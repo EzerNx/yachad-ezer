@@ -89,3 +89,22 @@ export function showConfigWarning(container) {
   container.prepend(h("p", { class: "notice warn" },
     "Le site n'est pas encore relié à Supabase. Remplis js/config.js (voir le README)."));
 }
+
+// Initiales et couleur d'avatar (affichage seulement)
+export const initials = (name) =>
+  (name || "?").trim().split(/\s+/).map((w) => w[0] || "").join("").slice(0, 2).toUpperCase() || "?";
+
+export function avatar(id, name, extra = "") {
+  const variants = ["", "b", "c", "d"];
+  const n = [...String(id)].reduce((a, c) => a + c.charCodeAt(0), 0) % variants.length;
+  return h("span", { class: ("avatar " + variants[n] + " " + extra).trim(), "aria-hidden": "true" }, initials(name));
+}
+
+// Dates relatives : « aujourd'hui », « hier », sinon la date
+export function relDate(iso) {
+  const d = new Date(iso);
+  const days = Math.floor((new Date().setHours(0, 0, 0, 0) - new Date(iso).setHours(0, 0, 0, 0)) / 864e5);
+  if (days === 0) return "aujourd’hui";
+  if (days === 1) return "hier";
+  return "le " + d.toLocaleDateString("fr-CA", { day: "numeric", month: "long" });
+}

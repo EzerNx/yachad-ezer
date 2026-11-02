@@ -6,82 +6,87 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Devenir intercesseur · Yachad Ezer</title>
+<meta name="theme-color" content="#0D1430">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Karla:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Figtree:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="wrap">
-  <header class="topbar">
-    <a class="brand" href="index.html"><span class="he" lang="he">יחד עזר</span><b>Yachad Ezer</b></a>
-    <nav><a href="connexion.html">Déjà membre ? Se connecter</a></nav>
-  </header>
-
-  <section id="formSection">
-    <span class="eyebrow">Rejoindre l’équipe</span>
-    <h1>Devenir intercesseur</h1>
-    <p class="story">Les intercesseurs reçoivent des demandes de prière, sans jamais connaître le nom de la personne. Ils prient, puis peuvent écrire ce qu’ils ont reçu : un encouragement, un verset. L’administrateur relit chaque observation avant de la transmettre.</p>
-    <div class="verse">
+<div class="auth">
+  <div class="auth-side">
+    <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
+    <div>
       <blockquote>« Je cherche parmi eux un homme qui élève un mur, qui se tienne à la brèche devant moi en faveur du pays… »</blockquote>
       <cite>Ézéchiel 22.30 · Louis Segond 1910</cite>
     </div>
+    <span class="hint" style="color:#8790AE">Déjà membre ? <a href="connexion.html" style="color:#E7B85A">Se connecter</a></span>
+  </div>
 
-    <form id="joinForm" novalidate>
-      <div class="field">
-        <label for="j-name">Votre nom</label>
-        <span class="hint">Visible seulement par l’administrateur.</span>
-        <input type="text" id="j-name" maxlength="80" autocomplete="name" required>
-      </div>
-      <div class="field">
-        <label for="j-email">Courriel</label>
-        <input type="email" id="j-email" maxlength="120" autocomplete="email" required>
-      </div>
-      <div class="field">
-        <label for="j-pass">Mot de passe</label>
-        <span class="hint">Au moins 8 caractères.</span>
-        <input type="password" id="j-pass" minlength="8" autocomplete="new-password" required>
-      </div>
-      <div class="field">
-        <label for="j-church">Votre église ou communauté <span class="hint">(facultatif)</span></label>
-        <input type="text" id="j-church" maxlength="120">
-      </div>
-      <div class="field">
-        <label for="j-motivation">Pourquoi souhaitez-vous servir dans la prière ?</label>
-        <textarea id="j-motivation" maxlength="1000" required></textarea>
+  <main class="auth-main">
+    <div id="formSection">
+      <div class="stack" style="gap:10px">
+        <span class="eyebrow">Rejoindre l’équipe</span>
+        <h1 style="font-size:2.3rem">Devenir intercesseur</h1>
+        <p class="muted">Vous recevrez des demandes de prière avec un code, jamais le nom de la personne. Après avoir prié, vous pourrez écrire ce que vous avez reçu. L’administrateur relit chaque observation avant de la transmettre.</p>
       </div>
 
-      <div class="box">
-        <span class="legend">Engagement de confidentialité</span>
-        <ul class="hint" style="margin:0;padding-left:20px">
-          <li>Je garde secret tout ce que je lis dans les demandes.</li>
-          <li>Je ne cherche jamais à savoir qui se cache derrière un code.</li>
-          <li>Je ne copie, ne photographie ni ne partage aucune demande.</li>
-          <li>Je prie fidèlement pour les demandes qui me sont confiées.</li>
-        </ul>
-        <label class="check"><input type="checkbox" id="j-engage"><span>Je m’engage à respecter ces règles.</span></label>
-      </div>
+      <form id="joinForm" novalidate>
+        <div class="field">
+          <label for="j-name">Votre nom</label>
+          <span class="hint">Visible seulement par l’administrateur.</span>
+          <input type="text" id="j-name" maxlength="80" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="j-email">Courriel</label>
+          <input type="email" id="j-email" maxlength="120" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="j-pass">Mot de passe</label>
+          <span class="hint">Au moins 8 caractères.</span>
+          <input type="password" id="j-pass" minlength="8" autocomplete="new-password" required>
+        </div>
+        <div class="field">
+          <label for="j-church">Votre église ou communauté <span class="hint">· facultatif</span></label>
+          <input type="text" id="j-church" maxlength="120">
+        </div>
+        <div class="field">
+          <label for="j-motivation">Pourquoi souhaitez-vous servir dans la prière ?</label>
+          <textarea id="j-motivation" maxlength="1000" required></textarea>
+        </div>
 
-      <label class="check"><input type="checkbox" id="j-consent"><span>J’accepte que Yachad Ezer conserve mon nom, mon courriel et ma candidature pour gérer l’équipe d’intercession, tant que je suis membre. Je peux demander leur suppression en tout temps.</span></label>
-      <label class="check"><input type="checkbox" id="j-age"><span>J’ai 18 ans ou plus.</span></label>
+        <div class="box">
+          <span class="legend">Engagement de confidentialité</span>
+          <ul class="hint" style="margin:0;padding-left:20px">
+            <li>Je garde secret tout ce que je lis dans les demandes.</li>
+            <li>Je ne cherche jamais à savoir qui se cache derrière un code.</li>
+            <li>Je ne copie, ne photographie ni ne partage aucune demande.</li>
+            <li>Je prie fidèlement pour les demandes qui me sont confiées.</li>
+          </ul>
+          <label class="check"><input type="checkbox" id="j-engage"><span>Je m’engage à respecter ces règles.</span></label>
+        </div>
 
-      <span class="err" id="j-err" hidden></span>
-      <button class="btn" type="submit" id="j-btn">Envoyer ma candidature</button>
-    </form>
-  </section>
+        <label class="check"><input type="checkbox" id="j-consent"><span>J’accepte que Yachad Ezer conserve mon nom, mon courriel et ma candidature pour gérer l’équipe d’intercession, tant que je suis membre. Je peux demander leur suppression en tout temps.</span></label>
+        <label class="check"><input type="checkbox" id="j-age"><span>J’ai 18 ans ou plus.</span></label>
 
-  <section id="doneSection" hidden aria-live="polite">
-    <div class="flame" aria-hidden="true"><i></i><b></b></div>
-    <h2>Merci pour votre cœur de servir.</h2>
-    <p class="story">Ouvrez le courriel que nous venons de vous envoyer et cliquez sur le lien pour confirmer votre adresse. L’administrateur examinera ensuite votre candidature. Vous pourrez vous connecter dès qu’elle sera acceptée.</p>
-    <a class="btn ghost" href="index.html">Retour à l’accueil</a>
-  </section>
+        <span class="err" id="j-err" hidden></span>
+        <button class="btn btn-primary" type="submit" id="j-btn">Envoyer ma candidature</button>
+      </form>
+    </div>
+
+    <div id="doneSection" hidden aria-live="polite">
+      <div class="flame" aria-hidden="true"><i></i><b></b></div>
+      <h1 style="font-size:2rem">Merci pour votre cœur de servir.</h1>
+      <p class="muted">Ouvrez le courriel que nous venons de vous envoyer et cliquez sur le lien pour confirmer votre adresse. L’administrateur examinera ensuite votre candidature. Vous pourrez vous connecter dès qu’elle sera acceptée.</p>
+      <a class="btn btn-secondary" href="./">Retour à l’accueil</a>
+    </div>
+  </main>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script type="module">
 import { sb, showConfigWarning, explain } from "./js/app.js";
 const $ = (id) => document.getElementById(id);
-showConfigWarning($("formSection"));
+showConfigWarning($("joinForm"));
 
 function fail(msg) { $("j-err").textContent = msg; $("j-err").hidden = false; }
 

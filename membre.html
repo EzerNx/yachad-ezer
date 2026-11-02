@@ -6,50 +6,64 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Mes demandes · Yachad Ezer</title>
+<meta name="theme-color" content="#0D1430">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Karla:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Figtree:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="wrap wide">
-  <header class="topbar">
-    <a class="brand" href="index.html"><span class="he" lang="he">יחד עזר</span><b>Yachad Ezer</b></a>
-    <nav><span class="muted" id="hello"></span><a href="admin.html" id="adminLink" hidden>Portail admin</a><button class="btn small quiet" id="logoutBtn" type="button">Se déconnecter</button></nav>
-  </header>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
+    <span class="side-label">Intercession</span>
+    <button class="nav-item" type="button" data-view="todo" aria-current="page"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg>À prier<span class="count hot" id="c-todo">0</span></button>
+    <button class="nav-item" type="button" data-view="done"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Déjà priées<span class="count" id="c-done">0</span></button>
+    <button class="nav-item" type="button" data-view="obs"><svg viewBox="0 0 24 24"><path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/></svg>Mes observations</button>
+    <a class="nav-item" href="admin.html" id="adminLink" hidden><svg viewBox="0 0 24 24"><path d="M4 13h4l2 3h4l2-3h4"/><path d="M5 5h14l1 8v6H4v-6z"/></svg>Admin</a>
+    <div class="side-foot">
+      <span id="meAvatar"></span>
+      <div class="who"><b id="meName"></b><span id="meRole">Intercesseur</span></div>
+      <button class="btn btn-ghost btn-sm" type="button" data-logout>Sortir</button>
+    </div>
+  </aside>
 
-  <section>
-    <span class="eyebrow">Portail intercesseur</span>
-    <h1>Les demandes qui vous sont confiées</h1>
-    <p class="muted">Vous ne voyez qu’un code, jamais le nom de la personne. Après avoir prié, vous pouvez écrire ce que vous avez reçu. L’administrateur le relira avant de le transmettre.</p>
-    <div class="stats" id="stats"></div>
-    <div class="toolbar">
-      <div class="tabs" role="tablist">
-        <button type="button" role="tab" aria-selected="true" data-view="todo">À prier</button>
-        <button type="button" role="tab" aria-selected="false" data-view="done">Déjà priées</button>
+  <main class="app-main">
+    <div class="mobile-top"><a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a><button class="btn btn-ghost btn-sm" type="button" data-logout>Sortir</button></div>
+    <div class="page-head">
+      <div>
+        <h1 id="hello">Bonjour</h1>
+        <p id="subtitle">Chargement de vos demandes…</p>
       </div>
     </div>
-    <div class="list" id="list"><p class="empty">Chargement…</p></div>
-  </section>
+    <div class="verse">
+      <blockquote>« Priez les uns pour les autres. La prière agissante du juste a une grande efficacité. »</blockquote>
+      <cite>Jacques 5.16 · Louis Segond 1910</cite>
+    </div>
+    <div class="list" id="list"></div>
+  </main>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script type="module">
-import { sb, h, fmtDate, toast, NEEDS, requireRole, signOut } from "./js/app.js";
+import { sb, h, fmtDate, relDate, toast, NEEDS, requireRole, signOut, avatar } from "./js/app.js";
 
 const me = await requireRole(["intercesseur", "admin"]);
-if (me) start();
 
 let view = "todo";
 let assignments = [];
 let observations = [];
 
-async function start() {
-  document.getElementById("hello").textContent = "Bonjour, " + (me.display_name || "");
+if (me) {
+  document.getElementById("hello").textContent = "Bonjour " + (me.display_name || "");
+  document.getElementById("meName").textContent = me.display_name || "Membre";
+  document.getElementById("meRole").textContent = me.role === "admin" ? "Administrateur" : "Intercesseur";
+  document.getElementById("meAvatar").replaceWith(avatar(me.id, me.display_name, "lg"));
   document.getElementById("adminLink").hidden = me.role !== "admin";
-  document.getElementById("logoutBtn").addEventListener("click", signOut);
+  document.querySelectorAll("[data-logout]").forEach((b) => b.addEventListener("click", signOut));
   document.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => {
     view = b.dataset.view;
-    document.querySelectorAll("[data-view]").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+    document.querySelectorAll("[data-view]").forEach((x) => x.toggleAttribute("aria-current", x === b));
+    document.querySelectorAll("[data-view][aria-current]").forEach((x) => x.setAttribute("aria-current", "page"));
     render();
   }));
   await load();
@@ -79,17 +93,29 @@ async function load() {
 function render() {
   const todo = assignments.filter((a) => !a.prayed_at);
   const done = assignments.filter((a) => a.prayed_at);
-  const stats = document.getElementById("stats");
-  stats.replaceChildren(
-    h("span", {}, h("b", {}, todo.length), "à prier"),
-    h("span", {}, h("b", {}, done.length), "déjà priées"),
-    h("span", {}, h("b", {}, observations.length), "observations écrites"),
-  );
-  const items = view === "todo" ? todo : done;
+  document.getElementById("c-todo").textContent = todo.length;
+  document.getElementById("c-done").textContent = done.length;
+  document.getElementById("c-todo").classList.toggle("hot", todo.length > 0);
+  document.getElementById("subtitle").textContent = todo.length
+    ? (todo.length === 1 ? "1 demande vous attend." : todo.length + " demandes vous attendent.") + " Merci de tenir les bras levés."
+    : "Aucune demande en attente. Merci pour votre fidélité.";
+
   const list = document.getElementById("list");
+  if (view === "obs") {
+    if (!observations.length) { list.replaceChildren(h("p", { class: "empty" }, "Vous n’avez pas encore écrit d’observation.")); return; }
+    const codeOf = (id) => assignments.find((a) => a.request.id === id)?.request.code || "—";
+    list.replaceChildren(...observations.slice().reverse().map((o) => h("article", { class: "item" },
+      h("div", { class: "item-head" },
+        h("span", { class: "code" }, codeOf(o.request_id)),
+        h("span", { class: o.status === "transmise" ? "pill ok" : "pill" }, o.status === "transmise" ? "Transmise" : o.status === "lue" ? "Lue par l’admin" : "Envoyée"),
+        h("span", { class: "meta" }, relDate(o.created_at))),
+      h("p", { class: "body" }, o.body))));
+    return;
+  }
+  const items = view === "todo" ? todo : done;
   if (!items.length) {
     list.replaceChildren(h("p", { class: "empty" },
-      view === "todo" ? "Aucune demande en attente pour l’instant. Merci pour votre fidélité." : "Aucune demande priée pour l’instant."));
+      view === "todo" ? "Aucune demande en attente pour l’instant." : "Aucune demande priée pour l’instant."));
     return;
   }
   list.replaceChildren(...items.map(card));
@@ -99,7 +125,7 @@ function card(a) {
   const r = a.request;
   const mine = observations.filter((o) => o.request_id === r.id);
   const ta = h("textarea", { id: "obs-" + r.id, maxlength: "2000", placeholder: "Ce que vous avez reçu en priant : un encouragement, un verset, une image…" });
-  const send = h("button", { class: "btn small", type: "button" }, "Envoyer à l’administrateur");
+  const send = h("button", { class: "btn btn-primary btn-sm", type: "button" }, "Envoyer à l’administrateur");
   send.addEventListener("click", async () => {
     const body = ta.value.trim();
     if (body.length < 2) { toast("Écrivez votre observation avant d’envoyer."); return; }
@@ -114,7 +140,7 @@ function card(a) {
     render();
   });
 
-  const prayBtn = h("button", { class: "btn small ghost", type: "button" }, a.prayed_at ? "Remettre dans « À prier »" : "J’ai prié pour cette demande");
+  const prayBtn = h("button", { class: "btn btn-secondary btn-sm", type: "button" }, a.prayed_at ? "Remettre dans « À prier »" : "J’ai prié pour cette demande");
   prayBtn.addEventListener("click", async () => {
     const value = a.prayed_at ? null : new Date().toISOString();
     const { error } = await sb.from("assignments").update({ prayed_at: value }).eq("id", a.id);
@@ -124,23 +150,23 @@ function card(a) {
     render();
   });
 
-  return h("article", { class: "card" },
-    h("div", { class: "card-head" },
+  return h("article", { class: "item" },
+    h("div", { class: "item-head" },
       h("span", { class: "code" }, r.code),
-      h("span", {}, "Confiée le " + fmtDate(a.assigned_at))),
+      r.wants_contact ? h("span", { class: "tag gold" }, "Souhaite une réponse") : null,
+      h("span", { class: "meta" }, "Confiée " + relDate(a.assigned_at))),
     h("p", { class: "body" }, r.body),
-    h("div", { class: "tags" },
-      (r.needs || []).map((n) => h("span", { class: "tag" }, NEEDS[n] || n)),
-      r.wants_contact ? h("span", { class: "tag lamp" }, "Souhaite une réponse") : null,
-      a.prayed_at ? h("span", { class: "tag ok" }, "Priée le " + fmtDate(a.prayed_at)) : null),
-    mine.length ? h("div", { class: "subtle" },
-      h("span", { class: "hint" }, "Vos observations"),
-      mine.map((o) => h("p", { class: "body" }, o.body, " ", h("span", { class: "hint" }, "· " + fmtDate(o.created_at) + (o.status === "transmise" ? " · transmise" : ""))))) : null,
+    h("div", { class: "tags" }, (r.needs || []).map((n) => h("span", { class: "tag" }, NEEDS[n] || n))),
+    mine.length ? h("div", { class: "obs-list" },
+      mine.map((o) => [
+        h("span", { class: "hint" }, "Votre observation · " + relDate(o.created_at) + (o.status === "transmise" ? " · transmise" : "")),
+        h("p", {}, o.body)])) : null,
     h("div", { class: "field" },
-      h("label", { for: "obs-" + r.id }, "Écrire une observation"),
+      h("label", { for: "obs-" + r.id }, mine.length ? "Écrire une autre observation" : "Écrire une observation"),
       ta),
-    h("div", { class: "actions" }, send, prayBtn),
-  );
+    h("div", { class: "item-foot" },
+      send, prayBtn,
+      a.prayed_at ? h("span", { class: "pill ok" }, "Priée le " + fmtDate(a.prayed_at)) : null));
 }
 </script>
 </body>

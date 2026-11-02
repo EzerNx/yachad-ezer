@@ -7,179 +7,209 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Yachad Ezer · Requêtes de prière</title>
 <meta name="description" content="Confiez votre sujet de prière à l'équipe d'intercession Yachad Ezer. Ensemble, nous portons les fardeaux les uns des autres.">
+<meta name="theme-color" content="#0D1430">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Karla:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Figtree:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="css/style.css">
-<style>
-  .hero { display: flex; flex-direction: column; gap: 18px; }
-  .hebrew { font-family: var(--display); font-size: clamp(3rem, 12vw, 5rem); line-height: 1; color: var(--lamp); text-align: left; margin-top: -8px; }
-  .meaning { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-size: .95rem; }
-  .meaning b { color: var(--ink); }
-  .why { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 22px; }
-  .why div { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-  .why p { color: var(--muted); font-size: .97rem; }
-  .thanks { align-items: center; text-align: center; padding-block: 24px; }
-  .thanks .verse { text-align: left; }
-  .chars { align-self: flex-end; font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-</style>
 </head>
-<body>
-<div class="wrap">
+<body class="public">
 
-  <header class="hero section">
-    <svg class="praise" viewBox="0 0 640 250" role="img" aria-label="Des personnes lèvent les mains vers la lumière">
-      <defs>
-        <radialGradient id="ye-glow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" style="stop-color:var(--lamp);stop-opacity:.55"/>
-          <stop offset="55%" style="stop-color:var(--lamp-soft);stop-opacity:.35"/>
-          <stop offset="100%" style="stop-color:var(--bg);stop-opacity:0"/>
-        </radialGradient>
-      </defs>
-      <ellipse class="glow" cx="320" cy="20" rx="260" ry="130"/>
-      <line class="ray" x1="320" y1="0" x2="120" y2="150"/>
-      <line class="ray" x1="320" y1="0" x2="250" y2="150"/>
-      <line class="ray" x1="320" y1="0" x2="390" y2="150"/>
-      <line class="ray" x1="320" y1="0" x2="520" y2="150"/>
-      <g class="person" transform="translate(95 196) scale(0.72)" opacity="0.38"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-1.2s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-1.2s"/></g></g>
-      <g class="person" transform="translate(205 196) scale(0.72)" opacity="0.38"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.6s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.6s"/></g></g>
-      <g class="person" transform="translate(315 196) scale(0.72)" opacity="0.38"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-0.4s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-0.4s"/></g></g>
-      <g class="person" transform="translate(425 196) scale(0.72)" opacity="0.38"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.0s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.0s"/></g></g>
-      <g class="person" transform="translate(540 196) scale(0.72)" opacity="0.38"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-3.1s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-3.1s"/></g></g>
-      <g class="person" transform="translate(40 240) scale(1)" opacity="0.88"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-0s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-0s"/></g></g>
-      <g class="person" transform="translate(150 240) scale(1.05)" opacity="0.88"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-1.6s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-1.6s"/></g></g>
-      <g class="person" transform="translate(262 240) scale(0.98)" opacity="0.88"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-0.8s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-0.8s"/></g></g>
-      <g class="person" transform="translate(378 240) scale(1.04)" opacity="0.88"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.3s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.3s"/></g></g>
-      <g class="person" transform="translate(488 240) scale(1)" opacity="0.88"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-1.1s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-1.1s"/></g></g>
-      <g class="person" transform="translate(598 240) scale(0.98)" opacity="0.88"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.9s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.9s"/></g></g>
-    </svg>
-    <div class="hebrew" lang="he" dir="rtl" aria-hidden="true">יַחַד עֵזֶר</div>
-    <div class="meaning"><span><b>Yachad</b> · ensemble</span><span><b>Ezer</b> · secours, aide</span></div>
-    <h1>Vous n’avez pas à porter cela seul.</h1>
-    <p class="story">Yachad Ezer est une équipe de croyants qui prie pour chaque personne qui confie ici un fardeau. Écrivez librement : votre demande sera lue avec respect et portée devant Dieu.</p>
-    <div class="verse">
-      <blockquote>« Portez les fardeaux les uns des autres, et vous accomplirez ainsi la loi de Christ. »</blockquote>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
+    <nav>
+      <a class="link" href="#vision">Notre vision</a>
+      <a class="link" href="devenir-intercesseur.html">Devenir intercesseur</a>
+      <a class="btn btn-light btn-sm" href="connexion.html">Espace équipe</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-text">
+      <div class="hebrew"><span lang="he" dir="rtl">יַחַד עֵזֶר</span><small>ENSEMBLE · SECOURS</small></div>
+      <h1>Vous n’avez pas à porter cela <em>seul</em>.</h1>
+      <p class="lead">Confiez votre sujet de prière à une équipe d’intercesseurs qui s’engage à prier pour vous. Avec respect, dans la confidentialité.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#demande">Confier une demande</a>
+        <a class="btn btn-light" href="devenir-intercesseur.html">Devenir intercesseur</a>
+      </div>
+      <ul class="trust">
+        <li>Anonyme si vous le voulez</li>
+        <li>Votre nom n’est jamais montré</li>
+        <li>Conforme à la Loi 25</li>
+      </ul>
+    </div>
+    <div class="hero-art"><svg class="praise" viewBox="0 0 600 360" role="img" aria-label="Des personnes lèvent les mains vers la lumière">
+  <defs><radialGradient id="ye-sun" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" style="stop-color:#FFE8B0;stop-opacity:.95"/>
+    <stop offset="35%" style="stop-color:#E7B85A;stop-opacity:.55"/>
+    <stop offset="70%" style="stop-color:#E7B85A;stop-opacity:.12"/>
+    <stop offset="100%" style="stop-color:#E7B85A;stop-opacity:0"/></radialGradient></defs>
+  <circle class="sun" cx="300" cy="290" r="250" fill="url(#ye-sun)"/>
+  <circle class="spark" cx="200" cy="200" r="2.5" style="animation-delay:-0s"/><circle class="spark" cx="330" cy="180" r="2" style="animation-delay:-2s"/><circle class="spark" cx="270" cy="150" r="3" style="animation-delay:-4s"/><circle class="spark" cx="420" cy="210" r="2" style="animation-delay:-5.5s"/><circle class="spark" cx="150" cy="230" r="2" style="animation-delay:-6.5s"/>
+  <g class="back" transform="translate(110 330) scale(0.8)"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-1.2s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-1.2s"/></g></g><g class="back" transform="translate(205 330) scale(0.8)"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.6s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.6s"/></g></g><g class="back" transform="translate(300 330) scale(0.8)"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-0.4s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-0.4s"/></g></g><g class="back" transform="translate(395 330) scale(0.8)"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.0s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.0s"/></g></g><g class="back" transform="translate(490 330) scale(0.8)"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-3.1s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-3.1s"/></g></g>
+  <g class="front" transform="translate(60 372) scale(1.1)"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-0s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-0s"/></g></g><g class="front" transform="translate(160 372) scale(1.15)"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-1.6s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-1.6s"/></g></g><g class="front" transform="translate(262 372) scale(1.08)"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-0.8s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-0.8s"/></g></g><g class="front" transform="translate(362 372) scale(1.14)"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.3s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.3s"/></g></g><g class="front" transform="translate(462 372) scale(1.1)"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-1.1s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-1.1s"/></g></g><g class="front" transform="translate(548 372) scale(1.05)"><circle cx="0" cy="-80" r="11"/><path d="M-15,-64 Q0,-70 15,-64 L23,0 L-23,0 Z"/><g transform="translate(-13 -61)"><line class="arm" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.9s"/></g><g transform="translate(13 -61)"><line class="arm r" x1="0" y1="0" x2="0" y2="34" style="animation-delay:-2.9s"/></g></g>
+</svg></div>
+  </div>
+</section>
+
+<main>
+  <div class="container narrow">
+    <div class="verse-band">
+      <blockquote>Portez les fardeaux les uns des autres, et vous accomplirez ainsi la loi de Christ.</blockquote>
       <cite>Galates 6.2 · Louis Segond 1910</cite>
     </div>
-  </header>
+  </div>
 
-  <section aria-labelledby="why-title">
-    <span class="eyebrow">Pourquoi nous sommes là</span>
-    <h2 id="why-title">Tenir les bras levés</h2>
-    <p class="story">Pendant la bataille, les bras de Moïse devenaient lourds. Aaron et Hur se sont placés de chaque côté et les ont soutenus jusqu’au coucher du soleil <span class="hint">(Exode 17.12)</span>. <em>C’est notre vision : soutenir ceux qui n’ont plus la force de prier seuls.</em></p>
-    <div class="why">
-      <div><h3>Prier avec vous</h3><p>Chaque demande est confiée à des intercesseurs qui s’engagent à prier pour elle.</p></div>
-      <div><h3>Écouter, si vous le voulez</h3><p>Demandez un suivi, un conseil ou une orientation spirituelle. Sinon, personne ne vous contactera.</p></div>
-      <div><h3>Garder la confidence</h3><p>Les intercesseurs ne voient jamais votre nom : seulement un code, comme YE-7KQ3.</p></div>
-    </div>
-  </section>
-
-  <section id="formSection" aria-labelledby="form-title">
-    <span class="eyebrow">Votre demande</span>
-    <h2 id="form-title">Confiez-nous votre sujet de prière</h2>
-
-    <form id="prayerForm" novalidate>
-      <div class="trap" aria-hidden="true">
-        <label for="f-website">Ne pas remplir</label>
-        <input type="text" id="f-website" tabindex="-1" autocomplete="off">
+  <div class="container">
+    <section class="section" style="padding-top:0" aria-labelledby="steps-title">
+      <div class="section-head">
+        <span class="eyebrow">Comment ça marche</span>
+        <h2 id="steps-title">Trois étapes, en toute confidence</h2>
       </div>
+      <ol class="steps">
+        <li><h3>Vous écrivez</h3><p>Votre sujet de prière, avec ou sans votre prénom. Le contact est facultatif.</p></li>
+        <li><h3>Des intercesseurs prient</h3><p>Ils reçoivent votre demande avec un code, comme YE-7KQ3. Jamais votre nom.</p></li>
+        <li><h3>Une réponse, si vous le voulez</h3><p>Ce qu’ils ont reçu en priant vous est transmis, avec un suivi ou un conseil.</p></li>
+      </ol>
+    </section>
 
-      <div class="field">
-        <label for="f-name">Votre prénom <span class="hint">(facultatif)</span></label>
-        <input type="text" id="f-name" maxlength="80" autocomplete="given-name" placeholder="Laissez vide pour rester anonyme">
-      </div>
-
-      <div class="field">
-        <label for="f-text">Votre sujet de prière</label>
-        <span class="hint">Un prénom suffit pour les autres personnes. Évitez les noms complets et les détails médicaux.</span>
-        <textarea id="f-text" maxlength="1500" required placeholder="Ex. : Priez pour ma mère qui commence un traitement la semaine prochaine, et pour que je garde la paix."></textarea>
-        <span class="chars" id="charCount">0 / 1500</span>
-        <span class="err" id="err-text" hidden>Écrivez au moins quelques mots pour que nous sachions comment prier.</span>
-      </div>
-
-      <fieldset>
-        <span class="legend">Ce que vous souhaitez</span>
-        <div class="choices">
-          <label class="chip"><input type="checkbox" name="need" value="priere" id="need-priere" checked><span>Que l’on prie pour moi</span></label>
-          <label class="chip"><input type="checkbox" name="need" value="suivi" id="need-suivi"><span>Un suivi</span></label>
-          <label class="chip"><input type="checkbox" name="need" value="conseil" id="need-conseil"><span>Un conseil</span></label>
-          <label class="chip"><input type="checkbox" name="need" value="orientation" id="need-orientation"><span>Une orientation spirituelle</span></label>
+    <section class="section" id="vision" aria-labelledby="vision-title">
+      <div class="vision">
+        <div class="stack">
+          <span class="eyebrow">Notre vision</span>
+          <h2 id="vision-title">Tenir les bras levés</h2>
         </div>
-      </fieldset>
+        <div class="stack">
+          <p>Pendant la bataille, les bras de Moïse devenaient lourds. Aaron et Hur se sont placés de chaque côté et les ont soutenus jusqu’au coucher du soleil (Exode 17.12).</p>
+          <p><strong>C’est notre appel : soutenir ceux qui n’ont plus la force de prier seuls.</strong></p>
+        </div>
+      </div>
+    </section>
 
-      <label class="check"><input type="checkbox" id="f-wantContact"><span><b>Je souhaite qu’on me recontacte</b><br><span class="hint">Pour recevoir ce que les intercesseurs ont reçu en priant, un suivi ou un conseil.</span></span></label>
-
-      <div class="box" id="contactBox" hidden>
-        <fieldset>
-          <span class="legend">Comment vous joindre ?</span>
-          <div class="choices">
-            <label class="chip"><input type="radio" name="via" value="courriel" id="via-mail" checked><span>Courriel</span></label>
-            <label class="chip"><input type="radio" name="via" value="telephone" id="via-tel"><span>Téléphone</span></label>
+    <section class="section" id="demande" aria-labelledby="form-title">
+      <div class="form-split">
+        <aside>
+          <span class="eyebrow">Votre demande</span>
+          <h2 id="form-title">Confiez-nous votre sujet de prière</h2>
+          <p class="muted">Écrivez librement. Votre demande sera lue avec respect et portée devant Dieu.</p>
+          <div class="verse">
+            <blockquote>« Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos. »</blockquote>
+            <cite>Matthieu 11.28 · Louis Segond 1910</cite>
           </div>
-        </fieldset>
-        <div class="field" id="mailField">
-          <label for="f-email">Courriel</label>
-          <input type="email" id="f-email" maxlength="120" autocomplete="email" placeholder="nom@exemple.com">
+        </aside>
+
+        <div>
+          <div class="form-card" id="formSection">
+            <form id="prayerForm" novalidate>
+              <div class="trap" aria-hidden="true">
+                <label for="f-website">Ne pas remplir</label>
+                <input type="text" id="f-website" tabindex="-1" autocomplete="off">
+              </div>
+
+              <div class="field">
+                <label for="f-name">Votre prénom <span class="hint">· facultatif</span></label>
+                <input type="text" id="f-name" maxlength="80" autocomplete="given-name" placeholder="Laissez vide pour rester anonyme">
+              </div>
+
+              <div class="field">
+                <label for="f-text">Votre sujet de prière</label>
+                <span class="hint">Un prénom suffit pour les autres personnes. Évitez les noms complets et les détails médicaux.</span>
+                <textarea id="f-text" maxlength="1500" required placeholder="Ex. : Priez pour ma mère qui commence un traitement la semaine prochaine, et pour que je garde la paix."></textarea>
+                <span class="chars" id="charCount">0 / 1500</span>
+                <span class="err" id="err-text" hidden>Écrivez au moins quelques mots pour que nous sachions comment prier.</span>
+              </div>
+
+              <fieldset>
+                <span class="legend">Ce que vous souhaitez</span>
+                <div class="choices">
+                  <label class="chip"><input type="checkbox" name="need" value="priere" id="need-priere" checked><span>Que l’on prie pour moi</span></label>
+                  <label class="chip"><input type="checkbox" name="need" value="suivi" id="need-suivi"><span>Un suivi</span></label>
+                  <label class="chip"><input type="checkbox" name="need" value="conseil" id="need-conseil"><span>Un conseil</span></label>
+                  <label class="chip"><input type="checkbox" name="need" value="orientation" id="need-orientation"><span>Une orientation spirituelle</span></label>
+                </div>
+              </fieldset>
+
+              <label class="check"><input type="checkbox" id="f-wantContact"><span><b>Je souhaite qu’on me recontacte</b><br><span class="hint">Pour recevoir ce que les intercesseurs ont reçu en priant, un suivi ou un conseil.</span></span></label>
+
+              <div class="box" id="contactBox" hidden>
+                <fieldset>
+                  <span class="legend">Comment vous joindre ?</span>
+                  <div class="choices">
+                    <label class="chip"><input type="radio" name="via" value="courriel" id="via-mail" checked><span>Courriel</span></label>
+                    <label class="chip"><input type="radio" name="via" value="telephone" id="via-tel"><span>Téléphone</span></label>
+                  </div>
+                </fieldset>
+                <div class="field" id="mailField">
+                  <label for="f-email">Courriel</label>
+                  <input type="email" id="f-email" maxlength="120" autocomplete="email" placeholder="nom@exemple.com">
+                </div>
+                <div class="field" id="telField" hidden>
+                  <label for="f-tel">Numéro de téléphone</label>
+                  <input type="tel" id="f-tel" maxlength="20" autocomplete="tel" placeholder="450 555-0123">
+                </div>
+                <span class="err" id="err-contact" hidden>Ce moyen de contact ne semble pas valide. Vérifiez-le.</span>
+                <label class="check"><input type="checkbox" id="f-consentContact"><span>J’accepte que Yachad Ezer utilise ce moyen de contact <b>uniquement</b> pour répondre à ma demande.</span></label>
+                <span class="err" id="err-consentContact" hidden>Ce consentement est nécessaire pour qu’on puisse vous recontacter.</span>
+              </div>
+
+              <label class="check"><input type="checkbox" id="f-consent"><span>J’ai lu « Vos renseignements personnels » plus bas. J’accepte que ma demande, qui peut révéler mes croyances, soit lue par l’équipe et conservée au plus 6 mois.</span></label>
+              <span class="err" id="err-consent" hidden>Votre consentement est nécessaire pour envoyer la demande.</span>
+
+              <label class="check"><input type="checkbox" id="f-age"><span>J’ai 14 ans ou plus. <span class="hint">Moins de 14 ans : demande à un parent de remplir ce formulaire avec toi.</span></span></label>
+              <span class="err" id="err-age" hidden>Confirmez votre âge, ou demandez l’aide d’un parent.</span>
+
+              <button class="btn btn-primary" type="submit" id="submitBtn">Confier ma demande</button>
+              <span class="err" id="err-send" hidden></span>
+            </form>
+          </div>
+
+          <div class="form-card stack thanks" id="thanks" hidden aria-live="polite">
+            <div class="flame" aria-hidden="true"><i></i><b></b></div>
+            <h2>Votre demande est entre de bonnes mains.</h2>
+            <p class="muted" id="thanksText"></p>
+            <div class="verse" style="text-align:left">
+              <blockquote>« Ne vous inquiétez de rien ; mais en toute chose faites connaître vos besoins à Dieu par des prières. »</blockquote>
+              <cite>Philippiens 4.6 · Louis Segond 1910</cite>
+            </div>
+            <button class="btn btn-secondary" id="againBtn" type="button">Envoyer une autre demande</button>
+          </div>
         </div>
-        <div class="field" id="telField" hidden>
-          <label for="f-tel">Numéro de téléphone</label>
-          <input type="tel" id="f-tel" maxlength="20" autocomplete="tel" placeholder="450 555-0123">
-        </div>
-        <span class="err" id="err-contact" hidden>Ce moyen de contact ne semble pas valide. Vérifiez-le.</span>
-        <label class="check"><input type="checkbox" id="f-consentContact"><span>J’accepte que Yachad Ezer utilise ce moyen de contact <b>uniquement</b> pour répondre à ma demande.</span></label>
-        <span class="err" id="err-consentContact" hidden>Ce consentement est nécessaire pour qu’on puisse vous recontacter.</span>
       </div>
+    </section>
 
-      <label class="check"><input type="checkbox" id="f-consent"><span>J’ai lu « Vos renseignements personnels » plus bas. J’accepte que ma demande, qui peut révéler mes croyances, soit lue par l’équipe et conservée au plus 6 mois.</span></label>
-      <span class="err" id="err-consent" hidden>Votre consentement est nécessaire pour envoyer la demande.</span>
+    <section class="section" id="confidentialite" aria-labelledby="privacy-title">
+      <div class="section-head"><span class="eyebrow">Loi 25 · Québec</span><h2 id="privacy-title">Vos renseignements personnels</h2></div>
+      <div class="privacy">
+        <details><summary>Ce que nous recueillons</summary>
+          <p>Votre sujet de prière, un prénom si vous le donnez, et un courriel ou un numéro seulement si vous demandez à être recontacté. Rien d’autre.</p></details>
+        <details><summary>Pourquoi</summary>
+          <p>Pour prier pour vous et, si vous le demandez, vous transmettre une réponse, un suivi ou un conseil. Pas d’infolettre, pas de publicité, aucune vente ni partage.</p></details>
+        <details><summary>Qui y a accès</summary>
+          <p>Les intercesseurs voient le texte de la demande avec un code, jamais votre nom ni vos coordonnées. Seul l’administrateur peut voir votre prénom et vos coordonnées. Chaque intercesseur a signé un engagement de confidentialité. Les données sont hébergées par Supabase au Canada, possiblement hors du Québec.</p></details>
+        <details><summary>Combien de temps</summary>
+          <p>Au plus 6 mois. Ensuite, la demande, vos coordonnées et les notes des intercesseurs sont supprimées automatiquement.</p></details>
+        <details><summary>Vos droits</summary>
+          <ul>
+            <li>Demander à consulter, corriger ou supprimer vos renseignements.</li>
+            <li>Retirer votre consentement en tout temps.</li>
+            <li>Porter plainte à la Commission d’accès à l’information du Québec.</li>
+          </ul></details>
+        <details><summary>Responsable de la protection des renseignements personnels</summary>
+          <p><b>[Nom du responsable]</b> · <b>[courriel@exemple.com]</b><br>Écrivez-lui en indiquant la date de votre demande. En cas d’incident de confidentialité présentant un risque de préjudice sérieux, nous avisons les personnes concernées et la Commission d’accès à l’information.</p></details>
+      </div>
+    </section>
+  </div>
+</main>
 
-      <label class="check"><input type="checkbox" id="f-age"><span>J’ai 14 ans ou plus. <span class="hint">Moins de 14 ans : demande à un parent de remplir ce formulaire avec toi.</span></span></label>
-      <span class="err" id="err-age" hidden>Confirmez votre âge, ou demandez l’aide d’un parent.</span>
-
-      <button class="btn" type="submit" id="submitBtn">Confier ma demande</button>
-      <span class="err" id="err-send" hidden></span>
-    </form>
-  </section>
-
-  <section class="thanks" id="thanks" hidden aria-live="polite">
-    <div class="flame" aria-hidden="true"><i></i><b></b></div>
-    <h2>Votre demande est entre de bonnes mains.</h2>
-    <p class="story" id="thanksText"></p>
-    <div class="verse">
-      <blockquote>« Ne vous inquiétez de rien ; mais en toute chose faites connaître vos besoins à Dieu par des prières. »</blockquote>
-      <cite>Philippiens 4.6 · Louis Segond 1910</cite>
-    </div>
-    <button class="btn ghost" id="againBtn" type="button">Envoyer une autre demande</button>
-  </section>
-
-  <section aria-labelledby="privacy-title">
-    <span class="eyebrow">Loi 25 · Québec</span>
-    <h2 id="privacy-title">Vos renseignements personnels</h2>
-    <div class="privacy">
-      <details><summary>Ce que nous recueillons</summary>
-        <p>Votre sujet de prière, un prénom si vous le donnez, et un courriel ou un numéro seulement si vous demandez à être recontacté. Rien d’autre.</p></details>
-      <details><summary>Pourquoi</summary>
-        <p>Pour prier pour vous et, si vous le demandez, vous transmettre une réponse, un suivi ou un conseil. Pas d’infolettre, pas de publicité, aucune vente ni partage.</p></details>
-      <details><summary>Qui y a accès</summary>
-        <p>Les intercesseurs voient le texte de la demande avec un code, jamais votre nom ni vos coordonnées. Seul l’administrateur peut voir votre prénom et vos coordonnées. Chaque intercesseur a signé un engagement de confidentialité. Les données sont hébergées par Supabase, possiblement hors du Québec.</p></details>
-      <details><summary>Combien de temps</summary>
-        <p>Au plus 6 mois. Ensuite, la demande, vos coordonnées et les notes des intercesseurs sont supprimées automatiquement.</p></details>
-      <details><summary>Vos droits</summary>
-        <ul>
-          <li>Demander à consulter, corriger ou supprimer vos renseignements.</li>
-          <li>Retirer votre consentement en tout temps.</li>
-          <li>Porter plainte à la Commission d’accès à l’information du Québec.</li>
-        </ul>
-        <p>Écrivez au responsable ci-dessous en indiquant la date de votre demande.</p></details>
-      <details><summary>Responsable de la protection des renseignements personnels</summary>
-        <p><b>[Nom du responsable]</b> · <b>[courriel@exemple.com]</b><br>En cas d’incident de confidentialité présentant un risque de préjudice sérieux, nous avisons les personnes concernées et la Commission d’accès à l’information.</p></details>
-    </div>
-  </section>
-
-  <footer>
-    <nav><a href="devenir-intercesseur.html">Devenir intercesseur</a><a href="connexion.html">Espace équipe</a></nav>
-    <span>Yachad Ezer · ensemble, nous portons les uns les autres dans la prière.</span>
-  </footer>
-</div>
+<footer class="site-footer">
+  <div class="container">
+    <span class="brand"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></span>
+    <nav><a href="devenir-intercesseur.html">Devenir intercesseur</a><a href="connexion.html">Espace équipe</a><a href="#confidentialite">Confidentialité</a></nav>
+  </div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script type="module">
@@ -187,7 +217,7 @@ import { sb, configured, showConfigWarning } from "./js/app.js";
 
 const $ = (id) => document.getElementById(id);
 const loadedAt = Date.now();
-showConfigWarning($("formSection"));
+showConfigWarning($("prayerForm"));
 
 const text = $("f-text");
 text.addEventListener("input", () => { $("charCount").textContent = text.value.length + " / 1500"; });
@@ -198,8 +228,8 @@ document.querySelectorAll('input[name="via"]').forEach((r) => r.addEventListener
   $("mailField").hidden = tel;
 }));
 
-// --- Validation : on vérifie ici pour aider la personne,
-//     et la base revérifie (contraintes CHECK) pour la sécurité.
+// Validation : on vérifie ici pour aider la personne,
+// et la base revérifie (contraintes CHECK) pour la sécurité.
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 const telOk = (v) => { const d = v.replace(/\D/g, ""); return d.length >= 10 && d.length <= 15; };
 const show = (id, on) => { $(id).hidden = !on; return on; };
@@ -229,7 +259,7 @@ function finish(wantsContact) {
   $("charCount").textContent = "0 / 1500";
   $("formSection").hidden = true;
   $("thanks").hidden = false;
-  $("thanks").scrollIntoView({ behavior: "smooth", block: "start" });
+  $("thanks").scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 $("prayerForm").addEventListener("submit", async (e) => {
