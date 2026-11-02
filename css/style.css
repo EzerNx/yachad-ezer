@@ -333,3 +333,32 @@ fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-direction: colu
   .praise .arm.r { transform: rotate(-152deg); }
   .btn { transition: none; }
 }
+
+/* ===================================================================
+   Langue et thème : petits boutons ronds
+   =================================================================== */
+.prefs { display: inline-flex; gap: 6px; align-items: center; }
+.pref-btn { all: unset; box-sizing: border-box; cursor: pointer; height: 34px; min-width: 34px; padding: 0 9px; border-radius: 999px;
+  display: inline-grid; place-items: center; font-size: .76rem; font-weight: 700; letter-spacing: .06em;
+  border: 1px solid var(--line); color: var(--ink); background: var(--surface); transition: background .15s ease, border-color .15s ease; }
+.pref-btn svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.pref-btn:hover { border-color: var(--gold); }
+.pref-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.prefs.on-dark .pref-btn { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.2); color: #E6E9F2; }
+.prefs.on-dark .pref-btn:hover { background: rgba(255,255,255,.13); border-color: rgba(255,255,255,.35); }
+
+.auth-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.auth-side a { color: var(--gold); }
+.side-prefs { margin-top: auto; padding: 0 10px 12px; }
+.side-prefs + .side-foot { margin-top: 0; }
+.mobile-top .right { display: flex; align-items: center; gap: 6px; }
+@media (max-width: 860px) { .sidebar .side-prefs { display: none; } }
+@media (max-width: 420px) { .site-header .brand b { display: none; } }
+
+/* Texte des volets Loi 25 */
+.privacy details > .pbody { color: var(--muted); font-size: .95rem; padding-bottom: 16px; }
+.pbody ul { margin: 0; padding-left: 20px; }
+
+/* Guillemets anglais pour le grand verset */
+html:lang(en) .verse-band blockquote::before { content: "“"; margin-right: 0; }
+html:lang(en) .verse-band blockquote::after { content: "”"; margin-left: 0; }

@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try{var y=localStorage.getItem("ye-theme");if(y==="dark"||y==="light")document.documentElement.setAttribute("data-theme",y);var l=localStorage.getItem("ye-lang");if(l!=="fr"&&l!=="en")l=/^en/i.test(navigator.language||"")?"en":"fr";document.documentElement.lang=l==="en"?"en-CA":"fr-CA"}catch(e){}</script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Mes demandes · Yachad Ezer</title>
+<title data-i18n="m.title">Mes demandes · Yachad Ezer</title>
 <meta name="theme-color" content="#0D1430">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Figtree:wght@400;500;600;700&display=swap">
@@ -15,58 +16,70 @@
 <div class="app">
   <aside class="sidebar">
     <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
-    <span class="side-label">Intercession</span>
-    <button class="nav-item" type="button" data-view="todo" aria-current="page"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg>À prier<span class="count hot" id="c-todo">0</span></button>
-    <button class="nav-item" type="button" data-view="done"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Déjà priées<span class="count" id="c-done">0</span></button>
-    <button class="nav-item" type="button" data-view="obs"><svg viewBox="0 0 24 24"><path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/></svg>Mes observations</button>
-    <a class="nav-item" href="admin.html" id="adminLink" hidden><svg viewBox="0 0 24 24"><path d="M4 13h4l2 3h4l2-3h4"/><path d="M5 5h14l1 8v6H4v-6z"/></svg>Admin</a>
+    <span class="side-label" data-i18n="m.side">Intercession</span>
+    <button class="nav-item" type="button" data-view="todo" aria-current="page"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg><span data-i18n="m.todo">À prier</span><span class="count hot" id="c-todo">0</span></button>
+    <button class="nav-item" type="button" data-view="done"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="m.done">Déjà priées</span><span class="count" id="c-done">0</span></button>
+    <button class="nav-item" type="button" data-view="obs"><svg viewBox="0 0 24 24"><path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/></svg><span data-i18n="m.obs">Mes observations</span></button>
+    <a class="nav-item" href="admin.html" id="adminLink" hidden><svg viewBox="0 0 24 24"><path d="M4 13h4l2 3h4l2-3h4"/><path d="M5 5h14l1 8v6H4v-6z"/></svg><span data-i18n="m.admin">Admin</span></a>
+    <div class="side-prefs on-dark" data-prefs></div>
     <div class="side-foot">
       <span id="meAvatar"></span>
-      <div class="who"><b id="meName"></b><span id="meRole">Intercesseur</span></div>
-      <button class="btn btn-ghost btn-sm" type="button" data-logout>Sortir</button>
+      <div class="who"><b id="meName"></b><span id="meRole"></span></div>
+      <button class="btn btn-ghost btn-sm" type="button" data-logout data-i18n="logout">Sortir</button>
     </div>
   </aside>
 
   <main class="app-main">
-    <div class="mobile-top"><a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a><button class="btn btn-ghost btn-sm" type="button" data-logout>Sortir</button></div>
+    <div class="mobile-top">
+      <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
+      <div class="right"><div data-prefs></div><button class="btn btn-ghost btn-sm" type="button" data-logout data-i18n="logout">Sortir</button></div>
+    </div>
     <div class="page-head">
       <div>
-        <h1 id="hello">Bonjour</h1>
-        <p id="subtitle">Chargement de vos demandes…</p>
+        <h1 id="hello"></h1>
+        <p id="subtitle" data-i18n="m.loading">Chargement de vos demandes…</p>
       </div>
     </div>
     <div class="verse">
-      <blockquote>« Priez les uns pour les autres. La prière agissante du juste a une grande efficacité. »</blockquote>
-      <cite>Jacques 5.16 · Louis Segond 1910</cite>
+      <blockquote data-i18n="v.jac">« Priez les uns pour les autres. La prière agissante du juste a une grande efficacité. »</blockquote>
+      <cite data-i18n="v.jac.ref">Jacques 5.16 · Louis Segond 1910</cite>
     </div>
     <div class="list" id="list"></div>
   </main>
 </div>
 
+<script src="js/i18n.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script type="module">
-import { sb, h, fmtDate, relDate, toast, NEEDS, requireRole, signOut, avatar } from "./js/app.js";
+import { sb, h, fmtDate, relDate, toast, needLabel, requireRole, signOut, avatar, t, onLangChange } from "./js/app.js";
 
 const me = await requireRole(["intercesseur", "admin"]);
 
 let view = "todo";
 let assignments = [];
 let observations = [];
+let loaded = false;
+let loadFailed = false;
+const drafts = {};   // texte en cours d'écriture, gardé si la page se redessine
 
 if (me) {
-  document.getElementById("hello").textContent = "Bonjour " + (me.display_name || "");
-  document.getElementById("meName").textContent = me.display_name || "Membre";
-  document.getElementById("meRole").textContent = me.role === "admin" ? "Administrateur" : "Intercesseur";
+  document.getElementById("meName").textContent = me.display_name || t("a.m.member");
   document.getElementById("meAvatar").replaceWith(avatar(me.id, me.display_name, "lg"));
   document.getElementById("adminLink").hidden = me.role !== "admin";
   document.querySelectorAll("[data-logout]").forEach((b) => b.addEventListener("click", signOut));
   document.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => {
     view = b.dataset.view;
-    document.querySelectorAll("[data-view]").forEach((x) => x.toggleAttribute("aria-current", x === b));
-    document.querySelectorAll("[data-view][aria-current]").forEach((x) => x.setAttribute("aria-current", "page"));
+    document.querySelectorAll("[data-view]").forEach((x) => (x === b ? x.setAttribute("aria-current", "page") : x.removeAttribute("aria-current")));
     render();
   }));
+  onLangChange(render);
+  renderHeader();
   await load();
+}
+
+function renderHeader() {
+  document.getElementById("hello").textContent = t("m.hello", { name: me.display_name || "" });
+  document.getElementById("meRole").textContent = t(me.role === "admin" ? "role.admin" : "role.int");
 }
 
 async function load() {
@@ -81,41 +94,45 @@ async function load() {
       .eq("member_id", me.id)
       .order("created_at"),
   ]);
-  if (a.error || o.error) {
-    document.getElementById("list").replaceChildren(h("p", { class: "err" }, "Impossible de charger vos demandes. Réessayez plus tard."));
-    return;
-  }
+  if (a.error || o.error) { loadFailed = true; render(); return; }
   assignments = a.data.filter((x) => x.request && x.request.status !== "fermee");
   observations = o.data;
+  loaded = true;
   render();
 }
 
 function render() {
+  renderHeader();
+  const list = document.getElementById("list");
+  if (loadFailed) { list.replaceChildren(h("p", { class: "err" }, t("m.loadErr"))); return; }
+  if (!loaded) return;
+
   const todo = assignments.filter((a) => !a.prayed_at);
   const done = assignments.filter((a) => a.prayed_at);
   document.getElementById("c-todo").textContent = todo.length;
   document.getElementById("c-done").textContent = done.length;
   document.getElementById("c-todo").classList.toggle("hot", todo.length > 0);
-  document.getElementById("subtitle").textContent = todo.length
-    ? (todo.length === 1 ? "1 demande vous attend." : todo.length + " demandes vous attendent.") + " Merci de tenir les bras levés."
-    : "Aucune demande en attente. Merci pour votre fidélité.";
+  const sub = document.getElementById("subtitle");
+  sub.removeAttribute("data-i18n");
+  sub.textContent = todo.length
+    ? t(todo.length === 1 ? "m.waiting.one" : "m.waiting.many", { n: todo.length })
+    : t("m.none");
 
-  const list = document.getElementById("list");
   if (view === "obs") {
-    if (!observations.length) { list.replaceChildren(h("p", { class: "empty" }, "Vous n’avez pas encore écrit d’observation.")); return; }
+    if (!observations.length) { list.replaceChildren(h("p", { class: "empty" }, t("m.empty.obs"))); return; }
     const codeOf = (id) => assignments.find((a) => a.request.id === id)?.request.code || "—";
     list.replaceChildren(...observations.slice().reverse().map((o) => h("article", { class: "item" },
       h("div", { class: "item-head" },
         h("span", { class: "code" }, codeOf(o.request_id)),
-        h("span", { class: o.status === "transmise" ? "pill ok" : "pill" }, o.status === "transmise" ? "Transmise" : o.status === "lue" ? "Lue par l’admin" : "Envoyée"),
+        h("span", { class: o.status === "transmise" ? "pill ok" : "pill" },
+          t(o.status === "transmise" ? "obs.st.transmitted" : o.status === "lue" ? "obs.st.read" : "obs.st.sent")),
         h("span", { class: "meta" }, relDate(o.created_at))),
       h("p", { class: "body" }, o.body))));
     return;
   }
   const items = view === "todo" ? todo : done;
   if (!items.length) {
-    list.replaceChildren(h("p", { class: "empty" },
-      view === "todo" ? "Aucune demande en attente pour l’instant." : "Aucune demande priée pour l’instant."));
+    list.replaceChildren(h("p", { class: "empty" }, t(view === "todo" ? "m.empty.todo" : "m.empty.done")));
     return;
   }
   list.replaceChildren(...items.map(card));
@@ -124,49 +141,53 @@ function render() {
 function card(a) {
   const r = a.request;
   const mine = observations.filter((o) => o.request_id === r.id);
-  const ta = h("textarea", { id: "obs-" + r.id, maxlength: "2000", placeholder: "Ce que vous avez reçu en priant : un encouragement, un verset, une image…" });
-  const send = h("button", { class: "btn btn-primary btn-sm", type: "button" }, "Envoyer à l’administrateur");
+  const ta = h("textarea", { id: "obs-" + r.id, maxlength: "2000", placeholder: t("m.obs.ph") });
+  ta.value = drafts[r.id] || "";
+  ta.addEventListener("input", () => { drafts[r.id] = ta.value; });
+
+  const send = h("button", { class: "btn btn-primary btn-sm", type: "button" }, t("m.obs.send"));
   send.addEventListener("click", async () => {
     const body = ta.value.trim();
-    if (body.length < 2) { toast("Écrivez votre observation avant d’envoyer."); return; }
+    if (body.length < 2) { toast(t("m.obs.emptyToast")); return; }
     send.disabled = true;
     const { data, error } = await sb.from("observations")
       .insert({ request_id: r.id, member_id: me.id, body })
       .select("id, request_id, body, status, created_at").single();
     send.disabled = false;
-    if (error) { toast("L’envoi n’a pas fonctionné. Réessayez."); return; }
+    if (error) { toast(t("m.obs.sendErr")); return; }
     observations.push(data);
-    toast("Observation envoyée à l’administrateur.");
+    delete drafts[r.id];
+    toast(t("m.obs.sent"));
     render();
   });
 
-  const prayBtn = h("button", { class: "btn btn-secondary btn-sm", type: "button" }, a.prayed_at ? "Remettre dans « À prier »" : "J’ai prié pour cette demande");
+  const prayBtn = h("button", { class: "btn btn-secondary btn-sm", type: "button" }, t(a.prayed_at ? "m.unpray" : "m.pray"));
   prayBtn.addEventListener("click", async () => {
     const value = a.prayed_at ? null : new Date().toISOString();
     const { error } = await sb.from("assignments").update({ prayed_at: value }).eq("id", a.id);
-    if (error) { toast("Impossible d’enregistrer. Réessayez."); return; }
+    if (error) { toast(t("m.saveErr")); return; }
     a.prayed_at = value;
-    toast(value ? "Merci d’avoir porté cette demande." : "Demande remise dans « À prier ».");
+    toast(t(value ? "m.prayedToast" : "m.unprayedToast"));
     render();
   });
 
   return h("article", { class: "item" },
     h("div", { class: "item-head" },
       h("span", { class: "code" }, r.code),
-      r.wants_contact ? h("span", { class: "tag gold" }, "Souhaite une réponse") : null,
-      h("span", { class: "meta" }, "Confiée " + relDate(a.assigned_at))),
+      r.wants_contact ? h("span", { class: "tag gold" }, t("m.wantsReply")) : null,
+      h("span", { class: "meta" }, t("m.entrusted", { when: relDate(a.assigned_at) }))),
     h("p", { class: "body" }, r.body),
-    h("div", { class: "tags" }, (r.needs || []).map((n) => h("span", { class: "tag" }, NEEDS[n] || n))),
+    h("div", { class: "tags" }, (r.needs || []).map((n) => h("span", { class: "tag" }, needLabel(n)))),
     mine.length ? h("div", { class: "obs-list" },
       mine.map((o) => [
-        h("span", { class: "hint" }, "Votre observation · " + relDate(o.created_at) + (o.status === "transmise" ? " · transmise" : "")),
+        h("span", { class: "hint" }, t("m.yourObs", { when: relDate(o.created_at) }) + (o.status === "transmise" ? t("m.transmittedSuffix") : "")),
         h("p", {}, o.body)])) : null,
     h("div", { class: "field" },
-      h("label", { for: "obs-" + r.id }, mine.length ? "Écrire une autre observation" : "Écrire une observation"),
+      h("label", { for: "obs-" + r.id }, t(mine.length ? "m.obs.another" : "m.obs.write")),
       ta),
     h("div", { class: "item-foot" },
       send, prayBtn,
-      a.prayed_at ? h("span", { class: "pill ok" }, "Priée le " + fmtDate(a.prayed_at)) : null));
+      a.prayed_at ? h("span", { class: "pill ok" }, t("m.prayedOn", { date: fmtDate(a.prayed_at) })) : null));
 }
 </script>
 </body>

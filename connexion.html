@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try{var y=localStorage.getItem("ye-theme");if(y==="dark"||y==="light")document.documentElement.setAttribute("data-theme",y);var l=localStorage.getItem("ye-lang");if(l!=="fr"&&l!=="en")l=/^en/i.test(navigator.language||"")?"en":"fr";document.documentElement.lang=l==="en"?"en-CA":"fr-CA"}catch(e){}</script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Espace équipe · Yachad Ezer</title>
+<title data-i18n="login.title">Espace équipe · Yachad Ezer</title>
 <meta name="theme-color" content="#0D1430">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Figtree:wght@400;500;600;700&display=swap">
@@ -14,49 +15,76 @@
 <body>
 <div class="auth">
   <div class="auth-side">
-    <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
-    <div>
-      <blockquote>« Priez les uns pour les autres. La prière agissante du juste a une grande efficacité. »</blockquote>
-      <cite>Jacques 5.16 · Louis Segond 1910</cite>
+    <div class="auth-top">
+      <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
+      <div class="on-dark" data-prefs></div>
     </div>
-    <span class="hint" style="color:#8790AE">Espace réservé à l’équipe d’intercession</span>
+    <div>
+      <blockquote data-i18n="v.jac">« Priez les uns pour les autres. La prière agissante du juste a une grande efficacité. »</blockquote>
+      <cite data-i18n="v.jac.ref">Jacques 5.16 · Louis Segond 1910</cite>
+    </div>
+    <span class="hint" style="color:#8790AE" data-i18n="login.side">Espace réservé à l’équipe d’intercession</span>
   </div>
 
   <main class="auth-main">
     <div id="loginSection">
       <div class="stack" style="gap:8px">
-        <span class="eyebrow">Espace équipe</span>
-        <h1 style="font-size:2.3rem">Connexion</h1>
-        <p class="muted">Pas encore membre ? <a href="devenir-intercesseur.html">Devenir intercesseur</a></p>
+        <span class="eyebrow" data-i18n="nav.team">Espace équipe</span>
+        <h1 style="font-size:2.3rem" data-i18n="login.h1">Connexion</h1>
+        <p class="muted" data-i18n-html="login.notyet">Pas encore membre ? <a href="devenir-intercesseur.html">Devenir intercesseur</a></p>
       </div>
       <form id="loginForm" novalidate>
         <div class="field">
-          <label for="l-email">Courriel</label>
+          <label for="l-email" data-i18n="contact.mail">Courriel</label>
           <input type="email" id="l-email" autocomplete="email" required>
         </div>
         <div class="field">
-          <label for="l-pass">Mot de passe</label>
+          <label for="l-pass" data-i18n="login.pass">Mot de passe</label>
           <input type="password" id="l-pass" autocomplete="current-password" required>
         </div>
         <span class="err" id="l-err" hidden></span>
-        <button class="btn btn-primary" type="submit" id="l-btn">Se connecter</button>
+        <button class="btn btn-primary" type="submit" id="l-btn" data-i18n="login.submit">Se connecter</button>
       </form>
     </div>
 
     <div id="waitSection" hidden aria-live="polite">
       <div class="flame" aria-hidden="true"><i></i><b></b></div>
-      <h1 id="waitTitle" style="font-size:2rem">Candidature en attente</h1>
+      <h1 id="waitTitle" style="font-size:2rem"></h1>
       <p class="muted" id="waitText"></p>
-      <button class="btn btn-secondary" id="logoutBtn" type="button">Se déconnecter</button>
+      <button class="btn btn-secondary" id="logoutBtn" type="button" data-i18n="logout.long">Se déconnecter</button>
     </div>
   </main>
 </div>
 
+<script src="js/i18n.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script type="module">
-import { sb, showConfigWarning, explain, getMyProfile, signOut } from "./js/app.js";
+import { sb, showConfigWarning, explain, getMyProfile, signOut, t, onLangChange } from "./js/app.js";
 const $ = (id) => document.getElementById(id);
 showConfigWarning($("loginForm"));
+
+let waiting = null;    // profil affiché dans l'écran d'attente
+let lastError = null;  // dernière erreur, pour la retraduire
+
+function renderWait() {
+  if (!waiting) return;
+  if (waiting.role === "refuse") {
+    $("waitTitle").textContent = t("wait.refused.title");
+    $("waitText").textContent = t("wait.refused.text");
+  } else if (waiting.role === "intercesseur") {
+    $("waitTitle").textContent = t("wait.paused.title");
+    $("waitText").textContent = t("wait.paused.text");
+  } else {
+    $("waitTitle").textContent = t("wait.title");
+    $("waitText").textContent = t("wait.text", { name: waiting.display_name || "" });
+  }
+}
+
+function showError() {
+  if (!lastError) return;
+  $("l-err").textContent = lastError === "notconfigured" ? t("f.notconfigured") : explain(lastError);
+  $("l-err").hidden = false;
+}
 
 // Envoie chaque personne vers le bon portail selon son rôle
 async function route() {
@@ -66,32 +94,27 @@ async function route() {
   if (me.active && me.role === "intercesseur") return location.replace("membre.html");
   $("loginSection").hidden = true;
   $("waitSection").hidden = false;
-  if (me.role === "refuse") {
-    $("waitTitle").textContent = "Candidature non retenue";
-    $("waitText").textContent = "Votre candidature n’a pas été retenue pour le moment. Merci pour votre cœur de servir.";
-  } else if (me.role === "intercesseur") {
-    $("waitTitle").textContent = "Compte en pause";
-    $("waitText").textContent = "Votre accès est en pause. Contactez l’administrateur si vous souhaitez reprendre.";
-  } else {
-    $("waitText").textContent = "Merci, " + (me.display_name || "") + ". L’administrateur examine votre candidature. Vous aurez accès à vos demandes dès qu’elle sera acceptée.";
-  }
+  waiting = me;
+  renderWait();
 }
 
 $("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   $("l-err").hidden = true;
-  if (!sb) { $("l-err").textContent = "Le site n’est pas encore relié à Supabase."; $("l-err").hidden = false; return; }
+  lastError = null;
+  if (!sb) { lastError = "notconfigured"; showError(); return; }
   $("l-btn").disabled = true;
   const { error } = await sb.auth.signInWithPassword({
     email: $("l-email").value.trim(),
     password: $("l-pass").value,
   });
   $("l-btn").disabled = false;
-  if (error) { $("l-err").textContent = explain(error); $("l-err").hidden = false; return; }
+  if (error) { lastError = error; showError(); return; }
   route();
 });
 
 $("logoutBtn").addEventListener("click", signOut);
+onLangChange(() => { renderWait(); showError(); });
 route();
 </script>
 </body>

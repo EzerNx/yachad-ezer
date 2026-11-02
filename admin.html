@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try{var y=localStorage.getItem("ye-theme");if(y==="dark"||y==="light")document.documentElement.setAttribute("data-theme",y);var l=localStorage.getItem("ye-lang");if(l!=="fr"&&l!=="en")l=/^en/i.test(navigator.language||"")?"en":"fr";document.documentElement.lang=l==="en"?"en-CA":"fr-CA"}catch(e){}</script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Portail admin · Yachad Ezer</title>
+<title data-i18n="a.title">Portail admin · Yachad Ezer</title>
 <meta name="theme-color" content="#0D1430">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Figtree:wght@400;500;600;700&display=swap">
@@ -15,40 +16,49 @@
 <div class="app">
   <aside class="sidebar">
     <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
-    <span class="side-label">Administration</span>
-    <button class="nav-item" type="button" data-tab="requests" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 13h4l2 3h4l2-3h4"/><path d="M5 5h14l1 8v6H4v-6z"/></svg>Demandes<span class="count" id="c-requests">0</span></button>
-    <button class="nav-item" type="button" data-tab="observations"><svg viewBox="0 0 24 24"><path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/></svg>Observations<span class="count" id="c-observations">0</span></button>
-    <button class="nav-item" type="button" data-tab="members"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.3-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c2 .7 3.2 2.5 3.6 5.2"/></svg>Intercesseurs<span class="count" id="c-members">0</span></button>
-    <button class="nav-item" type="button" data-tab="settings"><svg viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>Réglages</button>
-    <span class="side-label">Prière</span>
-    <a class="nav-item" href="membre.html"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg>À prier</a>
+    <span class="side-label" data-i18n="a.side">Administration</span>
+    <button class="nav-item" type="button" data-tab="requests" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 13h4l2 3h4l2-3h4"/><path d="M5 5h14l1 8v6H4v-6z"/></svg><span data-i18n="a.nav.requests">Demandes</span><span class="count" id="c-requests">0</span></button>
+    <button class="nav-item" type="button" data-tab="observations"><svg viewBox="0 0 24 24"><path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/></svg><span data-i18n="a.nav.obs">Observations</span><span class="count" id="c-observations">0</span></button>
+    <button class="nav-item" type="button" data-tab="members"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.3-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c2 .7 3.2 2.5 3.6 5.2"/></svg><span data-i18n="a.nav.members">Intercesseurs</span><span class="count" id="c-members">0</span></button>
+    <button class="nav-item" type="button" data-tab="settings"><svg viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span data-i18n="a.nav.settings">Réglages</span></button>
+    <span class="side-label" data-i18n="a.prayer">Prière</span>
+    <a class="nav-item" href="membre.html"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg><span data-i18n="m.todo">À prier</span></a>
+    <div class="side-prefs on-dark" data-prefs></div>
     <div class="side-foot">
       <span id="meAvatar"></span>
-      <div class="who"><b id="meName"></b><span>Administrateur</span></div>
-      <button class="btn btn-ghost btn-sm" type="button" data-logout>Sortir</button>
+      <div class="who"><b id="meName"></b><span data-i18n="role.admin">Administrateur</span></div>
+      <button class="btn btn-ghost btn-sm" type="button" data-logout data-i18n="logout">Sortir</button>
     </div>
   </aside>
 
   <main class="app-main" id="main">
-    <div class="mobile-top"><a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a><button class="btn btn-ghost btn-sm" type="button" data-logout>Sortir</button></div>
-    <div id="panel"><p class="empty">Chargement…</p></div>
+    <div class="mobile-top">
+      <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
+      <div class="right"><div data-prefs></div><button class="btn btn-ghost btn-sm" type="button" data-logout data-i18n="logout">Sortir</button></div>
+    </div>
+    <div id="panel"><p class="empty" data-i18n="a.loading">Chargement…</p></div>
   </main>
 </div>
 
+<script src="js/i18n.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script type="module">
-import { sb, h, fmtDate, relDate, toast, NEEDS, STATUS, requireRole, signOut, avatar } from "./js/app.js";
+import { sb, h, fmtDate, relDate, toast, needLabel, statusLabel, requireRole, signOut, avatar, t, lang, onLangChange } from "./js/app.js";
 
 const me = await requireRole(["admin"]);
 
 let tab = "requests";
 let requestFilter = "ouvertes";
 let obsFilter = "a-traiter";
+let loaded = false;
+let loadFailed = false;
 const state = { requests: [], members: [], observations: [], settings: null };
+const replyDrafts = {};   // réponses modifiées à la main, gardées si la page se redessine
+const replyLang = {};     // langue choisie pour chaque réponse
 
 const one = (x) => (Array.isArray(x) ? x[0] : x) || null;   // relation 1-à-1 renvoyée en objet ou tableau
 const member = (id) => state.members.find((m) => m.id === id);
-const memberName = (id) => member(id)?.display_name || "Membre";
+const memberName = (id) => member(id)?.display_name || t("a.m.member");
 
 if (me) {
   document.getElementById("meName").textContent = me.display_name || "Admin";
@@ -60,6 +70,7 @@ if (me) {
     render();
     window.scrollTo({ top: 0 });
   }));
+  onLangChange(render);
   await loadAll();
 }
 
@@ -77,23 +88,21 @@ async function loadAll() {
     sb.from("app_settings").select("auto_assign, per_request").eq("id", 1).maybeSingle(),
   ]);
   const err = r.error || m.error || o.error || s.error;
-  if (err) {
-    console.error(err);
-    document.getElementById("panel").replaceChildren(h("p", { class: "err" }, "Impossible de charger les données. Vérifiez votre connexion."));
-    return;
-  }
+  if (err) { console.error(err); loadFailed = true; render(); return; }
   state.requests = r.data;
   state.members = m.data;
   state.observations = o.data;
   state.settings = s.data;
+  loaded = true;
+  loadFailed = false;
   render();
 }
 
 // Exécute une action, affiche un message, puis recharge
-async function act(promise, okMsg) {
+async function act(promise, okKey) {
   const { error } = await promise;
-  if (error) { console.error(error); toast("Action impossible : " + (error.message || "erreur")); return false; }
-  if (okMsg) toast(okMsg);
+  if (error) { console.error(error); toast(t("a.actionErr", { msg: error.message || "?" })); return false; }
+  if (okKey) toast(t(okKey));
   await loadAll();
   return true;
 }
@@ -114,6 +123,9 @@ function segmented(label, options, current, onPick) {
 }
 
 function render() {
+  const panel = document.getElementById("panel");
+  if (loadFailed) { panel.replaceChildren(h("p", { class: "err" }, t("a.loadErr"))); return; }
+  if (!loaded) return;
   const unassigned = state.requests.filter((r) => r.status === "nouvelle").length;
   const newObs = state.observations.filter((o) => o.status === "nouvelle").length;
   const candidates = state.members.filter((m) => m.role === "candidat").length;
@@ -121,7 +133,7 @@ function render() {
   setCount("c-observations", newObs, true);
   setCount("c-members", candidates, true);
   const view = { requests: viewRequests, observations: viewObservations, members: viewMembers, settings: viewSettings }[tab];
-  document.getElementById("panel").replaceChildren(view());
+  panel.replaceChildren(view());
 }
 
 /* ===================== DEMANDES ===================== */
@@ -131,13 +143,13 @@ function viewRequests() {
   const newObs = state.observations.filter((o) => o.status === "nouvelle").length;
   const active = state.members.filter((m) => m.active && ["intercesseur", "admin"].includes(m.role)).length;
 
-  const distBtn = h("button", { class: "btn btn-primary btn-sm", type: "button" }, "Répartir les demandes");
+  const distBtn = h("button", { class: "btn btn-primary btn-sm", type: "button" }, t("a.distribute"));
   distBtn.addEventListener("click", async () => {
     distBtn.disabled = true;
     const { data, error } = await sb.rpc("distribute_new_requests");
     distBtn.disabled = false;
-    if (error) { toast("Répartition impossible : " + error.message); return; }
-    toast(data ? data + " attribution(s) faite(s)." : "Aucune attribution : pas de demande en attente ou pas d’intercesseur actif.");
+    if (error) { toast(t("a.distribute.err", { msg: error.message })); return; }
+    toast(data ? t("a.distribute.done", { n: data }) : t("a.distribute.none"));
     loadAll();
   });
 
@@ -145,21 +157,23 @@ function viewRequests() {
     requestFilter === "toutes" ? true :
     requestFilter === "ouvertes" ? r.status !== "fermee" : r.status === requestFilter);
 
+  const waitMsg = unassigned
+    ? t(unassigned === 1 ? "a.req.waitOne" : "a.req.waitMany", { n: unassigned })
+    : t("a.req.allAssigned");
+
   return h("div", { class: "stack", style: "gap:24px" },
-    pageHead("Demandes de prière",
-      "Bonjour " + (me.display_name || "") + ". " + (unassigned ? (unassigned === 1 ? "1 demande attend un intercesseur." : unassigned + " demandes attendent un intercesseur.") : "Toutes les demandes ont un intercesseur."),
-      distBtn),
+    pageHead(t("a.req.title"), t("a.req.hello", { name: me.display_name || "" }) + " " + waitMsg, distBtn),
     h("div", { class: "tiles" },
-      h("div", { class: "tile" }, h("span", { class: "num" }, open.length), h("span", { class: "lbl" }, "demandes ouvertes")),
-      h("div", { class: unassigned ? "tile hot" : "tile" }, h("span", { class: "num" }, unassigned), h("span", { class: "lbl" }, "sans intercesseur")),
-      h("div", { class: newObs ? "tile hot" : "tile" }, h("span", { class: "num" }, newObs), h("span", { class: "lbl" }, "observations à lire")),
-      h("div", { class: "tile" }, h("span", { class: "num" }, active), h("span", { class: "lbl" }, "intercesseurs actifs"))),
+      h("div", { class: "tile" }, h("span", { class: "num" }, open.length), h("span", { class: "lbl" }, t("a.t.open"))),
+      h("div", { class: unassigned ? "tile hot" : "tile" }, h("span", { class: "num" }, unassigned), h("span", { class: "lbl" }, t("a.t.unassigned"))),
+      h("div", { class: newObs ? "tile hot" : "tile" }, h("span", { class: "num" }, newObs), h("span", { class: "lbl" }, t("a.t.obs"))),
+      h("div", { class: "tile" }, h("span", { class: "num" }, active), h("span", { class: "lbl" }, t("a.t.active")))),
     h("div", { class: "toolbar" },
-      segmented("Filtrer les demandes",
-        [["ouvertes", "Ouvertes"], ["nouvelle", "Sans intercesseur"], ["fermee", "Fermées"], ["toutes", "Toutes"]],
+      segmented(t("a.f.label"),
+        [["ouvertes", t("a.f.open")], ["nouvelle", t("a.f.unassigned")], ["fermee", t("a.f.closed")], ["toutes", t("a.f.all")]],
         requestFilter, (v) => { requestFilter = v; render(); })),
     h("div", { class: "list" },
-      list.length ? list.map(requestCard) : h("p", { class: "empty" }, "Aucune demande ici pour l’instant.")));
+      list.length ? list.map(requestCard) : h("p", { class: "empty" }, t("a.req.empty"))));
 }
 
 function requestCard(r) {
@@ -167,54 +181,54 @@ function requestCard(r) {
   const assigned = r.assignments || [];
   const available = state.members.filter((m) => m.active && ["intercesseur", "admin"].includes(m.role) && !assigned.some((a) => a.member_id === m.id));
 
-  const pick = h("select", { "aria-label": "Ajouter un intercesseur à " + r.code },
-    h("option", { value: "" }, "Ajouter un intercesseur…"),
-    available.map((m) => h("option", { value: m.id }, m.display_name || "Membre")));
+  const pick = h("select", { "aria-label": t("a.add.aria", { code: r.code }) },
+    h("option", { value: "" }, t("a.add")),
+    available.map((m) => h("option", { value: m.id }, m.display_name || t("a.m.member"))));
   pick.addEventListener("change", async () => {
     if (!pick.value) return;
-    const ok = await act(sb.from("assignments").insert({ request_id: r.id, member_id: pick.value }), "Demande attribuée.");
+    const ok = await act(sb.from("assignments").insert({ request_id: r.id, member_id: pick.value }), "a.assigned");
     if (ok && r.status === "nouvelle") await act(sb.from("prayer_requests").update({ status: "assignee" }).eq("id", r.id));
   });
 
-  const toggle = h("button", { class: "btn btn-secondary btn-sm", type: "button" }, r.status === "fermee" ? "Rouvrir" : "Fermer");
+  const toggle = h("button", { class: "btn btn-secondary btn-sm", type: "button" }, t(r.status === "fermee" ? "a.reopen" : "a.close"));
   toggle.addEventListener("click", () => act(
     sb.from("prayer_requests").update({ status: r.status === "fermee" ? (assigned.length ? "assignee" : "nouvelle") : "fermee" }).eq("id", r.id),
-    r.status === "fermee" ? "Demande rouverte." : "Demande fermée."));
+    r.status === "fermee" ? "a.reopened" : "a.closed"));
 
-  const del = h("button", { class: "btn btn-ghost btn-sm", type: "button" }, "Supprimer");
+  const del = h("button", { class: "btn btn-ghost btn-sm", type: "button" }, t("a.delete"));
   const foot = h("div", { class: "item-foot" },
     assigned.length
       ? h("div", { class: "people" }, assigned.map((a) => {
-          const rm = h("button", { type: "button", "aria-label": "Retirer " + memberName(a.member_id) }, "×");
-          rm.addEventListener("click", () => act(sb.from("assignments").delete().eq("id", a.id), "Intercesseur retiré."));
+          const rm = h("button", { type: "button", "aria-label": t("a.remove.aria", { name: memberName(a.member_id) }) }, "×");
+          rm.addEventListener("click", () => act(sb.from("assignments").delete().eq("id", a.id), "a.removed"));
           return h("span", { class: a.prayed_at ? "person-chip done" : "person-chip" },
-            avatar(a.member_id, memberName(a.member_id)), memberName(a.member_id) + (a.prayed_at ? " · a prié" : ""), rm);
+            avatar(a.member_id, memberName(a.member_id)), memberName(a.member_id) + (a.prayed_at ? t("a.hasPrayed") : ""), rm);
         }))
-      : h("span", { class: "hint" }, "Aucun intercesseur pour l’instant"),
+      : h("span", { class: "hint" }, t("a.noone")),
     h("span", { class: "spacer" }),
     available.length && r.status !== "fermee" ? pick : null,
     toggle, del);
 
   del.addEventListener("click", () => {
-    const yes = h("button", { class: "btn btn-danger btn-sm", type: "button" }, "Oui, supprimer");
-    const no = h("button", { class: "btn btn-secondary btn-sm", type: "button" }, "Annuler");
-    yes.addEventListener("click", () => act(sb.from("prayer_requests").delete().eq("id", r.id), "Demande supprimée."));
+    const yes = h("button", { class: "btn btn-danger btn-sm", type: "button" }, t("a.delete.yes"));
+    const no = h("button", { class: "btn btn-secondary btn-sm", type: "button" }, t("a.cancel"));
+    yes.addEventListener("click", () => act(sb.from("prayer_requests").delete().eq("id", r.id), "a.deleted"));
     no.addEventListener("click", render);
-    foot.replaceChildren(h("span", {}, "Supprimer la demande, l’identité et les observations ?"), h("span", { class: "spacer" }), yes, no);
+    foot.replaceChildren(h("span", {}, t("a.delete.q")), h("span", { class: "spacer" }), yes, no);
   });
 
   return h("article", { class: "item" },
     h("div", { class: "item-head" },
       h("span", { class: "code" }, r.code),
-      h("span", { class: r.status === "nouvelle" ? "pill new" : r.status === "fermee" ? "pill" : "pill ok" }, STATUS[r.status]),
-      h("span", { class: "meta" }, "Reçue " + relDate(r.created_at) + " · supprimée le " + fmtDate(r.expires_at))),
+      h("span", { class: r.status === "nouvelle" ? "pill new" : r.status === "fermee" ? "pill" : "pill ok" }, statusLabel(r.status)),
+      h("span", { class: "meta" }, t("a.received", { when: relDate(r.created_at), date: fmtDate(r.expires_at) }))),
     h("div", { class: "identity" },
-      h("span", {}, h("b", {}, "Personne"), (p && p.first_name) || "Anonyme"),
+      h("span", {}, h("b", {}, t("a.person")), (p && p.first_name) || t("a.anon")),
       p && p.contact_value
-        ? h("span", {}, h("b", {}, p.contact_method === "courriel" ? "Courriel" : "Téléphone"), p.contact_value)
-        : h("span", { class: "muted" }, r.wants_contact ? "Contact demandé, coordonnées manquantes" : "Ne souhaite pas être contactée")),
+        ? h("span", {}, h("b", {}, t(p.contact_method === "courriel" ? "contact.mail" : "contact.tel")), p.contact_value)
+        : h("span", { class: "muted" }, t(r.wants_contact ? "a.missingContact" : "a.noContact"))),
     h("p", { class: "body" }, r.body),
-    h("div", { class: "tags" }, (r.needs || []).map((n) => h("span", { class: n === "priere" ? "tag" : "tag gold" }, NEEDS[n] || n))),
+    h("div", { class: "tags" }, (r.needs || []).map((n) => h("span", { class: n === "priere" ? "tag" : "tag gold" }, needLabel(n)))),
     foot);
 }
 
@@ -223,11 +237,17 @@ function viewObservations() {
   const list = state.observations.filter((o) =>
     obsFilter === "toutes" ? true : obsFilter === "transmise" ? o.status === "transmise" : o.status !== "transmise");
   return h("div", { class: "stack", style: "gap:24px" },
-    pageHead("Observations", "Ce que les intercesseurs ont reçu en priant. Relisez avant de transmettre."),
+    pageHead(t("a.obs.title"), t("a.obs.sub")),
     h("div", { class: "toolbar" },
-      segmented("Filtrer les observations", [["a-traiter", "À traiter"], ["transmise", "Transmises"], ["toutes", "Toutes"]],
+      segmented(t("a.of.label"), [["a-traiter", t("a.of.todo")], ["transmise", t("a.of.sent")], ["toutes", t("a.f.all")]],
         obsFilter, (v) => { obsFilter = v; render(); })),
-    h("div", { class: "list" }, list.length ? list.map(obsCard) : h("p", { class: "empty" }, "Aucune observation ici.")));
+    h("div", { class: "list" }, list.length ? list.map(obsCard) : h("p", { class: "empty" }, t("a.obs.empty"))));
+}
+
+// Le message à envoyer, dans la langue choisie pour cette réponse
+function replyTemplate(o, p, l) {
+  const greeting = p.first_name ? t("reply.greet.name", { name: p.first_name }, l) : t("reply.greet", null, l);
+  return greeting + "\n\n" + t("reply.body", { code: o.request.code }, l) + "\n\n" + o.body + "\n\n" + t("reply.end", null, l);
 }
 
 function obsCard(o) {
@@ -237,40 +257,53 @@ function obsCard(o) {
 
   let reply = null;
   if (canReply && o.status !== "transmise") {
-    const greeting = p.first_name ? "Bonjour " + p.first_name + "," : "Bonjour,";
+    const l = replyLang[o.id] || lang();
     const ta = h("textarea", { id: "reply-" + o.id, maxlength: "4000" });
-    ta.value = greeting + "\n\nVous nous avez confié un sujet de prière (référence " + r.code + "). Nous avons prié pour vous, et voici ce qu’un intercesseur a reçu :\n\n" + o.body + "\n\nNous continuons de vous porter dans la prière.\n\nL’équipe Yachad Ezer";
-    const copy = h("button", { class: "btn btn-primary btn-sm", type: "button" }, "Copier le message");
-    copy.addEventListener("click", async () => {
-      try { await navigator.clipboard.writeText(ta.value); toast("Message copié."); }
-      catch { ta.select(); toast("Sélectionné : faites Ctrl+C."); }
+    ta.value = replyDrafts[o.id] ?? replyTemplate(o, p, l);
+    ta.addEventListener("input", () => { replyDrafts[o.id] = ta.value; updateMail(); });
+
+    const langPick = segmented(t("a.reply.lang"), [["fr", "Français"], ["en", "English"]], l, (v) => {
+      replyLang[o.id] = v;
+      delete replyDrafts[o.id];   // nouvelle langue = nouveau modèle
+      render();
     });
-    const mailHref = () => "mailto:" + encodeURIComponent(p.contact_value) + "?subject=" + encodeURIComponent("Votre demande de prière · Yachad Ezer") + "&body=" + encodeURIComponent(ta.value);
+
+    const copy = h("button", { class: "btn btn-primary btn-sm", type: "button" }, t("a.copy"));
+    copy.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(ta.value); toast(t("a.copied")); }
+      catch { ta.select(); toast(t("a.copySel")); }
+    });
+    const mailHref = () => "mailto:" + encodeURIComponent(p.contact_value) + "?subject=" + encodeURIComponent(t("reply.subject", null, l)) + "&body=" + encodeURIComponent(ta.value);
     const mail = p.contact_method === "courriel"
-      ? h("a", { class: "btn btn-secondary btn-sm", href: mailHref() }, "Ouvrir dans ma messagerie")
+      ? h("a", { class: "btn btn-secondary btn-sm", href: mailHref() }, t("a.openMail"))
       : null;
-    if (mail) ta.addEventListener("input", () => { mail.href = mailHref(); });
-    const sent = h("button", { class: "btn btn-secondary btn-sm", type: "button" }, "Marquer comme transmise");
-    sent.addEventListener("click", () => act(sb.from("observations").update({ status: "transmise", transmitted_at: new Date().toISOString() }).eq("id", o.id), "Observation marquée comme transmise."));
+    function updateMail() { if (mail) mail.href = mailHref(); }
+    const sent = h("button", { class: "btn btn-secondary btn-sm", type: "button" }, t("a.markSent"));
+    sent.addEventListener("click", async () => {
+      const ok = await act(sb.from("observations").update({ status: "transmise", transmitted_at: new Date().toISOString() }).eq("id", o.id), "a.markedSent");
+      if (ok) delete replyDrafts[o.id];
+    });
     reply = h("div", { class: "reply" },
-      h("label", { for: "reply-" + o.id }, "Réponse à " + (p.first_name || "la personne") + " · " + p.contact_value),
-      h("span", { class: "hint" }, p.contact_method === "telephone" ? "Appelez ou textez ce numéro. Le texte ci-dessous peut vous guider." : "Relisez et ajustez avant d’envoyer. Le nom de l’intercesseur n’apparaît pas."),
+      h("div", { class: "toolbar" },
+        h("label", { for: "reply-" + o.id }, t("a.reply.label", { name: p.first_name || t("a.reply.someone"), contact: p.contact_value })),
+        langPick),
+      h("span", { class: "hint" }, t(p.contact_method === "telephone" ? "a.reply.hintTel" : "a.reply.hintMail")),
       ta,
       h("div", { class: "people" }, copy, mail, sent));
   }
 
-  const read = o.status === "nouvelle" ? h("button", { class: "btn btn-ghost btn-sm", type: "button" }, "Marquer comme lue") : null;
+  const read = o.status === "nouvelle" ? h("button", { class: "btn btn-ghost btn-sm", type: "button" }, t("a.markRead")) : null;
   if (read) read.addEventListener("click", () => act(sb.from("observations").update({ status: "lue" }).eq("id", o.id)));
 
   return h("article", { class: "item" },
     h("div", { class: "item-head" },
       h("span", { class: "code" }, r ? r.code : "—"),
       h("span", { class: o.status === "nouvelle" ? "pill new" : o.status === "transmise" ? "pill ok" : "pill" },
-        o.status === "nouvelle" ? "Nouvelle" : o.status === "transmise" ? "Transmise le " + fmtDate(o.transmitted_at) : "Lue"),
-      h("span", { class: "meta" }, "Par " + memberName(o.member_id) + " · " + relDate(o.created_at))),
+        o.status === "nouvelle" ? t("a.obs.st.new") : o.status === "transmise" ? t("a.obs.st.sentOn", { date: fmtDate(o.transmitted_at) }) : t("a.obs.st.read")),
+      h("span", { class: "meta" }, t("a.obs.by", { name: memberName(o.member_id), when: relDate(o.created_at) }))),
     h("p", { class: "body" }, o.body),
-    r ? h("details", {}, h("summary", { class: "hint", style: "cursor:pointer" }, "Voir la demande"), h("p", { class: "body muted", style: "margin-top:8px" }, r.body)) : null,
-    !canReply ? h("p", { class: "hint" }, r && r.wants_contact ? "Contact demandé, mais aucune coordonnée enregistrée." : "Cette personne n’a pas demandé de réponse : l’observation reste interne.") : null,
+    r ? h("details", {}, h("summary", { class: "hint", style: "cursor:pointer" }, t("a.seeRequest")), h("p", { class: "body muted", style: "margin-top:8px" }, r.body)) : null,
+    !canReply ? h("p", { class: "hint" }, t(r && r.wants_contact ? "a.obs.noDetails" : "a.obs.internal")) : null,
     reply,
     read ? h("div", { class: "item-foot" }, read) : null);
 }
@@ -282,40 +315,40 @@ function viewMembers() {
   const team = state.members.filter((m) => ["intercesseur", "admin"].includes(m.role));
 
   const candCard = (m) => {
-    const yes = h("button", { class: "btn btn-primary btn-sm", type: "button" }, "Accepter");
-    yes.addEventListener("click", () => act(sb.from("profiles").update({ role: "intercesseur", active: true, approved_at: new Date().toISOString() }).eq("id", m.id), "Candidature acceptée."));
-    const no = h("button", { class: "btn btn-ghost btn-sm", type: "button" }, "Refuser");
-    no.addEventListener("click", () => act(sb.from("profiles").update({ role: "refuse", active: false }).eq("id", m.id), "Candidature refusée."));
+    const yes = h("button", { class: "btn btn-primary btn-sm", type: "button" }, t("a.m.accept"));
+    yes.addEventListener("click", () => act(sb.from("profiles").update({ role: "intercesseur", active: true, approved_at: new Date().toISOString() }).eq("id", m.id), "a.m.accepted"));
+    const no = h("button", { class: "btn btn-ghost btn-sm", type: "button" }, t("a.m.refuse"));
+    no.addEventListener("click", () => act(sb.from("profiles").update({ role: "refuse", active: false }).eq("id", m.id), "a.m.refused"));
     return h("article", { class: "item" },
       h("div", { class: "item-head" },
         avatar(m.id, m.display_name, "lg"),
-        h("div", { class: "stack", style: "gap:0" }, h("b", {}, m.display_name || "Sans nom"), h("span", { class: "hint" }, m.church || "Église non indiquée")),
-        h("span", { class: "meta" }, "Inscrit " + relDate(m.created_at))),
-      h("p", { class: "body" }, m.motivation || "Pas de motivation indiquée."),
+        h("div", { class: "stack", style: "gap:0" }, h("b", {}, m.display_name || t("a.m.noName")), h("span", { class: "hint" }, m.church || t("a.m.noChurch"))),
+        h("span", { class: "meta" }, t("a.m.signedUp", { when: relDate(m.created_at) }))),
+      h("p", { class: "body" }, m.motivation || t("a.m.noMotivation")),
       h("div", { class: "tags" }, m.engagement_at
-        ? h("span", { class: "pill ok" }, "Engagement de confidentialité accepté")
-        : h("span", { class: "pill new" }, "Engagement non accepté")),
+        ? h("span", { class: "pill ok" }, t("a.m.pledgeOk"))
+        : h("span", { class: "pill new" }, t("a.m.pledgeNo"))),
       h("div", { class: "item-foot" }, yes, no));
   };
 
   const teamCard = (m) => {
     const isMe = m.id === me.id;
-    const toggle = h("button", { class: "btn btn-secondary btn-sm", type: "button" }, m.active ? "Mettre en pause" : "Réactiver");
-    toggle.addEventListener("click", () => act(sb.from("profiles").update({ active: !m.active }).eq("id", m.id), m.active ? "Membre mis en pause." : "Membre réactivé."));
+    const toggle = h("button", { class: "btn btn-secondary btn-sm", type: "button" }, t(m.active ? "a.m.pause" : "a.m.resume"));
+    toggle.addEventListener("click", () => act(sb.from("profiles").update({ active: !m.active }).eq("id", m.id), m.active ? "a.m.pausedToast" : "a.m.resumedToast"));
     return h("article", { class: "item member" },
       avatar(m.id, m.display_name, "lg"),
       h("div", { class: "info" },
-        h("b", {}, (m.display_name || "Sans nom") + (isMe ? " (vous)" : "")),
-        h("span", {}, (m.role === "admin" ? "Administrateur" : "Intercesseur") + " · " + openLoad(m.id) + " à prier")),
-      h("span", { class: m.active ? "pill ok" : "pill" }, m.active ? "Actif" : "En pause"),
+        h("b", {}, (m.display_name || t("a.m.noName")) + (isMe ? t("a.m.you") : "")),
+        h("span", {}, t(m.role === "admin" ? "role.admin" : "role.int") + " · " + t("a.m.load", { n: openLoad(m.id) }))),
+      h("span", { class: m.active ? "pill ok" : "pill" }, t(m.active ? "a.m.active" : "a.m.paused")),
       isMe ? null : toggle);
   };
 
   return h("div", { class: "stack", style: "gap:24px" },
-    pageHead("Intercesseurs", "Acceptez les candidatures et gérez l’équipe."),
-    h("h2", { style: "font-size:1.4rem" }, "Candidatures"),
-    candidates.length ? h("div", { class: "list" }, candidates.map(candCard)) : h("p", { class: "empty" }, "Aucune candidature en attente."),
-    h("h2", { style: "font-size:1.4rem" }, "Équipe"),
+    pageHead(t("a.nav.members"), t("a.m.sub")),
+    h("h2", { style: "font-size:1.4rem" }, t("a.m.cand")),
+    candidates.length ? h("div", { class: "list" }, candidates.map(candCard)) : h("p", { class: "empty" }, t("a.m.noCand")),
+    h("h2", { style: "font-size:1.4rem" }, t("a.m.team")),
     h("div", { class: "grid-2" }, team.map(teamCard)));
 }
 
@@ -324,17 +357,17 @@ function viewSettings() {
   const s = state.settings || { auto_assign: true, per_request: 2 };
   const auto = h("input", { type: "checkbox", id: "set-auto", checked: s.auto_assign });
   const per = h("input", { type: "number", id: "set-per", min: "1", max: "10", value: String(s.per_request) });
-  const save = h("button", { class: "btn btn-primary", type: "button" }, "Enregistrer");
+  const save = h("button", { class: "btn btn-primary", type: "button" }, t("a.s.save"));
   save.addEventListener("click", () => {
     const n = Math.min(10, Math.max(1, parseInt(per.value, 10) || 2));
-    act(sb.from("app_settings").update({ auto_assign: auto.checked, per_request: n }).eq("id", 1), "Réglages enregistrés.");
+    act(sb.from("app_settings").update({ auto_assign: auto.checked, per_request: n }).eq("id", 1), "a.s.saved");
   });
   return h("div", { class: "stack", style: "gap:24px" },
-    pageHead("Réglages", "Comment les demandes sont réparties entre les intercesseurs."),
+    pageHead(t("a.nav.settings"), t("a.s.sub")),
     h("div", { class: "form-card stack", style: "max-width:560px;gap:20px" },
-      h("p", { class: "muted" }, "Chaque nouvelle demande est confiée aux intercesseurs actifs qui ont le moins de demandes à prier en ce moment. En cas d’égalité, le choix se fait au hasard. Vous pouvez toujours ajouter ou retirer un intercesseur à la main."),
-      h("label", { class: "check" }, auto, h("span", {}, h("b", {}, "Répartir automatiquement"), h("br"), h("span", { class: "hint" }, "Dès qu’une demande arrive. Sinon, utilisez le bouton « Répartir » dans Demandes."))),
-      h("div", { class: "field" }, h("label", { for: "set-per" }, "Nombre d’intercesseurs par demande"), per),
+      h("p", { class: "muted" }, t("a.s.explain")),
+      h("label", { class: "check" }, auto, h("span", {}, h("b", {}, t("a.s.auto")), h("br"), h("span", { class: "hint" }, t("a.s.auto.hint")))),
+      h("div", { class: "field" }, h("label", { for: "set-per" }, t("a.s.per")), per),
       save));
 }
 </script>

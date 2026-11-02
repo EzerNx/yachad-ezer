@@ -9,14 +9,13 @@ export const sb = configured && window.supabase
   ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
   : null;
 
-export const NEEDS = {
-  priere: "Prière",
-  suivi: "Suivi",
-  conseil: "Conseil",
-  orientation: "Orientation spirituelle",
-};
+// Traductions : voir js/i18n.js (chargé avant ce fichier)
+export const t = (key, vars, forLang) => window.YE.t(key, vars, forLang);
+export const lang = () => window.YE.lang();
+export const onLangChange = (fn) => window.addEventListener("ye:lang", fn);
 
-export const STATUS = { nouvelle: "Nouvelle", assignee: "Attribuée", fermee: "Fermée" };
+export const needLabel = (n) => t("need." + n);
+export const statusLabel = (s) => t("st." + s);
 
 // Petit constructeur d'éléments HTML.
 // On passe le texte par textContent : impossible d'injecter du code (XSS).
@@ -36,27 +35,27 @@ export function h(tag, attrs = {}, ...children) {
 }
 
 export const fmtDate = (iso) =>
-  new Date(iso).toLocaleDateString("fr-CA", { day: "numeric", month: "long", year: "numeric" });
+  new Date(iso).toLocaleDateString(window.YE.locale(), { day: "numeric", month: "long", year: "numeric" });
 
 let toastTimer;
 export function toast(msg) {
-  let t = document.querySelector(".toast");
-  if (!t) { t = h("div", { class: "toast", role: "status" }); document.body.append(t); }
-  t.textContent = msg; t.hidden = false;
+  let el = document.querySelector(".toast");
+  if (!el) { el = h("div", { class: "toast", role: "status" }); document.body.append(el); }
+  el.textContent = msg; el.hidden = false;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { t.hidden = true; }, 3500);
+  toastTimer = setTimeout(() => { el.hidden = true; }, 3500);
 }
 
 // Traduit les erreurs techniques en phrases compréhensibles
 export function explain(error) {
   const m = (error && error.message) || "";
-  if (/Invalid login credentials/i.test(m)) return "Courriel ou mot de passe incorrect.";
-  if (/Email not confirmed/i.test(m)) return "Confirmez d'abord votre courriel avec le lien reçu.";
-  if (/already registered/i.test(m)) return "Ce courriel a déjà un compte. Connectez-vous.";
-  if (/Password should be/i.test(m)) return "Le mot de passe doit contenir au moins 8 caractères.";
-  if (/rate limit/i.test(m)) return "Trop d'essais. Attendez quelques minutes.";
-  if (/Failed to fetch|NetworkError/i.test(m)) return "Pas de connexion Internet. Réessayez.";
-  return "Une erreur est survenue. Réessayez dans un moment.";
+  if (/Invalid login credentials/i.test(m)) return t("err.login");
+  if (/Email not confirmed/i.test(m)) return t("err.notconfirmed");
+  if (/already registered/i.test(m)) return t("err.registered");
+  if (/Password should be/i.test(m)) return t("err.password");
+  if (/rate limit/i.test(m)) return t("err.rate");
+  if (/Failed to fetch|NetworkError/i.test(m)) return t("err.network");
+  return t("err.generic");
 }
 
 export async function getMyProfile() {
@@ -86,8 +85,7 @@ export async function signOut() {
 
 export function showConfigWarning(container) {
   if (configured) return;
-  container.prepend(h("p", { class: "notice warn" },
-    "Le site n'est pas encore relié à Supabase. Remplis js/config.js (voir le README)."));
+  container.prepend(h("p", { class: "notice warn", "data-i18n": "config.missing" }, t("config.missing")));
 }
 
 // Initiales et couleur d'avatar (affichage seulement)
@@ -104,7 +102,7 @@ export function avatar(id, name, extra = "") {
 export function relDate(iso) {
   const d = new Date(iso);
   const days = Math.floor((new Date().setHours(0, 0, 0, 0) - new Date(iso).setHours(0, 0, 0, 0)) / 864e5);
-  if (days === 0) return "aujourd’hui";
-  if (days === 1) return "hier";
-  return "le " + d.toLocaleDateString("fr-CA", { day: "numeric", month: "long" });
+  if (days === 0) return t("date.today");
+  if (days === 1) return t("date.yesterday");
+  return t("date.on", { date: d.toLocaleDateString(window.YE.locale(), { day: "numeric", month: "long" }) });
 }

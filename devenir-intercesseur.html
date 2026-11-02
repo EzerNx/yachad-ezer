@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try{var y=localStorage.getItem("ye-theme");if(y==="dark"||y==="light")document.documentElement.setAttribute("data-theme",y);var l=localStorage.getItem("ye-lang");if(l!=="fr"&&l!=="en")l=/^en/i.test(navigator.language||"")?"en":"fr";document.documentElement.lang=l==="en"?"en-CA":"fr-CA"}catch(e){}</script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Devenir intercesseur · Yachad Ezer</title>
+<title data-i18n="join.title">Devenir intercesseur · Yachad Ezer</title>
 <meta name="theme-color" content="#0D1430">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Figtree:wght@400;500;600;700&display=swap">
@@ -14,101 +15,111 @@
 <body>
 <div class="auth">
   <div class="auth-side">
-    <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
-    <div>
-      <blockquote>« Je cherche parmi eux un homme qui élève un mur, qui se tienne à la brèche devant moi en faveur du pays… »</blockquote>
-      <cite>Ézéchiel 22.30 · Louis Segond 1910</cite>
+    <div class="auth-top">
+      <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
+      <div class="on-dark" data-prefs></div>
     </div>
-    <span class="hint" style="color:#8790AE">Déjà membre ? <a href="connexion.html" style="color:#E7B85A">Se connecter</a></span>
+    <div>
+      <blockquote data-i18n="v.eze">« Je cherche parmi eux un homme qui élève un mur, qui se tienne à la brèche devant moi en faveur du pays… »</blockquote>
+      <cite data-i18n="v.eze.ref">Ézéchiel 22.30 · Louis Segond 1910</cite>
+    </div>
+    <span class="hint" style="color:#8790AE" data-i18n-html="join.member">Déjà membre ? <a href="connexion.html">Se connecter</a></span>
   </div>
 
   <main class="auth-main">
     <div id="formSection">
       <div class="stack" style="gap:10px">
-        <span class="eyebrow">Rejoindre l’équipe</span>
-        <h1 style="font-size:2.3rem">Devenir intercesseur</h1>
-        <p class="muted">Vous recevrez des demandes de prière avec un code, jamais le nom de la personne. Après avoir prié, vous pourrez écrire ce que vous avez reçu. L’administrateur relit chaque observation avant de la transmettre.</p>
+        <span class="eyebrow" data-i18n="join.eyebrow">Rejoindre l’équipe</span>
+        <h1 style="font-size:2.3rem" data-i18n="nav.join">Devenir intercesseur</h1>
+        <p class="muted" data-i18n="join.intro">Vous recevrez des demandes de prière avec un code, jamais le nom de la personne. Après avoir prié, vous pourrez écrire ce que vous avez reçu. L’administrateur relit chaque observation avant de la transmettre.</p>
       </div>
 
       <form id="joinForm" novalidate>
         <div class="field">
-          <label for="j-name">Votre nom</label>
-          <span class="hint">Visible seulement par l’administrateur.</span>
+          <label for="j-name" data-i18n="join.name">Votre nom</label>
+          <span class="hint" data-i18n="join.name.hint">Visible seulement par l’administrateur.</span>
           <input type="text" id="j-name" maxlength="80" autocomplete="name" required>
         </div>
         <div class="field">
-          <label for="j-email">Courriel</label>
+          <label for="j-email" data-i18n="contact.mail">Courriel</label>
           <input type="email" id="j-email" maxlength="120" autocomplete="email" required>
         </div>
         <div class="field">
-          <label for="j-pass">Mot de passe</label>
-          <span class="hint">Au moins 8 caractères.</span>
+          <label for="j-pass" data-i18n="login.pass">Mot de passe</label>
+          <span class="hint" data-i18n="join.pass.hint">Au moins 8 caractères.</span>
           <input type="password" id="j-pass" minlength="8" autocomplete="new-password" required>
         </div>
         <div class="field">
-          <label for="j-church">Votre église ou communauté <span class="hint">· facultatif</span></label>
+          <label for="j-church" data-i18n-html="join.church">Votre église ou communauté <span class="hint">· facultatif</span></label>
           <input type="text" id="j-church" maxlength="120">
         </div>
         <div class="field">
-          <label for="j-motivation">Pourquoi souhaitez-vous servir dans la prière ?</label>
+          <label for="j-motivation" data-i18n="join.motivation">Pourquoi souhaitez-vous servir dans la prière ?</label>
           <textarea id="j-motivation" maxlength="1000" required></textarea>
         </div>
 
         <div class="box">
-          <span class="legend">Engagement de confidentialité</span>
+          <span class="legend" data-i18n="join.pledge">Engagement de confidentialité</span>
           <ul class="hint" style="margin:0;padding-left:20px">
-            <li>Je garde secret tout ce que je lis dans les demandes.</li>
-            <li>Je ne cherche jamais à savoir qui se cache derrière un code.</li>
-            <li>Je ne copie, ne photographie ni ne partage aucune demande.</li>
-            <li>Je prie fidèlement pour les demandes qui me sont confiées.</li>
+            <li data-i18n="join.p1">Je garde secret tout ce que je lis dans les demandes.</li>
+            <li data-i18n="join.p2">Je ne cherche jamais à savoir qui se cache derrière un code.</li>
+            <li data-i18n="join.p3">Je ne copie, ne photographie ni ne partage aucune demande.</li>
+            <li data-i18n="join.p4">Je prie fidèlement pour les demandes qui me sont confiées.</li>
           </ul>
-          <label class="check"><input type="checkbox" id="j-engage"><span>Je m’engage à respecter ces règles.</span></label>
+          <label class="check"><input type="checkbox" id="j-engage"><span data-i18n="join.pledge.ok">Je m’engage à respecter ces règles.</span></label>
         </div>
 
-        <label class="check"><input type="checkbox" id="j-consent"><span>J’accepte que Yachad Ezer conserve mon nom, mon courriel et ma candidature pour gérer l’équipe d’intercession, tant que je suis membre. Je peux demander leur suppression en tout temps.</span></label>
-        <label class="check"><input type="checkbox" id="j-age"><span>J’ai 18 ans ou plus.</span></label>
+        <label class="check"><input type="checkbox" id="j-consent"><span data-i18n="join.consent">J’accepte que Yachad Ezer conserve mon nom, mon courriel et ma candidature pour gérer l’équipe d’intercession, tant que je suis membre. Je peux demander leur suppression en tout temps.</span></label>
+        <label class="check"><input type="checkbox" id="j-age"><span data-i18n="join.age">J’ai 18 ans ou plus.</span></label>
 
         <span class="err" id="j-err" hidden></span>
-        <button class="btn btn-primary" type="submit" id="j-btn">Envoyer ma candidature</button>
+        <button class="btn btn-primary" type="submit" id="j-btn" data-i18n="join.submit">Envoyer ma candidature</button>
       </form>
     </div>
 
     <div id="doneSection" hidden aria-live="polite">
       <div class="flame" aria-hidden="true"><i></i><b></b></div>
-      <h1 style="font-size:2rem">Merci pour votre cœur de servir.</h1>
-      <p class="muted">Ouvrez le courriel que nous venons de vous envoyer et cliquez sur le lien pour confirmer votre adresse. L’administrateur examinera ensuite votre candidature. Vous pourrez vous connecter dès qu’elle sera acceptée.</p>
-      <a class="btn btn-secondary" href="./">Retour à l’accueil</a>
+      <h1 style="font-size:2rem" data-i18n="join.done.h">Merci pour votre cœur de servir.</h1>
+      <p class="muted" data-i18n="join.done.p">Ouvrez le courriel que nous venons de vous envoyer et cliquez sur le lien pour confirmer votre adresse. L’administrateur examinera ensuite votre candidature. Vous pourrez vous connecter dès qu’elle sera acceptée.</p>
+      <a class="btn btn-secondary" href="./" data-i18n="join.home">Retour à l’accueil</a>
     </div>
   </main>
 </div>
 
+<script src="js/i18n.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script type="module">
-import { sb, showConfigWarning, explain } from "./js/app.js";
+import { sb, showConfigWarning, explain, t, onLangChange } from "./js/app.js";
 const $ = (id) => document.getElementById(id);
 showConfigWarning($("joinForm"));
 
-function fail(msg) { $("j-err").textContent = msg; $("j-err").hidden = false; }
+let lastError = null;   // clé de traduction ou erreur Supabase
+function showError() {
+  if (!lastError) { $("j-err").hidden = true; return; }
+  $("j-err").textContent = typeof lastError === "string" ? t(lastError) : explain(lastError);
+  $("j-err").hidden = false;
+}
+function fail(errorOrKey) { lastError = errorOrKey; showError(); }
 
 $("joinForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  $("j-err").hidden = true;
+  lastError = null; showError();
   const name = $("j-name").value.trim();
   const email = $("j-email").value.trim();
   const pass = $("j-pass").value;
   const motivation = $("j-motivation").value.trim();
 
-  if (name.length < 2) return fail("Indiquez votre nom.");
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return fail("Ce courriel ne semble pas valide.");
-  if (pass.length < 8) return fail("Le mot de passe doit contenir au moins 8 caractères.");
-  if (motivation.length < 10) return fail("Dites-nous en quelques mots pourquoi vous voulez servir.");
-  if (!$("j-engage").checked) return fail("L’engagement de confidentialité est nécessaire.");
-  if (!$("j-consent").checked) return fail("Votre consentement est nécessaire.");
-  if (!$("j-age").checked) return fail("Les intercesseurs doivent avoir 18 ans ou plus.");
-  if (!sb) return fail("Le site n’est pas encore relié à Supabase.");
+  if (name.length < 2) return fail("join.e.name");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return fail("join.e.email");
+  if (pass.length < 8) return fail("err.password");
+  if (motivation.length < 10) return fail("join.e.motivation");
+  if (!$("j-engage").checked) return fail("join.e.pledge");
+  if (!$("j-consent").checked) return fail("join.e.consent");
+  if (!$("j-age").checked) return fail("join.e.age");
+  if (!sb) return fail("f.notconfigured");
 
   const btn = $("j-btn");
-  btn.disabled = true; btn.textContent = "Envoi…";
+  btn.disabled = true; btn.textContent = t("sending");
   // signUp crée le compte. Le trigger de la base crée le profil « candidat ».
   const { error } = await sb.auth.signUp({
     email,
@@ -118,11 +129,13 @@ $("joinForm").addEventListener("submit", async (e) => {
       data: { display_name: name, church: $("j-church").value.trim(), motivation, engagement: "true" },
     },
   });
-  btn.disabled = false; btn.textContent = "Envoyer ma candidature";
-  if (error) return fail(explain(error));
+  btn.disabled = false; btn.textContent = t("join.submit");
+  if (error) return fail(error);
   $("formSection").hidden = true;
   $("doneSection").hidden = false;
 });
+
+onLangChange(showError);
 </script>
 </body>
 </html>
