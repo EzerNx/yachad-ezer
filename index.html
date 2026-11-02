@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#0D1430">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body class="public">
 
@@ -21,7 +21,7 @@
     <nav>
       <a class="link" href="#vision" data-i18n="nav.vision">Notre vision</a>
       <a class="link" href="devenir-intercesseur.html" data-i18n="nav.join">Devenir intercesseur</a>
-      <div class="on-dark" data-prefs></div>
+      <div data-prefs></div>
       <a class="btn btn-light btn-sm" href="connexion.html" data-i18n="nav.team">Espace équipe</a>
     </nav>
   </div>
@@ -213,10 +213,10 @@
   </div>
 </footer>
 
-<script src="js/i18n.js"></script>
+<script src="js/i18n.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script type="module">
-import { sb, configured, showConfigWarning, t, onLangChange } from "./js/app.js";
+import { sb, configured, showConfigWarning, t, onLangChange } from "./js/app.js?v=4";
 
 const $ = (id) => document.getElementById(id);
 const loadedAt = Date.now();

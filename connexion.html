@@ -10,20 +10,20 @@
 <meta name="theme-color" content="#0D1430">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body>
 <div class="auth">
   <div class="auth-side">
     <div class="auth-top">
       <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
-      <div class="on-dark" data-prefs></div>
+      <div data-prefs></div>
     </div>
     <div>
       <blockquote data-i18n="v.jac">« Priez les uns pour les autres. La prière agissante du juste a une grande efficacité. »</blockquote>
       <cite data-i18n="v.jac.ref">Jacques 5.16 · Louis Segond 1910</cite>
     </div>
-    <span class="hint" style="color:#8790AE" data-i18n="login.side">Espace réservé à l’équipe d’intercession</span>
+    <span class="side-note" data-i18n="login.side">Espace réservé à l’équipe d’intercession</span>
   </div>
 
   <main class="auth-main">
@@ -56,10 +56,10 @@
   </main>
 </div>
 
-<script src="js/i18n.js"></script>
+<script src="js/i18n.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script type="module">
-import { sb, showConfigWarning, explain, getMyProfile, signOut, t, onLangChange } from "./js/app.js";
+import { sb, showConfigWarning, explain, getMyProfile, signOut, t, onLangChange } from "./js/app.js?v=4";
 const $ = (id) => document.getElementById(id);
 showConfigWarning($("loginForm"));
 

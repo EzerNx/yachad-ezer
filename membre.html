@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#0D1430">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body>
 <div class="app">
@@ -21,7 +21,7 @@
     <button class="nav-item" type="button" data-view="done"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="m.done">Déjà priées</span><span class="count" id="c-done">0</span></button>
     <button class="nav-item" type="button" data-view="obs"><svg viewBox="0 0 24 24"><path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/></svg><span data-i18n="m.obs">Mes observations</span></button>
     <a class="nav-item" href="admin.html" id="adminLink" hidden><svg viewBox="0 0 24 24"><path d="M4 13h4l2 3h4l2-3h4"/><path d="M5 5h14l1 8v6H4v-6z"/></svg><span data-i18n="m.admin">Admin</span></a>
-    <div class="side-prefs on-dark" data-prefs></div>
+    <div class="side-prefs" data-prefs></div>
     <div class="side-foot">
       <span id="meAvatar"></span>
       <div class="who"><b id="meName"></b><span id="meRole"></span></div>
@@ -48,10 +48,10 @@
   </main>
 </div>
 
-<script src="js/i18n.js"></script>
+<script src="js/i18n.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script type="module">
-import { sb, h, fmtDate, relDate, toast, needLabel, requireRole, signOut, avatar, t, onLangChange } from "./js/app.js";
+import { sb, h, fmtDate, relDate, toast, needLabel, requireRole, signOut, avatar, t, onLangChange } from "./js/app.js?v=4";
 
 const me = await requireRole(["intercesseur", "admin"]);
 

@@ -20,9 +20,8 @@
     "nav.join": ["Devenir intercesseur", "Become an intercessor"],
     "nav.team": ["Espace équipe", "Team area"],
     "nav.privacy": ["Confidentialité", "Privacy"],
-    "prefs.lang": ["Read in English", "Lire en français"],
-    "prefs.dark": ["Passer en mode sombre", "Switch to dark mode"],
-    "prefs.light": ["Passer en mode clair", "Switch to light mode"],
+    "prefs.langGroup": ["Langue", "Language"],
+    "prefs.darkMode": ["Mode sombre", "Dark mode"],
     "logout": ["Sortir", "Sign out"],
     "logout.long": ["Se déconnecter", "Sign out"],
     "config.missing": ["Le site n’est pas encore relié à Supabase. Remplis js/config.js (voir le README).", "This site isn’t connected to Supabase yet. Fill in js/config.js (see the README)."],
@@ -371,34 +370,51 @@
     renderPrefs();
   }
 
-  // ---------- Boutons (langue + thème) ----------
+  // ---------- Contrôles : pastille « FR | EN » + interrupteur soleil/lune ----------
   var SUN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
   var MOON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>';
 
   function renderPrefs() {
+    var dark = currentTheme() === "dark";
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", dark ? "#0D1430" : "#FFFFFF");
+
     document.querySelectorAll("[data-prefs]").forEach(function (box) {
       box.classList.add("prefs");
       box.textContent = "";
 
-      var lb = document.createElement("button");
-      lb.type = "button";
-      lb.className = "pref-btn";
-      lb.textContent = lang === "en" ? "FR" : "EN";
-      lb.setAttribute("lang", lang === "en" ? "fr" : "en");
-      lb.setAttribute("aria-label", t("prefs.lang"));
-      lb.title = t("prefs.lang");
-      lb.addEventListener("click", function () { setLang(lang === "en" ? "fr" : "en"); });
+      // Langue : deux boutons, celui de la langue actuelle est « appuyé »
+      var group = document.createElement("div");
+      group.className = "pref-lang";
+      group.setAttribute("role", "group");
+      group.setAttribute("aria-label", t("prefs.langGroup"));
+      ["fr", "en"].forEach(function (code) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.textContent = code.toUpperCase();
+        b.setAttribute("lang", code);
+        b.setAttribute("aria-pressed", String(lang === code));
+        b.title = code === "fr" ? "Français" : "English";
+        b.addEventListener("click", function () { if (lang !== code) setLang(code); });
+        group.appendChild(b);
+      });
 
-      var dark = currentTheme() === "dark";
-      var tb = document.createElement("button");
-      tb.type = "button";
-      tb.className = "pref-btn";
-      tb.innerHTML = dark ? SUN : MOON;
-      tb.setAttribute("aria-label", t(dark ? "prefs.light" : "prefs.dark"));
-      tb.title = t(dark ? "prefs.light" : "prefs.dark");
-      tb.addEventListener("click", function () { setTheme(currentTheme() === "dark" ? "light" : "dark"); });
+      var sep = document.createElement("span");
+      sep.className = "pref-sep";
+      sep.setAttribute("aria-hidden", "true");
 
-      box.append(lb, tb);
+      // Thème : un interrupteur (switch) avec soleil à gauche, lune à droite
+      var sw = document.createElement("button");
+      sw.type = "button";
+      sw.className = "pref-theme";
+      sw.setAttribute("role", "switch");
+      sw.setAttribute("aria-checked", String(dark));
+      sw.setAttribute("aria-label", t("prefs.darkMode"));
+      sw.title = t("prefs.darkMode");
+      sw.innerHTML = '<span class="track">' + SUN + MOON + '<span class="knob">' + (dark ? MOON : SUN) + "</span></span>";
+      sw.addEventListener("click", function () { setTheme(currentTheme() === "dark" ? "light" : "dark"); });
+
+      box.append(group, sep, sw);
     });
   }
 
