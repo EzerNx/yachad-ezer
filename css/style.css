@@ -1,0 +1,169 @@
+/* Yachad Ezer — feuille de style commune
+   Palette : ciel d'aube, encre de nuit, et l'or de l'huile de lampe comme seul accent. */
+:root {
+  --bg: #EDF0F5;
+  --surface: #F8F9FC;
+  --ink: #1B2540;
+  --muted: #58617A;
+  --line: #D3D8E3;
+  --lamp: #A6741C;
+  --lamp-soft: #F3E6CB;
+  --ok: #2F6B4F;
+  --danger: #A23B3B;
+  --display: "Frank Ruhl Libre", "Times New Roman", Georgia, serif;
+  --body: "Karla", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0F1528; --surface: #172039; --ink: #E5E9F3; --muted: #A3ABC2; --line: #2A355A;
+    --lamp: #E0B45E; --lamp-soft: #3A3220; --ok: #7CC4A0; --danger: #E68A8A;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--body); font-size: 17px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+img, svg { max-width: 100%; }
+h1, h2, h3 { font-family: var(--display); font-weight: 500; line-height: 1.2; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2rem, 6vw, 2.8rem); }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.2rem; }
+p { margin: 0; }
+a { color: var(--lamp); }
+:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; border-radius: 4px; }
+[hidden] { display: none !important; }
+
+.wrap { max-width: 680px; margin: 0 auto; padding-block: 40px 64px; display: flex; flex-direction: column; gap: 56px; }
+.wrap.wide { max-width: 980px; gap: 28px; }
+section { display: flex; flex-direction: column; gap: 18px; }
+.eyebrow { font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--lamp); font-weight: 700; }
+.muted, .hint { color: var(--muted); }
+.hint { font-size: .87rem; font-weight: 400; }
+.story em { color: var(--ink); font-style: normal; font-family: var(--display); font-size: 1.08rem; }
+
+/* Barre du haut des portails */
+.topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px;
+  padding-block: 18px; border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: baseline; gap: 10px; text-decoration: none; color: var(--ink); }
+.brand .he { font-family: var(--display); color: var(--lamp); font-size: 1.5rem; }
+.brand b { font-family: var(--display); font-weight: 500; font-size: 1.15rem; }
+.topbar nav { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: .95rem; }
+
+/* Verset */
+.verse { border-left: 2px solid var(--lamp); padding: 4px 0 4px 20px; display: flex; flex-direction: column; gap: 6px; }
+.verse blockquote { margin: 0; font-family: var(--display); font-size: 1.4rem; line-height: 1.4; }
+.verse cite { font-style: normal; font-size: .85rem; color: var(--muted); letter-spacing: .04em; }
+
+/* Formulaires */
+form { display: flex; flex-direction: column; gap: 20px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+label, .legend { font-weight: 700; font-size: .95rem; }
+input[type=text], input[type=email], input[type=tel], input[type=password], input[type=number], textarea, select {
+  font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line);
+  border-radius: 10px; padding: 11px 14px; width: 100%;
+}
+textarea { min-height: 130px; resize: vertical; }
+input:focus, textarea:focus, select:focus { border-color: var(--lamp); outline: none; box-shadow: 0 0 0 3px var(--lamp-soft); }
+fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.choices { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { position: relative; }
+.chip input { position: absolute; opacity: 0; inset: 0; cursor: pointer; margin: 0; }
+.chip span { display: inline-block; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font-size: .95rem; cursor: pointer; font-weight: 500; }
+.chip input:checked + span { background: var(--lamp-soft); border-color: var(--lamp); font-weight: 700; }
+.chip input:focus-visible + span { outline: 2px solid var(--lamp); outline-offset: 2px; }
+.check { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; font-weight: 400; font-size: .95rem; }
+.check input { width: 20px; height: 20px; margin: 3px 0 0; accent-color: var(--lamp); }
+.box { display: flex; flex-direction: column; gap: 14px; padding: 16px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.err { color: var(--danger); font-size: .88rem; }
+.notice { font-size: .9rem; color: var(--muted); padding: 12px 14px; border-radius: 10px; border: 1px dashed var(--line); }
+.notice.warn { border-color: var(--lamp); color: var(--ink); background: var(--lamp-soft); }
+.trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* Boutons */
+.btn { font: inherit; font-weight: 700; border-radius: 999px; padding: 12px 24px; border: 1px solid var(--lamp);
+  background: var(--lamp); color: var(--bg); cursor: pointer; text-decoration: none; display: inline-block; align-self: flex-start; }
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--lamp); }
+.btn.small { padding: 6px 14px; font-size: .85rem; }
+.btn.danger { border-color: var(--danger); color: var(--danger); background: transparent; }
+.btn.quiet { border-color: var(--line); color: var(--ink); background: transparent; }
+.btn[disabled] { opacity: .5; cursor: default; }
+
+/* Cartes de liste (portails) */
+.list { display: flex; flex-direction: column; gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.card-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 14px; font-size: .88rem; color: var(--muted); align-items: baseline; }
+.code { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-weight: 700; color: var(--ink); font-size: 1rem; letter-spacing: .04em; }
+.card p.body { white-space: pre-wrap; overflow-wrap: anywhere; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: .78rem; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); }
+.tag.ok { border-color: var(--ok); color: var(--ok); }
+.tag.lamp { border-color: var(--lamp); color: var(--lamp); }
+.tag.new { background: var(--lamp-soft); border-color: var(--lamp); color: var(--ink); font-weight: 700; }
+.tag button { all: unset; cursor: pointer; margin-left: 6px; color: var(--danger); font-weight: 700; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.actions select { width: auto; max-width: 100%; padding: 6px 10px; font-size: .9rem; }
+.empty { color: var(--muted); padding: 20px 0; }
+.stats { display: flex; gap: 22px; flex-wrap: wrap; font-size: .9rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.stats b { color: var(--ink); font-size: 1.5rem; font-family: var(--display); font-weight: 500; margin-right: 4px; }
+.subtle { border-top: 1px solid var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+
+/* Onglets (admin) */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--line); }
+.tabs button { font: inherit; background: none; border: 0; padding: 10px 14px; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--lamp); font-weight: 700; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.toolbar select { width: auto; }
+
+/* Message flottant */
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+  background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-size: .92rem; z-index: 20; max-width: calc(100% - 32px); }
+
+/* Pied de page */
+footer { font-size: .85rem; color: var(--muted); text-align: center; display: flex; flex-direction: column; gap: 6px; }
+footer nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; }
+
+/* Section Loi 25 */
+.privacy { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.privacy details { border-bottom: 1px solid var(--line); padding: 14px 0; }
+.privacy summary { cursor: pointer; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+.privacy summary::-webkit-details-marker { display: none; }
+.privacy summary::after { content: "+"; color: var(--lamp); font-weight: 400; }
+.privacy details[open] summary::after { content: "–"; }
+.privacy details p, .privacy details ul { margin-top: 10px; color: var(--muted); font-size: .95rem; }
+.privacy ul { padding-left: 20px; }
+
+/* ——— Motion : des mains qui s'élèvent vers la lumière ——— */
+.praise { width: 100%; height: auto; display: block; }
+.praise .glow { fill: url(#ye-glow); transform-box: fill-box; transform-origin: center; animation: glow 8s ease-in-out infinite; }
+.praise .ray { stroke: var(--lamp); stroke-width: 1.2; opacity: .25; }
+.praise .person { fill: var(--ink); }
+.praise .arm { stroke: var(--ink); stroke-width: 7; stroke-linecap: round; fill: none;
+  transform-box: view-box; transform-origin: 0 0; animation: raise-l 8s ease-in-out infinite; }
+.praise .arm.r { animation-name: raise-r; }
+@keyframes glow { 0%, 100% { opacity: .55; transform: scale(.92); } 50% { opacity: 1; transform: scale(1.06); } }
+@keyframes raise-l { 0%, 12% { transform: rotate(18deg); } 38%, 78% { transform: rotate(152deg); } 100% { transform: rotate(18deg); } }
+@keyframes raise-r { 0%, 12% { transform: rotate(-18deg); } 38%, 78% { transform: rotate(-152deg); } 100% { transform: rotate(-18deg); } }
+
+/* Flamme de confirmation */
+.flame { width: 46px; height: 72px; position: relative; }
+.flame i { position: absolute; left: 50%; bottom: 0; width: 30px; height: 48px; margin-left: -15px;
+  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 50% 70%, var(--lamp-soft), var(--lamp) 70%);
+  transform-origin: 50% 100%; animation: flicker 2.4s ease-in-out infinite; }
+.flame b { position: absolute; left: 50%; bottom: -6px; width: 34px; height: 8px; margin-left: -17px; border-radius: 50%; background: var(--line); }
+@keyframes flicker { 0%, 100% { transform: scaleY(1) rotate(-2deg); } 50% { transform: scaleY(1.12) rotate(2deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .praise .glow, .flame i { animation: none; }
+  .praise .arm { animation: none; transform: rotate(152deg); }
+  .praise .arm.r { transform: rotate(-152deg); }
+}

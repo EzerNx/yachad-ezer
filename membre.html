@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mes demandes · Yachad Ezer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Karla:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="wrap wide">
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="he" lang="he">יחד עזר</span><b>Yachad Ezer</b></a>
+    <nav><span class="muted" id="hello"></span><a href="admin.html" id="adminLink" hidden>Portail admin</a><button class="btn small quiet" id="logoutBtn" type="button">Se déconnecter</button></nav>
+  </header>
+
+  <section>
+    <span class="eyebrow">Portail intercesseur</span>
+    <h1>Les demandes qui vous sont confiées</h1>
+    <p class="muted">Vous ne voyez qu’un code, jamais le nom de la personne. Après avoir prié, vous pouvez écrire ce que vous avez reçu. L’administrateur le relira avant de le transmettre.</p>
+    <div class="stats" id="stats"></div>
+    <div class="toolbar">
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" aria-selected="true" data-view="todo">À prier</button>
+        <button type="button" role="tab" aria-selected="false" data-view="done">Déjà priées</button>
+      </div>
+    </div>
+    <div class="list" id="list"><p class="empty">Chargement…</p></div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script type="module">
+import { sb, h, fmtDate, toast, NEEDS, requireRole, signOut } from "./js/app.js";
+
+const me = await requireRole(["intercesseur", "admin"]);
+if (me) start();
+
+let view = "todo";
+let assignments = [];
+let observations = [];
+
+async function start() {
+  document.getElementById("hello").textContent = "Bonjour, " + (me.display_name || "");
+  document.getElementById("adminLink").hidden = me.role !== "admin";
+  document.getElementById("logoutBtn").addEventListener("click", signOut);
+  document.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => {
+    view = b.dataset.view;
+    document.querySelectorAll("[data-view]").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+    render();
+  }));
+  await load();
+}
+
+async function load() {
+  // La base ne renvoie QUE les demandes attribuées à cette personne (règles RLS).
+  const [a, o] = await Promise.all([
+    sb.from("assignments")
+      .select("id, assigned_at, prayed_at, request:prayer_requests(id, code, body, needs, wants_contact, status, created_at)")
+      .eq("member_id", me.id)
+      .order("assigned_at", { ascending: false }),
+    sb.from("observations")
+      .select("id, request_id, body, status, created_at")
+      .eq("member_id", me.id)
+      .order("created_at"),
+  ]);
+  if (a.error || o.error) {
+    document.getElementById("list").replaceChildren(h("p", { class: "err" }, "Impossible de charger vos demandes. Réessayez plus tard."));
+    return;
+  }
+  assignments = a.data.filter((x) => x.request && x.request.status !== "fermee");
+  observations = o.data;
+  render();
+}
+
+function render() {
+  const todo = assignments.filter((a) => !a.prayed_at);
+  const done = assignments.filter((a) => a.prayed_at);
+  const stats = document.getElementById("stats");
+  stats.replaceChildren(
+    h("span", {}, h("b", {}, todo.length), "à prier"),
+    h("span", {}, h("b", {}, done.length), "déjà priées"),
+    h("span", {}, h("b", {}, observations.length), "observations écrites"),
+  );
+  const items = view === "todo" ? todo : done;
+  const list = document.getElementById("list");
+  if (!items.length) {
+    list.replaceChildren(h("p", { class: "empty" },
+      view === "todo" ? "Aucune demande en attente pour l’instant. Merci pour votre fidélité." : "Aucune demande priée pour l’instant."));
+    return;
+  }
+  list.replaceChildren(...items.map(card));
+}
+
+function card(a) {
+  const r = a.request;
+  const mine = observations.filter((o) => o.request_id === r.id);
+  const ta = h("textarea", { id: "obs-" + r.id, maxlength: "2000", placeholder: "Ce que vous avez reçu en priant : un encouragement, un verset, une image…" });
+  const send = h("button", { class: "btn small", type: "button" }, "Envoyer à l’administrateur");
+  send.addEventListener("click", async () => {
+    const body = ta.value.trim();
+    if (body.length < 2) { toast("Écrivez votre observation avant d’envoyer."); return; }
+    send.disabled = true;
+    const { data, error } = await sb.from("observations")
+      .insert({ request_id: r.id, member_id: me.id, body })
+      .select("id, request_id, body, status, created_at").single();
+    send.disabled = false;
+    if (error) { toast("L’envoi n’a pas fonctionné. Réessayez."); return; }
+    observations.push(data);
+    toast("Observation envoyée à l’administrateur.");
+    render();
+  });
+
+  const prayBtn = h("button", { class: "btn small ghost", type: "button" }, a.prayed_at ? "Remettre dans « À prier »" : "J’ai prié pour cette demande");
+  prayBtn.addEventListener("click", async () => {
+    const value = a.prayed_at ? null : new Date().toISOString();
+    const { error } = await sb.from("assignments").update({ prayed_at: value }).eq("id", a.id);
+    if (error) { toast("Impossible d’enregistrer. Réessayez."); return; }
+    a.prayed_at = value;
+    toast(value ? "Merci d’avoir porté cette demande." : "Demande remise dans « À prier ».");
+    render();
+  });
+
+  return h("article", { class: "card" },
+    h("div", { class: "card-head" },
+      h("span", { class: "code" }, r.code),
+      h("span", {}, "Confiée le " + fmtDate(a.assigned_at))),
+    h("p", { class: "body" }, r.body),
+    h("div", { class: "tags" },
+      (r.needs || []).map((n) => h("span", { class: "tag" }, NEEDS[n] || n)),
+      r.wants_contact ? h("span", { class: "tag lamp" }, "Souhaite une réponse") : null,
+      a.prayed_at ? h("span", { class: "tag ok" }, "Priée le " + fmtDate(a.prayed_at)) : null),
+    mine.length ? h("div", { class: "subtle" },
+      h("span", { class: "hint" }, "Vos observations"),
+      mine.map((o) => h("p", { class: "body" }, o.body, " ", h("span", { class: "hint" }, "· " + fmtDate(o.created_at) + (o.status === "transmise" ? " · transmise" : ""))))) : null,
+    h("div", { class: "field" },
+      h("label", { for: "obs-" + r.id }, "Écrire une observation"),
+      ta),
+    h("div", { class: "actions" }, send, prayBtn),
+  );
+}
+</script>
+</body>
+</html>

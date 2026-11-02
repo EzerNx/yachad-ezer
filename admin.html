@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portail admin · Yachad Ezer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Karla:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .identity { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .92rem; padding: 10px 12px; border-radius: 10px; background: var(--bg); }
+  .identity b { font-weight: 700; }
+  .reply textarea { min-height: 170px; }
+  .settings { max-width: 520px; }
+</style>
+</head>
+<body>
+<div class="wrap wide">
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="he" lang="he">יחד עזר</span><b>Yachad Ezer</b></a>
+    <nav><a href="membre.html">Mes demandes à prier</a><button class="btn small quiet" id="logoutBtn" type="button">Se déconnecter</button></nav>
+  </header>
+
+  <section>
+    <span class="eyebrow">Portail admin</span>
+    <h1>Gestion des requêtes</h1>
+    <div class="stats" id="stats"></div>
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" aria-selected="true" data-tab="requests">Demandes</button>
+      <button type="button" role="tab" aria-selected="false" data-tab="observations">Observations</button>
+      <button type="button" role="tab" aria-selected="false" data-tab="members">Intercesseurs</button>
+      <button type="button" role="tab" aria-selected="false" data-tab="settings">Réglages</button>
+    </div>
+    <div id="panel"><p class="empty">Chargement…</p></div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script type="module">
+import { sb, h, fmtDate, toast, NEEDS, STATUS, requireRole, signOut } from "./js/app.js";
+
+const me = await requireRole(["admin"]);
+
+let tab = "requests";
+let requestFilter = "ouvertes";
+let obsFilter = "a-traiter";
+const state = { requests: [], members: [], observations: [], settings: null };
+
+const one = (x) => (Array.isArray(x) ? x[0] : x) || null;   // relation 1-à-1 renvoyée en objet ou tableau
+const memberName = (id) => state.members.find((m) => m.id === id)?.display_name || "Membre";
+
+if (me) {
+  document.getElementById("logoutBtn").addEventListener("click", signOut);
+  document.querySelectorAll("[data-tab]").forEach((b) => b.addEventListener("click", () => {
+    tab = b.dataset.tab;
+    document.querySelectorAll("[data-tab]").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+    render();
+  }));
+  await loadAll();
+}
+
+async function loadAll() {
+  const [r, m, o, s] = await Promise.all([
+    sb.from("prayer_requests")
+      .select("id, code, body, needs, wants_contact, status, created_at, expires_at, private:request_private(first_name, contact_method, contact_value), assignments(id, member_id, prayed_at)")
+      .order("created_at", { ascending: false }),
+    sb.from("profiles")
+      .select("id, display_name, church, motivation, role, active, created_at, approved_at, engagement_at")
+      .order("created_at"),
+    sb.from("observations")
+      .select("id, body, status, created_at, transmitted_at, member_id, request:prayer_requests(id, code, body, wants_contact, private:request_private(first_name, contact_method, contact_value))")
+      .order("created_at", { ascending: false }),
+    sb.from("app_settings").select("auto_assign, per_request").eq("id", 1).maybeSingle(),
+  ]);
+  const err = r.error || m.error || o.error || s.error;
+  if (err) {
+    console.error(err);
+    document.getElementById("panel").replaceChildren(h("p", { class: "err" }, "Impossible de charger les données. Vérifiez votre connexion."));
+    return;
+  }
+  state.requests = r.data;
+  state.members = m.data;
+  state.observations = o.data;
+  state.settings = s.data;
+  render();
+}
+
+// Exécute une action, affiche un message, puis recharge
+async function act(promise, okMsg) {
+  const { error } = await promise;
+  if (error) { console.error(error); toast("Action impossible : " + (error.message || "erreur")); return false; }
+  if (okMsg) toast(okMsg);
+  await loadAll();
+  return true;
+}
+
+function render() {
+  const open = state.requests.filter((r) => r.status !== "fermee");
+  const unassigned = state.requests.filter((r) => r.status === "nouvelle").length;
+  const newObs = state.observations.filter((o) => o.status === "nouvelle").length;
+  const candidates = state.members.filter((m) => m.role === "candidat").length;
+  document.getElementById("stats").replaceChildren(
+    h("span", {}, h("b", {}, open.length), "demandes ouvertes"),
+    h("span", {}, h("b", {}, unassigned), "sans intercesseur"),
+    h("span", {}, h("b", {}, newObs), "observations à lire"),
+    h("span", {}, h("b", {}, candidates), "candidatures"),
+  );
+  const panel = document.getElementById("panel");
+  const view = { requests: viewRequests, observations: viewObservations, members: viewMembers, settings: viewSettings }[tab];
+  panel.replaceChildren(view());
+}
+
+/* ===================== DEMANDES ===================== */
+function viewRequests() {
+  const filterSel = h("select", { id: "reqFilter", "aria-label": "Filtrer les demandes" },
+    [["ouvertes", "Demandes ouvertes"], ["nouvelle", "Sans intercesseur"], ["fermee", "Fermées"], ["toutes", "Toutes"]]
+      .map(([v, l]) => h("option", { value: v, selected: v === requestFilter }, l)));
+  filterSel.addEventListener("change", () => { requestFilter = filterSel.value; render(); });
+
+  const distBtn = h("button", { class: "btn small", type: "button" }, "Répartir les demandes sans intercesseur");
+  distBtn.addEventListener("click", async () => {
+    distBtn.disabled = true;
+    const { data, error } = await sb.rpc("distribute_new_requests");
+    distBtn.disabled = false;
+    if (error) { toast("Répartition impossible : " + error.message); return; }
+    toast(data ? data + " attribution(s) faite(s)." : "Aucune attribution : pas de demande en attente ou pas d’intercesseur actif.");
+    loadAll();
+  });
+
+  const list = state.requests.filter((r) =>
+    requestFilter === "toutes" ? true :
+    requestFilter === "ouvertes" ? r.status !== "fermee" : r.status === requestFilter);
+
+  return h("div", { class: "list" },
+    h("div", { class: "toolbar" }, filterSel, distBtn),
+    list.length ? list.map(requestCard) : h("p", { class: "empty" }, "Aucune demande ici."));
+}
+
+function requestCard(r) {
+  const p = one(r.private);
+  const assigned = r.assignments || [];
+  const available = state.members.filter((m) => m.active && ["intercesseur", "admin"].includes(m.role) && !assigned.some((a) => a.member_id === m.id));
+
+  const pick = h("select", { "aria-label": "Choisir un intercesseur pour " + r.code },
+    h("option", { value: "" }, "Ajouter un intercesseur…"),
+    available.map((m) => h("option", { value: m.id }, m.display_name || "Membre")));
+  pick.addEventListener("change", async () => {
+    if (!pick.value) return;
+    const ok = await act(sb.from("assignments").insert({ request_id: r.id, member_id: pick.value }), "Demande attribuée.");
+    if (ok && r.status === "nouvelle") await act(sb.from("prayer_requests").update({ status: "assignee" }).eq("id", r.id));
+  });
+
+  const toggle = h("button", { class: "btn small quiet", type: "button" }, r.status === "fermee" ? "Rouvrir" : "Fermer");
+  toggle.addEventListener("click", () => act(
+    sb.from("prayer_requests").update({ status: r.status === "fermee" ? (assigned.length ? "assignee" : "nouvelle") : "fermee" }).eq("id", r.id),
+    r.status === "fermee" ? "Demande rouverte." : "Demande fermée."));
+
+  const actions = h("div", { class: "actions" }, available.length && r.status !== "fermee" ? pick : null, toggle);
+  const del = h("button", { class: "btn small danger", type: "button" }, "Supprimer");
+  del.addEventListener("click", () => {
+    const yes = h("button", { class: "btn small danger", type: "button" }, "Oui, supprimer définitivement");
+    const no = h("button", { class: "btn small quiet", type: "button" }, "Annuler");
+    yes.addEventListener("click", () => act(sb.from("prayer_requests").delete().eq("id", r.id), "Demande supprimée."));
+    no.addEventListener("click", render);
+    actions.replaceChildren(h("span", {}, "Supprimer la demande, l’identité et les observations ?"), yes, no);
+  });
+  actions.append(del);
+
+  return h("article", { class: "card" },
+    h("div", { class: "card-head" },
+      h("span", {}, h("span", { class: "code" }, r.code), " ", h("span", { class: r.status === "nouvelle" ? "tag new" : "tag" }, STATUS[r.status])),
+      h("span", {}, "Reçue le " + fmtDate(r.created_at) + " · supprimée le " + fmtDate(r.expires_at))),
+    h("div", { class: "identity" },
+      h("span", {}, h("b", {}, "Personne : "), (p && p.first_name) || "Anonyme"),
+      p && p.contact_value
+        ? h("span", {}, h("b", {}, p.contact_method === "courriel" ? "Courriel : " : "Téléphone : "), p.contact_value)
+        : h("span", { class: "muted" }, r.wants_contact ? "Contact demandé, coordonnées manquantes" : "Ne souhaite pas être contactée")),
+    h("p", { class: "body" }, r.body),
+    h("div", { class: "tags" }, (r.needs || []).map((n) => h("span", { class: "tag" }, NEEDS[n] || n))),
+    h("div", { class: "subtle" },
+      h("span", { class: "hint" }, assigned.length ? "Intercesseurs" : "Aucun intercesseur pour l’instant"),
+      h("div", { class: "tags" }, assigned.map((a) => {
+        const rm = h("button", { type: "button", "aria-label": "Retirer " + memberName(a.member_id) }, "×");
+        rm.addEventListener("click", () => act(sb.from("assignments").delete().eq("id", a.id), "Intercesseur retiré."));
+        return h("span", { class: a.prayed_at ? "tag ok" : "tag" }, memberName(a.member_id) + (a.prayed_at ? " · a prié" : ""), rm);
+      }))),
+    actions);
+}
+
+/* ===================== OBSERVATIONS ===================== */
+function viewObservations() {
+  const sel = h("select", { "aria-label": "Filtrer les observations" },
+    [["a-traiter", "À traiter"], ["transmise", "Transmises"], ["toutes", "Toutes"]]
+      .map(([v, l]) => h("option", { value: v, selected: v === obsFilter }, l)));
+  sel.addEventListener("change", () => { obsFilter = sel.value; render(); });
+  const list = state.observations.filter((o) =>
+    obsFilter === "toutes" ? true : obsFilter === "transmise" ? o.status === "transmise" : o.status !== "transmise");
+  return h("div", { class: "list" },
+    h("div", { class: "toolbar" }, sel),
+    list.length ? list.map(obsCard) : h("p", { class: "empty" }, "Aucune observation ici."));
+}
+
+function obsCard(o) {
+  const r = o.request;
+  const p = r ? one(r.private) : null;
+  const canReply = r && r.wants_contact && p && p.contact_value;
+
+  const actions = h("div", { class: "actions" });
+  if (o.status === "nouvelle") {
+    const read = h("button", { class: "btn small quiet", type: "button" }, "Marquer comme lue");
+    read.addEventListener("click", () => act(sb.from("observations").update({ status: "lue" }).eq("id", o.id)));
+    actions.append(read);
+  }
+
+  let reply = null;
+  if (canReply && o.status !== "transmise") {
+    const greeting = p.first_name ? "Bonjour " + p.first_name + "," : "Bonjour,";
+    const ta = h("textarea", { id: "reply-" + o.id, maxlength: "4000" });
+    ta.value = greeting + "\n\nVous nous avez confié un sujet de prière (référence " + r.code + "). Nous avons prié pour vous, et voici ce qu’un intercesseur a reçu :\n\n" + o.body + "\n\nNous continuons de vous porter dans la prière.\n\nL’équipe Yachad Ezer";
+    const copy = h("button", { class: "btn small", type: "button" }, "Copier le message");
+    copy.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(ta.value); toast("Message copié."); }
+      catch { ta.select(); toast("Sélectionné : faites Ctrl+C."); }
+    });
+    const mail = p.contact_method === "courriel"
+      ? h("a", { class: "btn small ghost", href: "mailto:" + encodeURIComponent(p.contact_value) + "?subject=" + encodeURIComponent("Votre demande de prière · Yachad Ezer") + "&body=" + encodeURIComponent(ta.value) }, "Ouvrir dans ma messagerie")
+      : h("span", { class: "tag lamp" }, "Appeler ou texter : " + p.contact_value);
+    ta.addEventListener("input", () => { if (mail.tagName === "A") mail.href = "mailto:" + encodeURIComponent(p.contact_value) + "?subject=" + encodeURIComponent("Votre demande de prière · Yachad Ezer") + "&body=" + encodeURIComponent(ta.value); });
+    const sent = h("button", { class: "btn small quiet", type: "button" }, "Marquer comme transmise");
+    sent.addEventListener("click", () => act(sb.from("observations").update({ status: "transmise", transmitted_at: new Date().toISOString() }).eq("id", o.id), "Observation marquée comme transmise."));
+    reply = h("div", { class: "box reply" },
+      h("label", { for: "reply-" + o.id }, "Réponse à transmettre"),
+      h("span", { class: "hint" }, "Relisez et ajustez avant d’envoyer. Le nom de l’intercesseur n’apparaît pas."),
+      ta,
+      h("div", { class: "actions" }, copy, mail, sent));
+  }
+
+  return h("article", { class: "card" },
+    h("div", { class: "card-head" },
+      h("span", {}, h("span", { class: "code" }, r ? r.code : "—"), " ",
+        h("span", { class: o.status === "nouvelle" ? "tag new" : o.status === "transmise" ? "tag ok" : "tag" },
+          o.status === "nouvelle" ? "Nouvelle" : o.status === "transmise" ? "Transmise le " + fmtDate(o.transmitted_at) : "Lue")),
+      h("span", {}, "Par " + memberName(o.member_id) + " · " + fmtDate(o.created_at))),
+    h("p", { class: "body" }, o.body),
+    r ? h("details", {}, h("summary", { class: "hint" }, "Voir la demande"), h("p", { class: "body muted" }, r.body)) : null,
+    !canReply ? h("p", { class: "hint" }, r && r.wants_contact ? "Contact demandé, mais aucune coordonnée enregistrée." : "Cette personne n’a pas demandé de réponse : l’observation reste interne.") : null,
+    reply,
+    actions.childNodes.length ? actions : null);
+}
+
+/* ===================== INTERCESSEURS ===================== */
+function viewMembers() {
+  const openLoad = (id) => state.requests.filter((r) => r.status !== "fermee" && (r.assignments || []).some((a) => a.member_id === id && !a.prayed_at)).length;
+  const candidates = state.members.filter((m) => m.role === "candidat");
+  const team = state.members.filter((m) => ["intercesseur", "admin"].includes(m.role));
+
+  const candCard = (m) => {
+    const yes = h("button", { class: "btn small", type: "button" }, "Accepter");
+    yes.addEventListener("click", () => act(sb.from("profiles").update({ role: "intercesseur", active: true, approved_at: new Date().toISOString() }).eq("id", m.id), "Candidature acceptée."));
+    const no = h("button", { class: "btn small danger", type: "button" }, "Refuser");
+    no.addEventListener("click", () => act(sb.from("profiles").update({ role: "refuse", active: false }).eq("id", m.id), "Candidature refusée."));
+    return h("article", { class: "card" },
+      h("div", { class: "card-head" }, h("strong", {}, m.display_name || "Sans nom"), h("span", {}, "Inscrit le " + fmtDate(m.created_at))),
+      m.church ? h("p", { class: "muted" }, "Église : " + m.church) : null,
+      h("p", { class: "body" }, m.motivation || "Pas de motivation indiquée."),
+      h("div", { class: "tags" }, m.engagement_at
+        ? h("span", { class: "tag ok" }, "Engagement de confidentialité accepté")
+        : h("span", { class: "tag lamp" }, "Engagement non accepté")),
+      h("div", { class: "actions" }, yes, no));
+  };
+
+  const teamCard = (m) => {
+    const isMe = m.id === me.id;
+    const toggle = h("button", { class: "btn small quiet", type: "button" }, m.active ? "Mettre en pause" : "Réactiver");
+    toggle.addEventListener("click", () => act(sb.from("profiles").update({ active: !m.active }).eq("id", m.id), m.active ? "Membre mis en pause." : "Membre réactivé."));
+    return h("article", { class: "card" },
+      h("div", { class: "card-head" },
+        h("strong", {}, (m.display_name || "Sans nom") + (isMe ? " (vous)" : "")),
+        h("span", {}, m.role === "admin" ? "Administrateur" : "Intercesseur")),
+      h("div", { class: "tags" },
+        h("span", { class: m.active ? "tag ok" : "tag" }, m.active ? "Actif" : "En pause"),
+        h("span", { class: "tag" }, openLoad(m.id) + " demande(s) à prier")),
+      isMe ? null : h("div", { class: "actions" }, toggle));
+  };
+
+  return h("div", { class: "list" },
+    h("h2", {}, "Candidatures"),
+    candidates.length ? candidates.map(candCard) : h("p", { class: "empty" }, "Aucune candidature en attente."),
+    h("h2", {}, "Équipe"),
+    team.map(teamCard));
+}
+
+/* ===================== RÉGLAGES ===================== */
+function viewSettings() {
+  const s = state.settings || { auto_assign: true, per_request: 2 };
+  const auto = h("input", { type: "checkbox", id: "set-auto", checked: s.auto_assign });
+  const per = h("input", { type: "number", id: "set-per", min: "1", max: "10", value: String(s.per_request) });
+  const save = h("button", { class: "btn", type: "button" }, "Enregistrer");
+  save.addEventListener("click", () => {
+    const n = Math.min(10, Math.max(1, parseInt(per.value, 10) || 2));
+    act(sb.from("app_settings").update({ auto_assign: auto.checked, per_request: n }).eq("id", 1), "Réglages enregistrés.");
+  });
+  return h("div", { class: "list settings" },
+    h("h2", {}, "Répartition des demandes"),
+    h("p", { class: "muted" }, "Chaque nouvelle demande est confiée aux intercesseurs actifs qui ont le moins de demandes à prier en ce moment. En cas d’égalité, le choix se fait au hasard. Vous pouvez toujours ajouter ou retirer un intercesseur à la main."),
+    h("label", { class: "check" }, auto, h("span", {}, h("b", {}, "Répartir automatiquement"), h("br"), h("span", { class: "hint" }, "Dès qu’une demande arrive. Sinon, utilisez le bouton « Répartir » dans l’onglet Demandes."))),
+    h("div", { class: "field" }, h("label", { for: "set-per" }, "Nombre d’intercesseurs par demande"), per),
+    save);
+}
+</script>
+</body>
+</html>
