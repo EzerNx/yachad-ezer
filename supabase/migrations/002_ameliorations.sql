@@ -102,6 +102,11 @@ create table if not exists private.rate_events (
 );
 create index if not exists rate_events_bucket_at_idx on private.rate_events (bucket, at);
 
+-- Double protection : ces tables sont dans le schéma privé (non exposé par l'API)
+-- et n'ont aucune règle RLS, donc seules les fonctions de la base peuvent les lire.
+alter table private.secrets     enable row level security;
+alter table private.rate_events enable row level security;
+
 create or replace function private.client_fingerprint()
 returns text language plpgsql stable security definer set search_path = '' as $$
 declare
