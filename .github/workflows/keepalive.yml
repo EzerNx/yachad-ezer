@@ -1,0 +1,26 @@
+# Empêche le projet Supabase gratuit de se mettre en pause
+# (Supabase endort les projets gratuits peu utilisés pendant 7 jours).
+# Deux fois par semaine, on appelle la petite fonction « keepalive ».
+# La clé utilisée est la clé publique (déjà visible dans js/config.js).
+name: Maintien en vie de Supabase
+
+on:
+  schedule:
+    - cron: "17 13 * * 1,4"   # lundi et jeudi, 13 h 17 UTC
+  workflow_dispatch:           # bouton « Run workflow » pour le lancer à la main
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Appeler keepalive
+        run: |
+          URL=$(grep -oP 'SUPABASE_URL = "\K[^"]+' js/config.js)
+          KEY=$(grep -oP '"\Ksb_publishable_[^"]+' js/config.js)
+          RESULT=$(curl -sS -X POST "$URL/rest/v1/rpc/keepalive" -H "apikey: $KEY" -H "content-type: application/json" -d '{}')
+          echo "Réponse : $RESULT"
+          [ "$RESULT" = '"ok"' ]

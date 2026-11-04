@@ -1,0 +1,23 @@
+# Test de sécurité sur le VRAI site et le VRAI Supabase.
+# Il se met dans la peau d'un visiteur anonyme et vérifie que rien de privé ne fuit.
+# Il n'écrit rien dans la base. Chaque dimanche, et à la main avec « Run workflow ».
+name: Sécurité en ligne
+
+on:
+  schedule:
+    - cron: "41 14 * * 0"   # dimanche, 14 h 41 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sonde:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Sondes de sécurité (visiteur anonyme)
+        run: node tests/live-security.mjs

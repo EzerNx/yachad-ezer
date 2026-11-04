@@ -2,16 +2,31 @@
 <html lang="fr-CA">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://kklvokzhptyogutwakol.supabase.co wss://kklvokzhptyogutwakol.supabase.co; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>try{var y=localStorage.getItem("ye-theme");if(y==="dark"||y==="light")document.documentElement.setAttribute("data-theme",y);var l=localStorage.getItem("ye-lang");if(l!=="fr"&&l!=="en")l=/^en/i.test(navigator.language||"")?"en":"fr";document.documentElement.lang=l==="en"?"en-CA":"fr-CA"}catch(e){}</script>
+<script src="js/boot.js?v=5"></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title data-i18n="idx.title">Yachad Ezer · Requêtes de prière</title>
 <meta name="description" data-i18n-attr="content:idx.desc" content="Confiez votre sujet de prière à l’équipe d’intercession Yachad Ezer. Ensemble, nous portons les fardeaux les uns des autres.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="canonical" href="https://ezernx.github.io/yachad-ezer/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Yachad Ezer">
+<meta property="og:title" content="Yachad Ezer · Vous n’avez pas à porter cela seul">
+<meta property="og:description" content="Confiez votre sujet de prière à une équipe d’intercesseurs. Anonyme si vous le voulez, en toute confidentialité.">
+<meta property="og:url" content="https://ezernx.github.io/yachad-ezer/">
+<meta property="og:image" content="https://ezernx.github.io/yachad-ezer/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Des personnes lèvent les mains vers la lumière. Yachad Ezer : vous n’avez pas à porter cela seul.">
+<meta property="og:locale" content="fr_CA">
+<meta property="og:locale:alternate" content="en_CA">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0D1430">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="css/style.css?v=4">
+<link rel="stylesheet" href="css/fonts.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body class="public">
 
@@ -172,6 +187,16 @@
             <div class="flame" aria-hidden="true"><i></i><b></b></div>
             <h2 data-i18n="thanks.title">Votre demande est entre de bonnes mains.</h2>
             <p class="muted" id="thanksText"></p>
+            <div class="follow" id="followBox" hidden>
+              <h3 data-i18n="follow.title">Votre lien de suivi privé</h3>
+              <p class="hint" data-i18n="follow.explain">Gardez ce lien précieusement : c’est la seule façon de voir combien de personnes ont prié pour vous, de partager un témoignage ou de supprimer votre demande. Nous ne pouvons pas le retrouver pour vous.</p>
+              <label class="sr-only" for="followUrl" data-i18n="follow.title">Votre lien de suivi privé</label>
+              <input type="text" id="followUrl" readonly>
+              <div class="people">
+                <button class="btn btn-primary btn-sm" type="button" id="followCopy" data-i18n="follow.copy">Copier le lien</button>
+                <a class="btn btn-secondary btn-sm" id="followOpen" href="suivi.html" target="_blank" rel="noopener" data-i18n="follow.open">Ouvrir ma page de suivi</a>
+              </div>
+            </div>
             <div class="verse" style="text-align:left">
               <blockquote data-i18n="v.phil">« Ne vous inquiétez de rien ; mais en toute chose faites connaître vos besoins à Dieu par des prières. »</blockquote>
               <cite data-i18n="v.phil.ref">Philippiens 4.6 · Louis Segond 1910</cite>
@@ -180,6 +205,11 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <section class="section" id="temoignages" hidden aria-labelledby="tst-title">
+      <div class="section-head"><span class="eyebrow" data-i18n="tst.eyebrow">Prières exaucées</span><h2 id="tst-title" data-i18n="tst.title">Ils témoignent</h2></div>
+      <div class="tst-grid" id="tstList"></div>
     </section>
 
     <section class="section" id="confidentialite" aria-labelledby="privacy-title">
@@ -197,8 +227,8 @@
           <div class="pbody" data-i18n-html="privacy.5.b"><ul><li>Demander à consulter, corriger ou supprimer vos renseignements.</li><li>Retirer votre consentement en tout temps.</li><li>Porter plainte à la Commission d’accès à l’information du Québec.</li></ul></div></details>
         <details><summary data-i18n="privacy.6.s">Responsable de la protection des renseignements personnels</summary>
           <div class="pbody">
-            <!-- À COMPLÉTER : nom et courriel du responsable (Loi 25) -->
-            <p><b>[Nom du responsable]</b> · <b>[courriel@exemple.com]</b></p>
+            <!-- Le nom et le courriel viennent de js/config.js (PRIVACY_OFFICER) -->
+            <p id="officer"></p>
             <p data-i18n="privacy.6.b">Écrivez-lui en indiquant la date de votre demande. En cas d’incident de confidentialité présentant un risque de préjudice sérieux, nous avisons les personnes concernées et la Commission d’accès à l’information.</p>
           </div></details>
       </div>
@@ -213,128 +243,9 @@
   </div>
 </footer>
 
-<script src="js/i18n.js?v=4"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script type="module">
-import { sb, configured, showConfigWarning, t, onLangChange } from "./js/app.js?v=4";
+<script src="js/i18n.js?v=5"></script>
+<script src="js/vendor/supabase-2.117.3.js"></script>
+<script type="module" src="js/pages/accueil.js?v=5"></script>
 
-const $ = (id) => document.getElementById(id);
-const loadedAt = Date.now();
-let lastWantsContact = null;
-showConfigWarning($("prayerForm"));
-
-const text = $("f-text");
-text.addEventListener("input", () => { $("charCount").textContent = text.value.length + " / 1500"; });
-$("f-wantContact").addEventListener("change", (e) => { $("contactBox").hidden = !e.target.checked; });
-document.querySelectorAll('input[name="via"]').forEach((r) => r.addEventListener("change", () => {
-  const tel = $("via-tel").checked;
-  $("telField").hidden = !tel;
-  $("mailField").hidden = tel;
-}));
-
-// Validation : on vérifie ici pour aider la personne,
-// et la base revérifie (contraintes CHECK) pour la sécurité.
-const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
-const telOk = (v) => { const d = v.replace(/\D/g, ""); return d.length >= 10 && d.length <= 15; };
-const show = (id, on) => { $(id).hidden = !on; return on; };
-
-function validate() {
-  let bad = false;
-  bad = show("err-text", text.value.trim().length < 5) || bad;
-  if ($("f-wantContact").checked) {
-    const tel = $("via-tel").checked;
-    const val = (tel ? $("f-tel") : $("f-email")).value.trim();
-    bad = show("err-contact", !(tel ? telOk(val) : emailOk(val))) || bad;
-    bad = show("err-consentContact", !$("f-consentContact").checked) || bad;
-  } else {
-    show("err-contact", false); show("err-consentContact", false);
-  }
-  bad = show("err-consent", !$("f-consent").checked) || bad;
-  bad = show("err-age", !$("f-age").checked) || bad;
-  return !bad;
-}
-
-function thanksText() {
-  if (lastWantsContact === null) return;
-  $("thanksText").textContent = t(lastWantsContact ? "thanks.contact" : "thanks.nocontact");
-}
-
-function finish(wantsContact) {
-  lastWantsContact = wantsContact;
-  thanksText();
-  $("prayerForm").reset();
-  $("contactBox").hidden = true;
-  $("charCount").textContent = "0 / 1500";
-  $("formSection").hidden = true;
-  $("thanks").hidden = false;
-  $("thanks").scrollIntoView({ behavior: "smooth", block: "center" });
-}
-
-function sendError(key) {
-  const el = $("err-send");
-  el.setAttribute("data-i18n", key);
-  el.textContent = t(key);
-  show("err-send", true);
-}
-
-$("prayerForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  show("err-send", false);
-  if (!validate()) {
-    document.querySelector(".err:not([hidden])")?.scrollIntoView({ behavior: "smooth", block: "center" });
-    return;
-  }
-  const wants = $("f-wantContact").checked;
-
-  // Anti-robot simple : champ piège rempli, ou envoi en moins de 3 secondes
-  if ($("f-website").value || Date.now() - loadedAt < 3000) { finish(wants); return; }
-
-  if (!configured || !sb) { sendError("f.notconfigured"); return; }
-
-  const btn = $("submitBtn");
-  btn.disabled = true; btn.textContent = t("sending");
-  try {
-    // On crée l'identifiant ici pour pouvoir y rattacher l'identité juste après.
-    const id = crypto.randomUUID();
-    const needs = [...document.querySelectorAll('input[name="need"]:checked')].map((i) => i.value);
-
-    const { error } = await sb.from("prayer_requests").insert({
-      id,
-      body: text.value.trim(),
-      needs: needs.length ? needs : ["priere"],
-      wants_contact: wants,
-      age_confirmed: true,
-    });
-    if (error) throw error;
-
-    const firstName = $("f-name").value.trim();
-    if (firstName || wants) {
-      const tel = $("via-tel").checked;
-      const { error: e2 } = await sb.from("request_private").insert({
-        request_id: id,
-        first_name: firstName,
-        contact_method: wants ? (tel ? "telephone" : "courriel") : null,
-        contact_value: wants ? (tel ? $("f-tel") : $("f-email")).value.trim() : null,
-        contact_consent_at: wants ? new Date().toISOString() : null,
-      });
-      if (e2) throw e2;
-    }
-    finish(wants);
-  } catch (err) {
-    console.error(err);
-    sendError("f.send.err");
-  } finally {
-    btn.disabled = false; btn.textContent = t("f.submit");
-  }
-});
-
-$("againBtn").addEventListener("click", () => {
-  $("thanks").hidden = true;
-  $("formSection").hidden = false;
-  text.focus();
-});
-
-onLangChange(thanksText);
-</script>
 </body>
 </html>

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://kklvokzhptyogutwakol.supabase.co wss://kklvokzhptyogutwakol.supabase.co; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="js/boot.js?v=5"></script>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title data-i18n="s.title">Suivi de ma demande · Yachad Ezer</title>
+<meta name="theme-color" content="#0D1430">
+<link rel="stylesheet" href="css/fonts.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body class="public">
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
+    <nav><div data-prefs></div></nav>
+  </div>
+</header>
+
+<main class="container narrow">
+  <section class="section">
+    <div class="stack" style="gap:8px">
+      <span class="eyebrow" data-i18n="s.eyebrow">Suivi privé</span>
+      <h1 style="font-size:clamp(2rem,5vw,2.8rem)" data-i18n="s.h1">Votre demande est portée</h1>
+    </div>
+
+    <p class="muted" id="loading" data-i18n="s.loading">Recherche de votre demande…</p>
+
+    <div class="form-card status-card" id="notFound" hidden>
+      <h2 data-i18n="s.notfound.h">Lien introuvable</h2>
+      <p class="muted" data-i18n="s.notfound.p">Ce lien ne correspond à aucune demande.</p>
+    </div>
+
+    <div id="found" hidden class="stack" style="gap:20px">
+      <div class="form-card status-card">
+        <div class="item-head">
+          <span class="code" id="code"></span>
+          <span class="meta" id="received"></span>
+        </div>
+        <div class="big-count" id="bigCount"></div>
+        <p id="prayedText" style="font-size:1.1rem"></p>
+        <p class="muted" id="assignedText"></p>
+        <p class="pill ok" id="replyText" hidden></p>
+        <p class="hint" id="expires"></p>
+      </div>
+
+      <div class="verse">
+        <blockquote data-i18n="v.phil">« Ne vous inquiétez de rien ; mais en toute chose faites connaître vos besoins à Dieu par des prières. »</blockquote>
+        <cite data-i18n="v.phil.ref">Philippiens 4.6 · Louis Segond 1910</cite>
+      </div>
+
+      <div class="form-card stack">
+        <h2 style="font-size:1.5rem" data-i18n="s.t.h">Dieu a répondu ? Partagez un témoignage</h2>
+        <p class="muted" data-i18n="s.t.p">Votre témoignage encouragera d’autres personnes.</p>
+        <form id="tstForm" novalidate>
+          <div class="field">
+            <label for="t-body" data-i18n="s.t.body">Votre témoignage</label>
+            <textarea id="t-body" maxlength="1500"></textarea>
+          </div>
+          <div class="field">
+            <label for="t-name" data-i18n-html="s.t.name">Prénom à afficher</label>
+            <input type="text" id="t-name" maxlength="40" autocomplete="given-name">
+          </div>
+          <label class="check"><input type="checkbox" id="t-consent"><span data-i18n="s.t.consent">J’accepte que ce témoignage soit publié.</span></label>
+          <span class="err" id="t-err" hidden></span>
+          <button class="btn btn-primary" type="submit" id="t-btn" data-i18n="s.t.send">Envoyer mon témoignage</button>
+        </form>
+        <p class="pill ok" id="t-done" hidden data-i18n="s.t.sent">Merci !</p>
+      </div>
+
+      <div class="form-card stack danger-zone">
+        <h2 style="font-size:1.4rem" data-i18n="s.del.h">Supprimer ma demande</h2>
+        <p class="muted" data-i18n="s.del.p">Votre demande sera effacée définitivement.</p>
+        <div class="people" id="delZone">
+          <button class="btn btn-danger" type="button" id="delBtn" data-i18n="s.del.btn">Supprimer ma demande</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card status-card" id="deleted" hidden>
+      <div class="flame" aria-hidden="true"><i></i><b></b></div>
+      <p data-i18n="s.del.done">Votre demande a été effacée.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span class="brand"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></span>
+    <nav><a href="./" data-i18n="join.home">Retour à l’accueil</a></nav>
+  </div>
+</footer>
+
+<script src="js/i18n.js?v=5"></script>
+<script src="js/vendor/supabase-2.117.3.js"></script>
+<script type="module" src="js/pages/suivi.js?v=5"></script>
+</body>
+</html>

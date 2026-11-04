@@ -428,13 +428,18 @@ create policy "réglages : l'admin modifie" on public.app_settings
 --    Si cette partie échoue, active d'abord « Cron » dans
 --    Supabase > Integrations, puis relance seulement ces lignes.
 -- ---------------------------------------------------------------------
-create extension if not exists pg_cron with schema pg_catalog;
-
-select cron.schedule(
-  'purge-demandes-expirees',
-  '0 3 * * *',
-  $$ delete from public.prayer_requests where expires_at < now(); $$
-);
+do $do$
+begin
+  create extension if not exists pg_cron with schema pg_catalog;
+  perform cron.schedule(
+    'purge-demandes-expirees',
+    '0 3 * * *',
+    $$ delete from public.prayer_requests where expires_at < now(); $$
+  );
+exception when others then
+  raise notice 'pg_cron indisponible (%). Active « Cron » dans Supabase > Integrations.', sqlerrm;
+end
+$do$;
 
 -- ---------------------------------------------------------------------
 -- 8. APRÈS t'être inscrit sur la page « Devenir intercesseur »,
