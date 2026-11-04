@@ -2,15 +2,17 @@
 <html lang="fr-CA">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://kklvokzhptyogutwakol.supabase.co wss://kklvokzhptyogutwakol.supabase.co; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>try{var y=localStorage.getItem("ye-theme");if(y==="dark"||y==="light")document.documentElement.setAttribute("data-theme",y);var l=localStorage.getItem("ye-lang");if(l!=="fr"&&l!=="en")l=/^en/i.test(navigator.language||"")?"en":"fr";document.documentElement.lang=l==="en"?"en-CA":"fr-CA"}catch(e){}</script>
+<script src="js/boot.js?v=5"></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title data-i18n="login.title">Espace équipe · Yachad Ezer</title>
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0D1430">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="css/style.css?v=4">
+<link rel="stylesheet" href="css/fonts.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
 <div class="auth">
@@ -45,6 +47,7 @@
         <span class="err" id="l-err" hidden></span>
         <button class="btn btn-primary" type="submit" id="l-btn" data-i18n="login.submit">Se connecter</button>
       </form>
+      <a href="mot-de-passe.html" data-i18n="pw.link">Mot de passe oublié ?</a>
     </div>
 
     <div id="waitSection" hidden aria-live="polite">
@@ -56,66 +59,9 @@
   </main>
 </div>
 
-<script src="js/i18n.js?v=4"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script type="module">
-import { sb, showConfigWarning, explain, getMyProfile, signOut, t, onLangChange } from "./js/app.js?v=4";
-const $ = (id) => document.getElementById(id);
-showConfigWarning($("loginForm"));
+<script src="js/i18n.js?v=5"></script>
+<script src="js/vendor/supabase-2.117.3.js"></script>
+<script type="module" src="js/pages/connexion.js?v=5"></script>
 
-let waiting = null;    // profil affiché dans l'écran d'attente
-let lastError = null;  // dernière erreur, pour la retraduire
-
-function renderWait() {
-  if (!waiting) return;
-  if (waiting.role === "refuse") {
-    $("waitTitle").textContent = t("wait.refused.title");
-    $("waitText").textContent = t("wait.refused.text");
-  } else if (waiting.role === "intercesseur") {
-    $("waitTitle").textContent = t("wait.paused.title");
-    $("waitText").textContent = t("wait.paused.text");
-  } else {
-    $("waitTitle").textContent = t("wait.title");
-    $("waitText").textContent = t("wait.text", { name: waiting.display_name || "" });
-  }
-}
-
-function showError() {
-  if (!lastError) return;
-  $("l-err").textContent = lastError === "notconfigured" ? t("f.notconfigured") : explain(lastError);
-  $("l-err").hidden = false;
-}
-
-// Envoie chaque personne vers le bon portail selon son rôle
-async function route() {
-  const me = await getMyProfile();
-  if (!me) return;
-  if (me.active && me.role === "admin") return location.replace("admin.html");
-  if (me.active && me.role === "intercesseur") return location.replace("membre.html");
-  $("loginSection").hidden = true;
-  $("waitSection").hidden = false;
-  waiting = me;
-  renderWait();
-}
-
-$("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  $("l-err").hidden = true;
-  lastError = null;
-  if (!sb) { lastError = "notconfigured"; showError(); return; }
-  $("l-btn").disabled = true;
-  const { error } = await sb.auth.signInWithPassword({
-    email: $("l-email").value.trim(),
-    password: $("l-pass").value,
-  });
-  $("l-btn").disabled = false;
-  if (error) { lastError = error; showError(); return; }
-  route();
-});
-
-$("logoutBtn").addEventListener("click", signOut);
-onLangChange(() => { renderWait(); showError(); });
-route();
-</script>
 </body>
 </html>

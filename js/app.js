@@ -1,5 +1,6 @@
 // Outils partagés par toutes les pages
-import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js?v=5";
+export { PRIVACY_OFFICER, EMAIL_REPLIES_ENABLED } from "./config.js?v=5";
 
 export const configured =
   !SUPABASE_URL.includes("TON-PROJET") && !SUPABASE_PUBLISHABLE_KEY.includes("A_REMPLACER");
@@ -49,6 +50,7 @@ export function toast(msg) {
 // Traduit les erreurs techniques en phrases compréhensibles
 export function explain(error) {
   const m = (error && error.message) || "";
+  if (isRateLimited(error)) return t("err.spam");
   if (/Invalid login credentials/i.test(m)) return t("err.login");
   if (/Email not confirmed/i.test(m)) return t("err.notconfirmed");
   if (/already registered/i.test(m)) return t("err.registered");
@@ -88,6 +90,27 @@ export function showConfigWarning(container) {
   container.prepend(h("p", { class: "notice warn", "data-i18n": "config.missing" }, t("config.missing")));
 }
 
+// L'anti-spam de la base répond « rate_limited »
+export const isRateLimited = (error) => /rate_limited/i.test((error && (error.message || "")) || "");
+
+// Jeton secret pour le lien de suivi : 32 octets aléatoires (impossible à deviner)
+export function randomToken() {
+  const bytes = crypto.getRandomValues(new Uint8Array(32));
+  return btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+// Empreinte SHA-256 en hexadécimal : la base ne garde que ceci, jamais le jeton
+export async function sha256Hex(text) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+// Copier un texte ; si le navigateur refuse, on sélectionne le champ
+export async function copyText(text, field, okMsg, selMsg) {
+  try { await navigator.clipboard.writeText(text); toast(okMsg); }
+  catch { if (field) { field.focus(); field.select(); } toast(selMsg); }
+}
+
 // Initiales et couleur d'avatar (affichage seulement)
 export const initials = (name) =>
   (name || "?").trim().split(/\s+/).map((w) => w[0] || "").join("").slice(0, 2).toUpperCase() || "?";
@@ -105,4 +128,9 @@ export function relDate(iso) {
   if (days === 0) return t("date.today");
   if (days === 1) return t("date.yesterday");
   return t("date.on", { date: d.toLocaleDateString(window.YE.locale(), { day: "numeric", month: "long" }) });
+}
+
+// Installation comme application (PWA) : le « service worker » garde les fichiers du site
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
 }

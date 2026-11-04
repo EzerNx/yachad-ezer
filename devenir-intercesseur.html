@@ -2,15 +2,17 @@
 <html lang="fr-CA">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://kklvokzhptyogutwakol.supabase.co wss://kklvokzhptyogutwakol.supabase.co; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>try{var y=localStorage.getItem("ye-theme");if(y==="dark"||y==="light")document.documentElement.setAttribute("data-theme",y);var l=localStorage.getItem("ye-lang");if(l!=="fr"&&l!=="en")l=/^en/i.test(navigator.language||"")?"en":"fr";document.documentElement.lang=l==="en"?"en-CA":"fr-CA"}catch(e){}</script>
+<script src="js/boot.js?v=5"></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title data-i18n="join.title">Devenir intercesseur · Yachad Ezer</title>
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0D1430">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="css/style.css?v=4">
+<link rel="stylesheet" href="css/fonts.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
 <div class="auth">
@@ -86,56 +88,9 @@
   </main>
 </div>
 
-<script src="js/i18n.js?v=4"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script type="module">
-import { sb, showConfigWarning, explain, t, onLangChange } from "./js/app.js?v=4";
-const $ = (id) => document.getElementById(id);
-showConfigWarning($("joinForm"));
+<script src="js/i18n.js?v=5"></script>
+<script src="js/vendor/supabase-2.117.3.js"></script>
+<script type="module" src="js/pages/candidature.js?v=5"></script>
 
-let lastError = null;   // clé de traduction ou erreur Supabase
-function showError() {
-  if (!lastError) { $("j-err").hidden = true; return; }
-  $("j-err").textContent = typeof lastError === "string" ? t(lastError) : explain(lastError);
-  $("j-err").hidden = false;
-}
-function fail(errorOrKey) { lastError = errorOrKey; showError(); }
-
-$("joinForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  lastError = null; showError();
-  const name = $("j-name").value.trim();
-  const email = $("j-email").value.trim();
-  const pass = $("j-pass").value;
-  const motivation = $("j-motivation").value.trim();
-
-  if (name.length < 2) return fail("join.e.name");
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return fail("join.e.email");
-  if (pass.length < 8) return fail("err.password");
-  if (motivation.length < 10) return fail("join.e.motivation");
-  if (!$("j-engage").checked) return fail("join.e.pledge");
-  if (!$("j-consent").checked) return fail("join.e.consent");
-  if (!$("j-age").checked) return fail("join.e.age");
-  if (!sb) return fail("f.notconfigured");
-
-  const btn = $("j-btn");
-  btn.disabled = true; btn.textContent = t("sending");
-  // signUp crée le compte. Le trigger de la base crée le profil « candidat ».
-  const { error } = await sb.auth.signUp({
-    email,
-    password: pass,
-    options: {
-      emailRedirectTo: new URL("connexion.html", location.href).href,
-      data: { display_name: name, church: $("j-church").value.trim(), motivation, engagement: "true" },
-    },
-  });
-  btn.disabled = false; btn.textContent = t("join.submit");
-  if (error) return fail(error);
-  $("formSection").hidden = true;
-  $("doneSection").hidden = false;
-});
-
-onLangChange(showError);
-</script>
 </body>
 </html>

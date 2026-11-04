@@ -1,0 +1,16 @@
+{
+  "name": "Yachad Ezer · Requêtes de prière",
+  "short_name": "Yachad Ezer",
+  "description": "Ensemble, nous portons les fardeaux les uns des autres dans la prière.",
+  "lang": "fr-CA",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0D1430",
+  "theme_color": "#0D1430",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

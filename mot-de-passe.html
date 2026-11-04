@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://kklvokzhptyogutwakol.supabase.co wss://kklvokzhptyogutwakol.supabase.co; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="js/boot.js?v=5"></script>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title data-i18n="pw.title">Mot de passe oublié · Yachad Ezer</title>
+<meta name="theme-color" content="#0D1430">
+<link rel="stylesheet" href="css/fonts.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div class="auth">
+  <div class="auth-side">
+    <div class="auth-top">
+      <a class="brand" href="./"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1E2A57"/><path d="M32 7c7 11 16 19 15 33-1 10-7 17-15 17s-15-7-15-17c0-9 7-14 10-24 2 5 4 7 5 9 1-6 1-12 0-18z" fill="#E7B85A"/><path d="M32 30c4 6 8 10 7 16-1 5-4 8-7 8s-7-3-7-8c0-5 4-8 7-16z" fill="#FBF1DC"/></svg><b>Yachad Ezer</b></a>
+      <div data-prefs></div>
+    </div>
+    <div>
+      <blockquote data-i18n="v.mat">« Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos. »</blockquote>
+      <cite data-i18n="v.mat.ref">Matthieu 11.28 · Louis Segond 1910</cite>
+    </div>
+    <span class="side-note" data-i18n="login.side">Espace réservé à l’équipe d’intercession</span>
+  </div>
+
+  <main class="auth-main">
+    <!-- 1. Demander le lien -->
+    <div id="askSection">
+      <div class="stack" style="gap:8px">
+        <span class="eyebrow" data-i18n="nav.team">Espace équipe</span>
+        <h1 style="font-size:2.3rem" data-i18n="pw.h1">Mot de passe oublié</h1>
+        <p class="muted" data-i18n="pw.p">Entrez votre courriel.</p>
+      </div>
+      <form id="askForm" novalidate>
+        <div class="field">
+          <label for="p-email" data-i18n="contact.mail">Courriel</label>
+          <input type="email" id="p-email" autocomplete="email" required>
+        </div>
+        <span class="err" id="p-err" hidden></span>
+        <button class="btn btn-primary" type="submit" id="p-btn" data-i18n="pw.send">Recevoir le lien</button>
+      </form>
+      <p class="notice" id="p-sent" hidden data-i18n="pw.sent">Si un compte existe, un courriel vient d’être envoyé.</p>
+      <a href="connexion.html" data-i18n="pw.back">Retour à la connexion</a>
+    </div>
+
+    <!-- 2. Choisir le nouveau mot de passe (après le clic dans le courriel) -->
+    <div id="newSection" hidden>
+      <div class="stack" style="gap:8px">
+        <h1 style="font-size:2.3rem" data-i18n="pw.new.h1">Nouveau mot de passe</h1>
+        <p class="muted" data-i18n="pw.new.p">Choisissez un nouveau mot de passe d’au moins 8 caractères.</p>
+      </div>
+      <form id="newForm" novalidate>
+        <div class="field">
+          <label for="n-pass" data-i18n="pw.new.label">Nouveau mot de passe</label>
+          <input type="password" id="n-pass" minlength="8" autocomplete="new-password" required>
+        </div>
+        <div class="field">
+          <label for="n-pass2" data-i18n="pw.new.confirm">Confirmez le mot de passe</label>
+          <input type="password" id="n-pass2" minlength="8" autocomplete="new-password" required>
+        </div>
+        <span class="err" id="n-err" hidden></span>
+        <button class="btn btn-primary" type="submit" id="n-btn" data-i18n="pw.new.save">Enregistrer</button>
+      </form>
+      <p class="notice" id="n-done" hidden><span data-i18n="pw.new.done">Mot de passe changé.</span> <a href="connexion.html" data-i18n="pw.back">Retour à la connexion</a></p>
+    </div>
+  </main>
+</div>
+
+<script src="js/i18n.js?v=5"></script>
+<script src="js/vendor/supabase-2.117.3.js"></script>
+<script type="module" src="js/pages/mot-de-passe.js?v=5"></script>
+</body>
+</html>
