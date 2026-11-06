@@ -19,6 +19,7 @@ OUT=$(mktemp)
   psql -q -v ON_ERROR_STOP=1 -d $DB -f supabase/schema.sql
   psql -q -v ON_ERROR_STOP=1 -d $DB -f supabase/migrations/002_ameliorations.sql
   psql -q -v ON_ERROR_STOP=1 -d $DB -f supabase/migrations/002_ameliorations.sql   # relancée : doit rester sans erreur
+  psql -q -v ON_ERROR_STOP=1 -d $DB -f supabase/migrations/003_service_role.sql
   psql -v ON_ERROR_STOP=1 -d $DB -f tests/securite.sql
 } >"$OUT" 2>&1 || { cat "$OUT"; echo "Le chargement du schéma ou des tests a échoué."; exit 1; }
 

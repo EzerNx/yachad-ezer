@@ -329,3 +329,13 @@ select t.ok(exists (select 1 from public.prayer_requests where id = '44444444-44
 select t.as('anon');
 select t.ok((select public.keepalive()) = 'ok', 'La fonction keepalive répond au visiteur');
 select t.as('postgres');
+
+\echo
+\echo '== Fonctions serveur (rôle de service) =='
+grant usage on schema t to service_role;
+grant execute on all functions in schema t to service_role;
+select t.as('service_role');
+select t.ok(t.n('select role from public.profiles') > 0, 'Les fonctions de courriel peuvent lire les profils (vérifier l''admin)');
+select t.ok(t.n('select contact_value from public.request_private') >= 0, 'Les fonctions de courriel peuvent lire l''adresse de réponse');
+select t.ok(t.w('update public.observations set status = status') >= 0, 'Les fonctions de courriel peuvent marquer une observation comme transmise');
+select t.as('postgres');

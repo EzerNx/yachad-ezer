@@ -26,7 +26,11 @@ Deno.serve(async (req) => {
   const { data: userData, error: authErr } = token ? await svc.auth.getUser(token) : { data: null, error: true };
   const uid = userData?.user?.id;
   if (authErr || !uid) return json({ ok: false, error: "non connecté : reconnectez-vous" }, 401);
-  const { data: me } = await svc.from("profiles").select("role, active").eq("id", uid).maybeSingle();
+  const { data: me, error: dbErr } = await svc.from("profiles").select("role, active").eq("id", uid).maybeSingle();
+  if (dbErr) {
+    console.error(dbErr);
+    return json({ ok: false, error: "base de données : " + dbErr.message + " (migration 003 exécutée ?)" }, 500);
+  }
   if (!me || me.role !== "admin" || !me.active) return json({ ok: false, error: "réservé à l'admin" }, 403);
 
   // 2. Ce qu'il faut envoyer

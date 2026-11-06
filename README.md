@@ -30,8 +30,8 @@ Navigateur ──► GitHub Pages (les fichiers : la vitrine, aucune donnée)
 
 ## Mettre à jour un projet existant (ta situation)
 
-1. **Supabase → SQL Editor** : colle et exécute `supabase/migrations/002_ameliorations.sql`.
-   Elle peut être relancée sans danger.
+1. **Supabase → SQL Editor** : exécute, dans l'ordre, `supabase/migrations/002_ameliorations.sql`
+   puis `supabase/migrations/003_service_role.sql`. Elles peuvent être relancées sans danger.
 2. **Integrations → Cron** doit être activé (c'est le cas si `schema.sql` a fonctionné).
 3. **Fusionner la branche** `ameliorations-v2` sur GitHub (voir plus bas).
 4. **Courriels** : suis `docs/courriels.md`. Au minimum, le niveau 1 (5 minutes).
@@ -40,7 +40,7 @@ Navigateur ──► GitHub Pages (les fichiers : la vitrine, aucune donnée)
 
 ## Nouvelle installation
 
-1. Supabase (région **Canada Central**) → SQL Editor : `supabase/schema.sql`, puis `supabase/migrations/002_ameliorations.sql`.
+1. Supabase (région **Canada Central**) → SQL Editor : `supabase/schema.sql`, puis les fichiers de `supabase/migrations/` dans l'ordre (002, 003…).
 2. Remplis `js/config.js` (URL + clé publishable) et l'adresse Supabase dans la balise CSP de chaque page.
 3. GitHub Pages : Settings → Pages → branche `main`, dossier `/`.
 4. Supabase → Authentication → URL Configuration : Site URL + Redirect URLs (`connexion.html`, `mot-de-passe.html`).
@@ -54,7 +54,7 @@ Navigateur ──► GitHub Pages (les fichiers : la vitrine, aucune donnée)
 
 | Test | Quand | Ce qu'il vérifie |
 |---|---|---|
-| `tests/run.sh` (92 tests) | À chaque envoi sur GitHub | Les règles de la base : visiteur, candidat, intercesseur, intercesseur en pause, admin |
+| `tests/run.sh` (95 tests) | À chaque envoi sur GitHub | Les règles de la base : visiteur, candidat, intercesseur, intercesseur en pause, admin |
 | `tests/static-checks.mjs` | À chaque envoi | CSP sur chaque page, aucun script en ligne, aucune clé secrète, pas d'injection HTML, traductions complètes |
 | `deno check` | À chaque envoi | Les fonctions de courriel |
 | `tests/live-security.mjs` | Chaque dimanche + à la main | Le **vrai** site et le **vrai** Supabase, vus par un visiteur anonyme (lecture seule) |
