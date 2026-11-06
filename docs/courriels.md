@@ -84,11 +84,23 @@ npx supabase secrets set BREVO_API_KEY=ta_cle_api_brevo SENDER_EMAIL=ton@adresse
 
 ### Déployer
 ```
-npx supabase functions deploy send-reply
+npx supabase functions deploy send-reply --no-verify-jwt
 npx supabase functions deploy notify --no-verify-jwt
 ```
-`notify` est appelée par la base (pas par une personne connectée) : elle se protège
-avec `WEBHOOK_SECRET` au lieu d'un jeton de connexion.
+- `send-reply` vérifie elle-même, avec Supabase Auth, que la personne est connectée
+  et qu'elle est admin. On coupe donc la vérification automatique, qui peut refuser
+  les jetons des projets récents.
+- `notify` est appelée par la base, pas par une personne connectée : elle se protège
+  avec `WEBHOOK_SECRET`.
+
+### Brevo : autoriser les envois depuis Supabase
+Les fonctions partent de serveurs dont l'adresse IP change. Si Brevo bloque les IP
+inconnues, l'envoi échoue avec « unrecognised IP address ».
+Brevo → ton profil → **Security → Authorized IPs** : désactive le blocage des IP inconnues.
+
+### En cas d'erreur
+- L'admin affiche maintenant la raison exacte sous le bouton **Envoyer le courriel**.
+- Les détails sont aussi dans Supabase → **Edge Functions → send-reply → Logs**.
 
 ### Brancher les notifications (Database Webhooks)
 Supabase → **Integrations → Database Webhooks → Create a new hook**, cinq fois :

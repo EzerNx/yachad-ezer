@@ -11,21 +11,22 @@
 import { createClient } from "npm:@supabase/supabase-js@2.117.3";
 import { corsHeaders, json, sendEmail } from "../_shared/email.ts";
 
-const URL_ = Deno.env.get("SUPABASE_URL")!;
-const ANON = Deno.env.get("SUPABASE_ANON_KEY")!;
-const SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const URL_ = Deno.env.get("SUPABASE_URL") ?? "";
+const SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ ok: false, error: "method" }, 405);
+  if (!URL_ || !SERVICE) return json({ ok: false, error: "configuration de la fonction incomplète (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY)" }, 500);
 
-  // 1. Qui appelle ? (avec le jeton de la personne connectée)
-  const authHeader = req.headers.get("Authorization") ?? "";
-  const asCaller = createClient(URL_, ANON, { global: { headers: { Authorization: authHeader } }, auth: { persistSession: false } });
-  const { data: userData } = await asCaller.auth.getUser();
+  // 1. Qui appelle ? Supabase Auth vérifie le jeton de connexion envoyé par le navigateur.
+  //    (On vérifie ici, dans la fonction : elle est déployée avec --no-verify-jwt.)
+  const svc = createClient(URL_, SERVICE, { auth: { persistSession: false } });
+  const token = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
+  const { data: userData, error: authErr } = token ? await svc.auth.getUser(token) : { data: null, error: true };
   const uid = userData?.user?.id;
-  if (!uid) return json({ ok: false, error: "non connecté" }, 401);
-  const { data: me } = await asCaller.from("profiles").select("role, active").eq("id", uid).maybeSingle();
+  if (authErr || !uid) return json({ ok: false, error: "non connecté : reconnectez-vous" }, 401);
+  const { data: me } = await svc.from("profiles").select("role, active").eq("id", uid).maybeSingle();
   if (!me || me.role !== "admin" || !me.active) return json({ ok: false, error: "réservé à l'admin" }, 403);
 
   // 2. Ce qu'il faut envoyer
@@ -36,7 +37,6 @@ Deno.serve(async (req) => {
   if (!body.observation_id || message.length < 10 || message.length > 4000) return json({ ok: false, error: "message invalide" }, 400);
 
   // 3. À qui ? (lu dans la base avec les droits de service, après la vérification admin)
-  const svc = createClient(URL_, SERVICE, { auth: { persistSession: false } });
   const { data: obs } = await svc.from("observations")
     .select("id, status, request:prayer_requests(id, wants_contact, private:request_private(contact_method, contact_value))")
     .eq("id", body.observation_id).maybeSingle();
@@ -52,7 +52,8 @@ Deno.serve(async (req) => {
     await sendEmail(p.contact_value, subject, message);
   } catch (e) {
     console.error(e);
-    return json({ ok: false, error: "envoi impossible" }, 502);
+    // L'admin voit la raison exacte (ex. « Brevo 401 : unrecognised IP address »)
+    return json({ ok: false, error: e instanceof Error ? e.message : "envoi impossible" }, 502);
   }
   await svc.from("observations").update({ status: "transmise", transmitted_at: new Date().toISOString() }).eq("id", obs.id);
   return json({ ok: true });

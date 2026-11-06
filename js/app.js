@@ -1,6 +1,6 @@
 // Outils partagés par toutes les pages
-import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js?v=6";
-export { PRIVACY_OFFICER, EMAIL_REPLIES_ENABLED } from "./config.js?v=6";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js?v=7";
+export { PRIVACY_OFFICER, EMAIL_REPLIES_ENABLED } from "./config.js?v=7";
 
 export const configured =
   !SUPABASE_URL.includes("TON-PROJET") && !SUPABASE_PUBLISHABLE_KEY.includes("A_REMPLACER");

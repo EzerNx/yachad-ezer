@@ -1,7 +1,7 @@
 // Script de la page suivi.html (lien privé de la personne qui a demandé la prière)
 // Le jeton est dans l'adresse après « #t= ». La partie après # n'est jamais
 // envoyée au serveur de GitHub : seul ce script la lit, puis la passe à Supabase.
-import { sb, t, lang, h, relDate, fmtDate, onLangChange, isRateLimited } from "../app.js?v=6";
+import { sb, t, lang, h, relDate, fmtDate, onLangChange, isRateLimited } from "../app.js?v=7";
 
 const $ = (id) => document.getElementById(id);
 const token = new URLSearchParams(location.hash.slice(1)).get("t") || "";

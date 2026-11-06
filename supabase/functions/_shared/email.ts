@@ -18,7 +18,13 @@ export async function sendEmail(to: string, subject: string, text: string): Prom
       textContent: text.slice(0, 5000),
     }),
   });
-  if (!res.ok) throw new Error(`Brevo a répondu ${res.status}`);
+  if (!res.ok) {
+    // On garde le message de Brevo : il dit exactement ce qui bloque
+    // (clé invalide, adresse IP non autorisée, expéditeur non vérifié…)
+    let detail = "";
+    try { const j = await res.json(); detail = j.message ?? JSON.stringify(j); } catch { /* pas de JSON */ }
+    throw new Error(`Brevo ${res.status} : ${detail}`.slice(0, 300));
+  }
 }
 
 export const SITE_URL = (Deno.env.get("SITE_URL") ?? "https://ezernx.github.io/yachad-ezer/").replace(/\/?$/, "/");

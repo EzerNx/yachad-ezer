@@ -1,6 +1,6 @@
 // Script de la page admin.html (portail administrateur)
 import { sb, h, fmtDate, relDate, toast, needLabel, statusLabel, requireRole, signOut, avatar,
-         t, lang, onLangChange, copyText, EMAIL_REPLIES_ENABLED } from "../app.js?v=6";
+         t, lang, onLangChange, copyText, EMAIL_REPLIES_ENABLED } from "../app.js?v=7";
 
 const me = await requireRole(["admin"]);
 
@@ -249,15 +249,23 @@ function obsCard(o) {
 
     // Envoi direct par la fonction « send-reply » (si elle est déployée)
     let sendNow = null;
+    // Message d'erreur qui reste affiché (un « toast » disparaît trop vite pour être lu)
+    const errBox = h("p", { class: "err", role: "alert", hidden: true });
+    const showSendError = (msg) => { errBox.textContent = t("a.sendMail.err", { msg }); errBox.hidden = false; };
     if (EMAIL_REPLIES_ENABLED && p.contact_method === "courriel") {
       sendNow = h("button", { class: "btn btn-primary btn-sm", type: "button" }, t("a.sendMail"));
       sendNow.addEventListener("click", async () => {
-        sendNow.disabled = true; sendNow.textContent = t("a.sendMail.sending");
-        const { data, error } = await sb.functions.invoke("send-reply", {
+        sendNow.disabled = true; sendNow.textContent = t("a.sendMail.sending"); errBox.hidden = true;
+        let { data, error } = await sb.functions.invoke("send-reply", {
           body: { observation_id: o.id, subject: t("reply.subject", null, l), message: ta.value },
         });
+        // En cas d'erreur, la vraie raison est dans la réponse de la fonction : on la lit
+        if (error && error.context && typeof error.context.json === "function") {
+          try { data = await error.context.json(); } catch { /* réponse sans JSON */ }
+          if (!data?.error && error.context.status) data = { error: "HTTP " + error.context.status + (error.context.status === 404 ? " (fonction non déployée ?)" : "") };
+        }
         sendNow.disabled = false; sendNow.textContent = t("a.sendMail");
-        if (error || !data?.ok) { toast(t("a.sendMail.err", { msg: data?.error || error?.message || "?" })); return; }
+        if (error || !data?.ok) { showSendError(data?.error || error?.message || "?"); return; }
         delete replyDrafts[o.id];
         toast(t("a.sendMail.done"));
         loadAll();
@@ -275,7 +283,8 @@ function obsCard(o) {
         langPick),
       h("span", { class: "hint" }, t(p.contact_method === "telephone" ? "a.reply.hintTel" : "a.reply.hintMail")),
       ta,
-      h("div", { class: "people" }, sendNow, copy, mail, sent));
+      h("div", { class: "people" }, sendNow, copy, mail, sent),
+      errBox);
   }
 
   const read = o.status === "nouvelle" ? h("button", { class: "btn btn-ghost btn-sm", type: "button" }, t("a.markRead")) : null;

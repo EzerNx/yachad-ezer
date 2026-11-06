@@ -1,5 +1,5 @@
 // Script de la page membre.html (portail intercesseur)
-import { sb, h, fmtDate, relDate, toast, needLabel, requireRole, signOut, avatar, t, onLangChange } from "../app.js?v=6";
+import { sb, h, fmtDate, relDate, toast, needLabel, requireRole, signOut, avatar, t, onLangChange } from "../app.js?v=7";
 
 const me = await requireRole(["intercesseur", "admin"]);
 

@@ -1,6 +1,6 @@
 // Script de la page index.html (page publique)
 import { sb, configured, showConfigWarning, t, lang, onLangChange, h, relDate,
-         isRateLimited, randomToken, sha256Hex, copyText, PRIVACY_OFFICER } from "../app.js?v=6";
+         isRateLimited, randomToken, sha256Hex, copyText, PRIVACY_OFFICER } from "../app.js?v=7";
 
 const $ = (id) => document.getElementById(id);
 const loadedAt = Date.now();
