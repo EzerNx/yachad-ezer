@@ -1,5 +1,5 @@
 // Script de la page devenir-intercesseur.html
-import { sb, showConfigWarning, explain, t, onLangChange } from "../app.js?v=5";
+import { sb, showConfigWarning, explain, t, onLangChange } from "../app.js?v=6";
 const $ = (id) => document.getElementById(id);
 showConfigWarning($("joinForm"));
 

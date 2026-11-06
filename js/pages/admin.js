@@ -1,6 +1,6 @@
 // Script de la page admin.html (portail administrateur)
 import { sb, h, fmtDate, relDate, toast, needLabel, statusLabel, requireRole, signOut, avatar,
-         t, lang, onLangChange, copyText, EMAIL_REPLIES_ENABLED } from "../app.js?v=5";
+         t, lang, onLangChange, copyText, EMAIL_REPLIES_ENABLED } from "../app.js?v=6";
 
 const me = await requireRole(["admin"]);
 

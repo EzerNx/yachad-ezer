@@ -7,14 +7,14 @@
 //   · on ne touche JAMAIS aux appels vers Supabase (les données restent privées)
 //   · les pages sont toujours redemandées au réseau d'abord (version la plus récente)
 // =====================================================================
-const CACHE = "yachad-ezer-v5";
+const CACHE = "yachad-ezer-v6";
 const ASSETS = [
   "./", "index.html", "suivi.html", "connexion.html", "devenir-intercesseur.html", "mot-de-passe.html",
   "membre.html", "admin.html",
-  "css/style.css?v=5", "css/fonts.css?v=5",
-  "js/boot.js?v=5", "js/i18n.js?v=5", "js/app.js?v=5", "js/config.js?v=5", "js/vendor/supabase-2.117.3.js",
-  "js/pages/accueil.js?v=5", "js/pages/suivi.js?v=5", "js/pages/connexion.js?v=5", "js/pages/candidature.js?v=5",
-  "js/pages/mot-de-passe.js?v=5", "js/pages/membre.js?v=5", "js/pages/admin.js?v=5",
+  "css/style.css?v=6", "css/fonts.css?v=6",
+  "js/boot.js?v=6", "js/i18n.js?v=6", "js/app.js?v=6", "js/config.js?v=6", "js/vendor/supabase-2.117.3.js",
+  "js/pages/accueil.js?v=6", "js/pages/suivi.js?v=6", "js/pages/connexion.js?v=6", "js/pages/candidature.js?v=6",
+  "js/pages/mot-de-passe.js?v=6", "js/pages/membre.js?v=6", "js/pages/admin.js?v=6",
   "favicon.svg", "icons/icon-192.png", "icons/icon-512.png",
 ];
 

@@ -2,7 +2,7 @@
 // Étape 1 : la personne demande un lien.
 // Étape 2 : elle clique le lien du courriel ; Supabase la ramène ici
 //           avec un jeton temporaire (événement PASSWORD_RECOVERY).
-import { sb, t, explain } from "../app.js?v=5";
+import { sb, t, explain } from "../app.js?v=6";
 
 const $ = (id) => document.getElementById(id);
 

@@ -1,6 +1,6 @@
 // Outils partagés par toutes les pages
-import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js?v=5";
-export { PRIVACY_OFFICER, EMAIL_REPLIES_ENABLED } from "./config.js?v=5";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js?v=6";
+export { PRIVACY_OFFICER, EMAIL_REPLIES_ENABLED } from "./config.js?v=6";
 
 export const configured =
   !SUPABASE_URL.includes("TON-PROJET") && !SUPABASE_PUBLISHABLE_KEY.includes("A_REMPLACER");
@@ -28,7 +28,7 @@ export function h(tag, attrs = {}, ...children) {
     else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
     else el.setAttribute(k, v === true ? "" : v);
   }
-  for (const c of children.flat()) {
+  for (const c of children.flat(Infinity)) {   // accepte des listes dans des listes
     if (c == null || c === false) continue;
     el.append(c instanceof Node ? c : document.createTextNode(String(c)));
   }

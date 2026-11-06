@@ -1,5 +1,5 @@
 // Script de la page membre.html (portail intercesseur)
-import { sb, h, fmtDate, relDate, toast, needLabel, requireRole, signOut, avatar, t, onLangChange } from "../app.js?v=5";
+import { sb, h, fmtDate, relDate, toast, needLabel, requireRole, signOut, avatar, t, onLangChange } from "../app.js?v=6";
 
 const me = await requireRole(["intercesseur", "admin"]);
 
@@ -171,7 +171,7 @@ function card(a) {
     h("p", { class: "body" }, r.body),
     h("div", { class: "tags" }, (r.needs || []).map((n) => h("span", { class: "tag" }, needLabel(n)))),
     mine.length ? h("div", { class: "obs-list" },
-      mine.map((o) => [
+      mine.flatMap((o) => [
         h("span", { class: "hint" }, t("m.yourObs", { when: relDate(o.created_at) }) + (o.status === "transmise" ? t("m.transmittedSuffix") : "")),
         h("p", {}, o.body)])) : null,
     h("div", { class: "field" },
