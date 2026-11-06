@@ -14,10 +14,10 @@ export const SUPABASE_PUBLISHABLE_KEY =
 // 2. Loi 25 : la personne responsable de la protection des renseignements
 //    personnels. Son nom et un courriel de contact s'affichent sur la page publique.
 export const PRIVACY_OFFICER = {
-  name: "",    // ex. : "Jean Dupont"
-  email: "",   // ex. : "confidentialite@exemple.com"
+  name: "", // ex. : "Jean Dupont"
+  email: "", // ex. : "confidentialite@exemple.com"
 };
 
 // 3. Courriels automatiques (voir docs/courriels.md).
 //    Mets true seulement APRÈS avoir déployé la fonction « send-reply ».
-export const EMAIL_REPLIES_ENABLED = false;
+export const EMAIL_REPLIES_ENABLED = true;
