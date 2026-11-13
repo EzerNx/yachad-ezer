@@ -147,7 +147,7 @@ select t.ok(t.fails('insert into public.prayer_requests (body, needs, age_confir
   'Un besoin inconnu est refusé');
 select t.ok(t.fails('insert into public.prayer_requests (body, age_confirmed) values (repeat(''x'', 1501), true)'),
   'Un texte de plus de 1500 caractères est refusé');
-select t.ok(t.fails('insert into public.prayer_requests (body, age_confirmed, lang) values (''Bonjour test'', true, ''de'')'),
+select t.ok(t.fails('insert into public.prayer_requests (body, age_confirmed, lang) values (''Bonjour test'', true, ''xx'')'),
   'Une langue inconnue est refusée');
 select t.ok(t.fails('insert into public.prayer_requests (body, age_confirmed, follow_hash) values (''Bonjour test'', true, ''<script>'')'),
   'Une empreinte de suivi mal formée est refusée');
@@ -328,6 +328,113 @@ select t.ok(exists (select 1 from public.prayer_requests where id = '44444444-44
 \echo '== Maintien en vie =='
 select t.as('anon');
 select t.ok((select public.keepalive()) = 'ok', 'La fonction keepalive répond au visiteur');
+select t.as('postgres');
+
+\echo
+\echo '== Profil multilingue (migration 004) =='
+select t.as('postgres');
+insert into auth.users (id, email, raw_user_meta_data) values
+  ('00000000-0000-0000-0000-0000000000d1', 'multi@test',
+   '{"display_name":"Ana","languages":["ES","es","pt","<b>","x1"],"country":"ht","timezone":"Europe/Paris"}'),
+  ('00000000-0000-0000-0000-0000000000d2', 'bad@test',
+   '{"display_name":"Bad","languages":"es","country":"Canada","timezone":"Mars/Olympus"}');
+select t.ok((select languages = array['es','pt'] and country = 'HT' and timezone = 'Europe/Paris'
+             from public.profiles where id = '00000000-0000-0000-0000-0000000000d1'),
+  'Inscription : langues nettoyées (sans doublon ni code invalide), pays et fuseau enregistrés');
+select t.ok((select languages = array['fr'] and country = '' and timezone = 'America/Toronto'
+             from public.profiles where id = '00000000-0000-0000-0000-0000000000d2'),
+  'Inscription : des métadonnées mal formées ne bloquent pas, on prend des valeurs sûres');
+update public.profiles set role = 'intercesseur', active = true where id = '00000000-0000-0000-0000-0000000000d1';
+
+select t.as('authenticated', '00000000-0000-0000-0000-0000000000b1');
+select t.ok(t.w('update public.profiles set languages = ''{fr,ht,fr}'', country = ''HT'', timezone = ''America/Port-au-Prince'', display_name = ''Ruth M.'', church = ''Église test'' where id = ''00000000-0000-0000-0000-0000000000b1''') = 1,
+  'L''intercesseur modifie son nom, son Église, ses langues, son pays et son fuseau');
+select t.ok((select languages = array['fr','ht'] from public.profiles where id = '00000000-0000-0000-0000-0000000000b1'),
+  'Les langues en double sont retirées, l''ordre est gardé');
+select t.ok(t.fails('update public.profiles set timezone = ''Mars/Olympus'' where id = ''00000000-0000-0000-0000-0000000000b1'''),
+  'Un fuseau horaire inconnu est refusé');
+select t.ok(t.fails('update public.profiles set languages = ''{}'' where id = ''00000000-0000-0000-0000-0000000000b1'''),
+  'Il faut au moins une langue');
+select t.ok(t.fails('update public.profiles set languages = ''{a,b,c,d,e,f,g,h,i}'' where id = ''00000000-0000-0000-0000-0000000000b1'''),
+  'Pas plus de 8 langues, et seulement des codes valides');
+select t.ok(t.fails('update public.profiles set country = ''<script>'' where id = ''00000000-0000-0000-0000-0000000000b1'''),
+  'Un pays invalide est refusé');
+select t.ok(t.w('update public.profiles set languages = ''{ko}'' where id = ''00000000-0000-0000-0000-0000000000d1''') <= 0,
+  'L''intercesseur ne modifie pas le profil d''un autre');
+select t.ok(t.fails('update public.profiles set role = ''admin'' where id = ''00000000-0000-0000-0000-0000000000b1'''),
+  'L''intercesseur ne se donne toujours pas le rôle admin depuis Mon compte');
+
+\echo
+\echo '== Disponibilités =='
+select t.ok(t.w('insert into public.availability (member_id, weekday, start_min, end_min) values (''00000000-0000-0000-0000-0000000000b1'', 1, 360, 420)') = 1,
+  'L''intercesseur ajoute un créneau (lundi 6 h - 7 h)');
+select t.ok(t.fails('insert into public.availability (member_id, weekday, start_min, end_min) values (''00000000-0000-0000-0000-0000000000d1'', 1, 360, 420)'),
+  'Il ne peut pas ajouter un créneau au nom d''un autre');
+select t.ok(t.fails('insert into public.availability (member_id, weekday, start_min, end_min) values (''00000000-0000-0000-0000-0000000000b1'', 2, 600, 540)'),
+  'Un créneau qui finit avant de commencer est refusé');
+select t.ok(t.fails('insert into public.availability (member_id, weekday, start_min, end_min) values (''00000000-0000-0000-0000-0000000000b1'', 8, 60, 120)'),
+  'Un jour de semaine invalide est refusé');
+select t.ok(t.w('update public.availability set member_id = ''00000000-0000-0000-0000-0000000000d1'' where member_id = ''00000000-0000-0000-0000-0000000000b1''') <= 0,
+  'Il ne peut pas donner son créneau à quelqu''un d''autre');
+select t.as('postgres');
+insert into public.availability (member_id, weekday, start_min, end_min)
+select '00000000-0000-0000-0000-0000000000b1', d, h * 60, h * 60 + 30 from generate_series(1, 7) d, generate_series(10, 13) h
+limit 27;   -- avec le créneau du lundi : 28 au total
+select t.as('authenticated', '00000000-0000-0000-0000-0000000000b1');
+select t.ok(t.fails('insert into public.availability (member_id, weekday, start_min, end_min) values (''00000000-0000-0000-0000-0000000000b1'', 3, 1200, 1230)'),
+  'Pas plus de 28 créneaux par personne');
+select t.as('authenticated', '00000000-0000-0000-0000-0000000000d1');
+select t.ok(t.n('select * from public.availability') = 0, 'Un intercesseur ne voit pas les disponibilités des autres');
+select t.ok(t.w('delete from public.availability') <= 0, 'Ni ne les supprime');
+select t.as('anon');
+select t.ok(t.n('select * from public.availability') <= 0, 'Le visiteur ne voit aucune disponibilité');
+select t.as('authenticated', '00000000-0000-0000-0000-0000000000a1');
+select t.ok(t.n('select * from public.availability') >= 28, 'L''admin voit les disponibilités (tableau de couverture)');
+
+\echo
+\echo '== Répartition selon la langue =='
+select t.as('postgres');
+update public.profiles set languages = '{fr}' where id in ('00000000-0000-0000-0000-0000000000a1', '00000000-0000-0000-0000-0000000000b1');
+update public.profiles set languages = '{es,pt}' where id = '00000000-0000-0000-0000-0000000000d1';
+-- Ana a plus de demandes en cours que les autres : la langue passe quand même avant
+insert into public.prayer_requests (id, body, age_confirmed) values
+  ('55555555-5555-5555-5555-555555555551', 'Charge 1', true),
+  ('55555555-5555-5555-5555-555555555552', 'Charge 2', true);
+insert into public.assignments (request_id, member_id) values
+  ('55555555-5555-5555-5555-555555555551', '00000000-0000-0000-0000-0000000000d1'),
+  ('55555555-5555-5555-5555-555555555552', '00000000-0000-0000-0000-0000000000d1');
+insert into public.prayer_requests (id, body, age_confirmed, lang) values ('66666666-6666-6666-6666-666666666666', 'Oren por mi familia', true, 'es');
+select private.assign_request('66666666-6666-6666-6666-666666666666', 1);
+select t.ok((select member_id from public.assignments where request_id = '66666666-6666-6666-6666-666666666666') = '00000000-0000-0000-0000-0000000000d1',
+  'Une demande en espagnol va d''abord à un intercesseur qui parle espagnol');
+insert into public.prayer_requests (id, body, age_confirmed, lang) values ('77777777-7777-7777-7777-777777777777', '기도해 주세요', true, 'ko');
+select private.assign_request('77777777-7777-7777-7777-777777777777', 1);
+select t.ok((select count(*) from public.assignments where request_id = '77777777-7777-7777-7777-777777777777') = 1,
+  'Si personne ne parle la langue, la demande est quand même confiée (bouton Traduire)');
+
+\echo
+\echo '== Télécharger mes données (RGPD art. 15 et 20) =='
+select t.as('authenticated', '00000000-0000-0000-0000-0000000000b1');
+select t.ok((select public.export_my_data() #>> '{account,email}') = 'int1@test', 'L''intercesseur télécharge ses propres données');
+select t.ok((select public.export_my_data()::text not like '%int2@test%' and public.export_my_data()::text not like '%Jean%'),
+  'L''export ne contient ni les données d''un autre, ni l''identité des personnes');
+select t.as('anon');
+select t.ok(t.fails('select public.export_my_data()'), 'Le visiteur ne peut rien exporter sans être connecté');
+select t.as('anon', '', '10.0.0.77');
+insert into public.prayer_requests (body, age_confirmed, lang, follow_hash)
+values ('Merci de prier pour mon examen', true, 'pt', encode(sha256(convert_to('jeton-export-0123456789abcdefghij', 'UTF8')), 'hex'));
+select t.ok((select public.request_export('jeton-export-0123456789abcdefghij') #>> '{request,body}') = 'Merci de prier pour mon examen',
+  'La personne retrouve sa demande avec son lien privé');
+select t.ok(t.fails('select public.request_export(''mauvais-jeton-0123456789abcdefghij'')'), 'Un mauvais lien ne donne rien');
+select t.ok((select public.request_export('jeton-export-0123456789abcdefghij')::text not like '%Ruth%'
+             and public.request_export('jeton-export-0123456789abcdefghij')::text not like '%Paul%'),
+  'L''export de la personne ne révèle aucun intercesseur');
+select public.add_testimony('jeton-export-0123456789abcdefghij', 'Deus respondeu a minha oração!', 'Ana', 'pt');
+select t.as('postgres');
+select t.ok((select lang from public.testimonies where body like 'Deus respondeu%') = 'pt', 'Le témoignage garde sa langue (portugais)');
+select t.as('anon', '', '10.0.0.78');
+select t.ok(t.w('insert into public.prayer_requests (body, age_confirmed, lang) values (''기도 부탁드립니다'', true, ''ko'')') = 1,
+  'Une demande en coréen est acceptée');
 select t.as('postgres');
 
 \echo
