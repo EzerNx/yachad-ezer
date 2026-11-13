@@ -8,10 +8,10 @@
 | `suivi.html` | La personne qui a demandé | Lien privé : combien ont prié, témoigner, effacer sa demande |
 | `devenir-intercesseur.html` | Futurs intercesseurs | Poser sa candidature |
 | `connexion.html` · `mot-de-passe.html` | L'équipe | Se connecter, récupérer son mot de passe |
-| `membre.html` | Intercesseurs | Demandes confiées (code seulement), observations, mon compte |
-| `admin.html` | Toi | Demandes, répartition, observations, intercesseurs, témoignages, réglages |
+| `membre.html` | Intercesseurs | Demandes confiées (code seulement), bouton Traduire, observations, Mon compte (profil, langues, disponibilités, courriel, mot de passe, mes données) |
+| `admin.html` | Toi | Demandes, répartition, observations, intercesseurs (langues, pays, couverture 7 × 24 h), témoignages, réglages |
 
-Le site est bilingue (FR / EN), a un mode clair et sombre, et s'installe sur un téléphone comme une application.
+Le site existe en 10 langues : tout le site en français et en anglais ; les pages publiques aussi en espagnol, portugais, swahili, créole haïtien, allemand, russe, chinois et coréen. Il a un mode clair et sombre, et s'installe sur un téléphone comme une application.
 
 ## Comment ça marche, en mots simples
 
@@ -30,12 +30,13 @@ Navigateur ──► GitHub Pages (les fichiers : la vitrine, aucune donnée)
 
 ## Mettre à jour un projet existant (ta situation)
 
-1. **Supabase → SQL Editor** : exécute, dans l'ordre, `supabase/migrations/002_ameliorations.sql`
-   puis `supabase/migrations/003_service_role.sql`. Elles peuvent être relancées sans danger.
+1. **Supabase → SQL Editor** : exécute, dans l'ordre, `supabase/migrations/002_ameliorations.sql`,
+   `003_service_role.sql`, puis `004_multilingue_profil.sql`. Elles peuvent être relancées sans danger.
+   **Exécute la 004 AVANT de fusionner la branche** `multilingue-v3`.
 2. **Integrations → Cron** doit être activé (c'est le cas si `schema.sql` a fonctionné).
 3. **Fusionner la branche** `ameliorations-v2` sur GitHub (voir plus bas).
 4. **Courriels** : suis `docs/courriels.md`. Au minimum, le niveau 1 (5 minutes).
-5. **Loi 25** : remplis `PRIVACY_OFFICER` dans `js/config.js` et lis `docs/loi25.md`.
+5. **Loi 25 et RGPD** : remplis `PRIVACY_OFFICER` dans `js/config.js`, puis lis `docs/loi25.md` et `docs/rgpd.md`.
 6. **GitHub → Actions** : lance « Sécurité en ligne » avec **Run workflow** et vérifie que tout est vert.
 
 ## Nouvelle installation
@@ -54,8 +55,8 @@ Navigateur ──► GitHub Pages (les fichiers : la vitrine, aucune donnée)
 
 | Test | Quand | Ce qu'il vérifie |
 |---|---|---|
-| `tests/run.sh` (95 tests) | À chaque envoi sur GitHub | Les règles de la base : visiteur, candidat, intercesseur, intercesseur en pause, admin |
-| `tests/static-checks.mjs` | À chaque envoi | CSP sur chaque page, aucun script en ligne, aucune clé secrète, pas d'injection HTML, traductions complètes |
+| `tests/run.sh` (131 tests) | À chaque envoi sur GitHub | Les règles de la base : visiteur, candidat, intercesseur, intercesseur en pause, admin |
+| `tests/static-checks.mjs` | À chaque envoi | CSP sur chaque page, aucun script en ligne, aucune clé secrète, pas d'injection HTML, traductions complètes dans les 10 langues |
 | `deno check` | À chaque envoi | Les fonctions de courriel |
 | `tests/live-security.mjs` | Chaque dimanche + à la main | Le **vrai** site et le **vrai** Supabase, vus par un visiteur anonyme (lecture seule) |
 | `keepalive.yml` | Lundi et jeudi | Empêche le projet Supabase gratuit de s'endormir |
@@ -68,7 +69,10 @@ Lancer les tests de la base en local (avec PostgreSQL installé) : `bash tests/r
 index.html, suivi.html, …      les pages (aucun script dedans)
 css/style.css, css/fonts.css   l'apparence, les polices hébergées sur le site
 js/boot.js                     thème et langue, avant l'affichage
-js/i18n.js                     toutes les traductions FR / EN
+js/i18n.js                     traductions FR / EN + choix de la langue
+js/lang/*.js                   les 8 autres langues (pages publiques), chargées à la demande
+js/profil.js                   langues, pays, fuseaux, disponibilités (formulaires)
+js/traduire.js                 bouton « Traduire » (sur l'appareil, rien n'est envoyé)
 js/app.js                      outils partagés (Supabase, dates, sécurité)
 js/pages/*.js                  le code de chaque page
 js/vendor/                     supabase-js (copie locale, version fixe)
@@ -88,3 +92,10 @@ docs/                          courriels, Loi 25, registre des incidents
 | Plus de 300 courriels par jour | Offre payante Brevo, ou Resend |
 | Tu veux un nom à toi | Un domaine (environ 15 à 20 $ par an), branché sur GitHub Pages, et les courriels envoyés depuis ce domaine |
 | Plusieurs admins | Un journal des actions (qui a fait quoi, quand) |
+
+## Versets bibliques
+
+Seulement des traductions libres de droits : Louis Segond 1910, King James, Reina-Valera 1909,
+Elberfelder 1905, Synodale russe 1876, 개역한글 (1961), 和合本 (1919), et la **Bíblia Livre**
+(licence Creative Commons BY 3.0 Brésil, citée dans chaque référence).
+En swahili et en créole, faute de Bible au statut libre vérifié, les versets restent en anglais / français.

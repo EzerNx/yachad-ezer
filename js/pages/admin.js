@@ -1,6 +1,8 @@
 // Script de la page admin.html (portail administrateur)
 import { sb, h, fmtDate, relDate, toast, needLabel, statusLabel, requireRole, signOut, avatar,
-         t, lang, onLangChange, copyText, EMAIL_REPLIES_ENABLED } from "../app.js?v=7";
+         t, lang, onLangChange, copyText, EMAIL_REPLIES_ENABLED } from "../app.js?v=8";
+import { languageName, countryName, fmtSlot, slotCells, dayName } from "../profil.js?v=8";
+import { translateButton } from "../traduire.js?v=8";
 
 const me = await requireRole(["admin"]);
 
@@ -10,7 +12,7 @@ let obsFilter = "a-traiter";
 let tstFilter = "en_attente";
 let loaded = false;
 let loadFailed = false;
-const state = { requests: [], members: [], observations: [], testimonies: [], settings: null };
+const state = { requests: [], members: [], observations: [], testimonies: [], settings: null, availability: [] };
 const replyDrafts = {};   // réponses modifiées à la main, gardées si la page se redessine
 const replyLang = {};     // langue choisie pour chaque réponse
 
@@ -33,13 +35,12 @@ if (me) {
 }
 
 async function loadAll() {
-  const [r, m, o, s, tst] = await Promise.all([
+  const PROFILE_COLS = "id, display_name, church, motivation, role, active, created_at, approved_at, engagement_at";
+  const [r, m0, o, s, tst, av] = await Promise.all([
     sb.from("prayer_requests")
       .select("id, code, body, needs, wants_contact, status, created_at, expires_at, lang, private:request_private(first_name, contact_method, contact_value), assignments(id, member_id, prayed_at)")
       .order("created_at", { ascending: false }),
-    sb.from("profiles")
-      .select("id, display_name, church, motivation, role, active, created_at, approved_at, engagement_at")
-      .order("created_at"),
+    sb.from("profiles").select(PROFILE_COLS + ", languages, country, timezone").order("created_at"),
     sb.from("observations")
       .select("id, body, status, created_at, transmitted_at, member_id, request:prayer_requests(id, code, body, wants_contact, lang, private:request_private(first_name, contact_method, contact_value))")
       .order("created_at", { ascending: false }),
@@ -47,7 +48,10 @@ async function loadAll() {
     sb.from("testimonies")
       .select("id, body, display_name, lang, status, created_at, published_at")
       .order("created_at", { ascending: false }),
+    sb.from("availability").select("member_id, weekday, start_min, end_min").order("weekday").order("start_min"),
   ]);
+  // Avant la migration 004, les colonnes langues/pays/fuseau n'existent pas : on relit sans elles
+  const m = m0.error ? await sb.from("profiles").select(PROFILE_COLS).order("created_at") : m0;
   const err = r.error || m.error || o.error || s.error;
   if (err) { console.error(err); loadFailed = true; render(); return; }
   state.requests = r.data;
@@ -55,6 +59,7 @@ async function loadAll() {
   state.observations = o.data;
   state.settings = s.data;
   state.testimonies = tst.error ? [] : tst.data;   // table absente avant la migration 002
+  state.availability = av.error ? [] : av.data;      // table absente avant la migration 004
   loaded = true;
   loadFailed = false;
   render();
@@ -190,14 +195,15 @@ function requestCard(r) {
     h("div", { class: "item-head" },
       h("span", { class: "code" }, r.code),
       h("span", { class: r.status === "nouvelle" ? "pill new" : r.status === "fermee" ? "pill" : "pill ok" }, statusLabel(r.status)),
-      r.lang ? h("span", { class: "pill plain" }, r.lang.toUpperCase()) : null,
+      r.lang ? h("span", { class: "pill plain", lang: r.lang }, window.YE.langName(r.lang)) : null,
       h("span", { class: "meta" }, t("a.received", { when: relDate(r.created_at), date: fmtDate(r.expires_at) }))),
     h("div", { class: "identity" },
       h("span", {}, h("b", {}, t("a.person")), (p && p.first_name) || t("a.anon")),
       p && p.contact_value
         ? h("span", {}, h("b", {}, t(p.contact_method === "courriel" ? "contact.mail" : "contact.tel")), p.contact_value)
         : h("span", { class: "muted" }, t(r.wants_contact ? "a.missingContact" : "a.noContact"))),
-    h("p", { class: "body" }, r.body),
+    h("p", { class: "body", lang: r.lang || null }, r.body),
+    translateButton(r.body, r.lang),
     h("div", { class: "tags" }, (r.needs || []).map((n) => h("span", { class: n === "priere" ? "tag" : "tag gold" }, needLabel(n)))),
     foot);
 }
@@ -233,7 +239,8 @@ function obsCard(o) {
     ta.value = replyDrafts[o.id] ?? replyTemplate(o, p, l);
     ta.addEventListener("input", () => { replyDrafts[o.id] = ta.value; updateMail(); });
 
-    const langPick = segmented(t("a.reply.lang"), [["fr", "Français"], ["en", "English"]], l, (v) => {
+    const replyLangs = [...new Set(["fr", "en", r.lang].filter(Boolean))].map((c) => [c, window.YE.langName(c)]);
+    const langPick = segmented(t("a.reply.lang"), replyLangs, l, (v) => {
       replyLang[o.id] = v;
       delete replyDrafts[o.id];   // nouvelle langue = nouveau modèle
       render();
@@ -297,7 +304,10 @@ function obsCard(o) {
         o.status === "nouvelle" ? t("a.obs.st.new") : o.status === "transmise" ? t("a.obs.st.sentOn", { date: fmtDate(o.transmitted_at) }) : t("a.obs.st.read")),
       h("span", { class: "meta" }, t("a.obs.by", { name: memberName(o.member_id), when: relDate(o.created_at) }))),
     h("p", { class: "body" }, o.body),
-    r ? h("details", {}, h("summary", { class: "hint", style: "cursor:pointer" }, t("a.seeRequest")), h("p", { class: "body muted", style: "margin-top:8px" }, r.body)) : null,
+    translateButton(o.body, "auto"),
+    r ? h("details", {}, h("summary", { class: "hint", style: "cursor:pointer" }, t("a.seeRequest")),
+      h("p", { class: "body muted", style: "margin-top:8px", lang: r.lang || null }, r.body),
+      translateButton(r.body, r.lang)) : null,
     !canReply ? h("p", { class: "hint" }, t(r && r.wants_contact ? "a.obs.noDetails" : "a.obs.internal")) : null,
     reply,
     read ? h("div", { class: "item-foot" }, read) : null);
@@ -307,6 +317,60 @@ function obsCard(o) {
 function deleteAccountButton(m) {
   return confirmButton(t("a.m.deleteAcc"), t("a.m.delete.q"), t("a.delete.yes"),
     () => act(sb.rpc("delete_member", { p_id: m.id }), "a.m.deleted"));
+}
+
+// Langues, pays, fuseau et créneaux d'un membre, en une ligne lisible
+function profileFacts(m) {
+  const slots = state.availability.filter((a) => a.member_id === m.id);
+  const facts = [];
+  if (m.languages?.length) facts.push(h("span", {}, h("b", {}, t("a.m.langs")), m.languages.map(languageName).join(", ")));
+  if (m.country) facts.push(h("span", {}, h("b", {}, t("a.m.country")), countryName(m.country)));
+  if (m.timezone) facts.push(h("span", {}, h("b", {}, t("m.acc.tz")), m.timezone.replace(/_/g, " ")));
+  facts.push(h("span", {}, h("b", {}, t("a.m.dispo")),
+    slots.length ? slots.slice(0, 6).map(fmtSlot).join(" · ") + (slots.length > 6 ? " · +" + (slots.length - 6) : "") : t("a.m.noDispo")));
+  return h("div", { class: "identity facts" }, facts);
+}
+
+// Grille 7 jours × 24 heures, dans le fuseau de l'admin : combien d'intercesseurs actifs sont disponibles
+function coverageView() {
+  const active = new Map(state.members.filter((m) => m.active && ["intercesseur", "admin"].includes(m.role)).map((m) => [m.id, m]));
+  const cells = {};   // "jour-heure" → ensemble de membres
+  state.availability.forEach((a) => {
+    const m = active.get(a.member_id);
+    if (!m) return;
+    slotCells(a, m.timezone || "America/Toronto").forEach((k) => (cells[k] ||= new Set()).add(a.member_id));
+  });
+  const max = Math.max(1, ...Object.values(cells).map((x) => x.size));
+  const empty = Object.keys(cells).length === 0;
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const head = h("tr", {}, h("th", { scope: "col" }, ""), [1, 2, 3, 4, 5, 6, 7].map((d) => h("th", { scope: "col" }, dayName(d, "short"))));
+  const rows = Array.from({ length: 24 }, (_, hr) => h("tr", {},
+    h("th", { scope: "row" }, String(hr).padStart(2, "0") + " h"),
+    [1, 2, 3, 4, 5, 6, 7].map((d) => {
+      const n = cells[d + "-" + hr]?.size || 0;
+      return h("td", { class: n ? "" : "gap", style: n ? "--a:" + (0.18 + 0.82 * n / max).toFixed(2) : null,
+        title: t("a.cov.cell", { day: dayName(d), hour: hr, n }) }, n || "");
+    })));
+
+  // Langues : demandes ouvertes d'un côté, intercesseurs actifs qui la parlent de l'autre
+  const open = state.requests.filter((r) => r.status !== "fermee");
+  const codes = [...new Set([...open.map((r) => r.lang || "fr"), ...[...active.values()].flatMap((m) => m.languages || [])])];
+  const langRows = codes.map((c) => {
+    const req = open.filter((r) => (r.lang || "fr") === c).length;
+    const ppl = [...active.values()].filter((m) => (m.languages || []).includes(c)).length;
+    return h("tr", { class: req && !ppl ? "warn" : "" },
+      h("th", { scope: "row", lang: c }, languageName(c)), h("td", {}, req), h("td", {}, ppl));
+  });
+
+  return h("div", { class: "stack", style: "gap:14px" },
+    h("h2", { style: "font-size:1.4rem" }, t("a.cov.h")),
+    h("p", { class: "hint" }, t("a.cov.p", { tz })),
+    empty ? h("p", { class: "empty" }, t("a.cov.empty"))
+      : h("div", { class: "cov-wrap" }, h("table", { class: "coverage" }, h("thead", {}, head), h("tbody", {}, rows))),
+    h("table", { class: "lang-table" },
+      h("thead", {}, h("tr", {}, h("th", { scope: "col" }, t("a.cov.lang")), h("th", { scope: "col" }, t("a.cov.req")), h("th", { scope: "col" }, t("a.cov.ppl")))),
+      h("tbody", {}, langRows)));
 }
 
 function viewMembers() {
@@ -326,6 +390,7 @@ function viewMembers() {
         h("div", { class: "stack", style: "gap:0" }, h("b", {}, m.display_name || t("a.m.noName")), h("span", { class: "hint" }, m.church || t("a.m.noChurch"))),
         h("span", { class: "meta" }, t("a.m.signedUp", { when: relDate(m.created_at) }))),
       h("p", { class: "body" }, m.motivation || t("a.m.noMotivation")),
+      profileFacts(m),
       h("div", { class: "tags" }, m.engagement_at
         ? h("span", { class: "pill ok" }, t("a.m.pledgeOk"))
         : h("span", { class: "pill new" }, t("a.m.pledgeNo"))),
@@ -343,7 +408,8 @@ function viewMembers() {
         h("span", {}, t(m.role === "admin" ? "role.admin" : "role.int") + " · " + t("a.m.load", { n: openLoad(m.id) }))),
       h("span", { class: m.active ? "pill ok" : "pill" }, t(m.active ? "a.m.active" : "a.m.paused")),
       isMe ? null : toggle,
-      isMe ? null : deleteAccountButton(m));
+      isMe ? null : deleteAccountButton(m),
+      profileFacts(m));
   };
 
   const refusedCard = (m) => h("article", { class: "item member" },
@@ -357,6 +423,7 @@ function viewMembers() {
     candidates.length ? h("div", { class: "list" }, candidates.map(candCard)) : h("p", { class: "empty" }, t("a.m.noCand")),
     h("h2", { style: "font-size:1.4rem" }, t("a.m.team")),
     h("div", { class: "grid-2" }, team.map(teamCard)),
+    coverageView(),
     refused.length ? h("h2", { style: "font-size:1.4rem" }, t("a.m.refusedList")) : null,
     refused.length ? h("p", { class: "hint" }, t("a.m.refusedHint")) : null,
     refused.length ? h("div", { class: "grid-2" }, refused.map(refusedCard)) : null);

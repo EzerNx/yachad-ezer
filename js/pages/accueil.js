@@ -1,6 +1,6 @@
 // Script de la page index.html (page publique)
 import { sb, configured, showConfigWarning, t, lang, onLangChange, h, relDate,
-         isRateLimited, randomToken, sha256Hex, copyText, PRIVACY_OFFICER } from "../app.js?v=7";
+         isRateLimited, randomToken, sha256Hex, copyText, PRIVACY_OFFICER } from "../app.js?v=8";
 
 const $ = (id) => document.getElementById(id);
 const loadedAt = Date.now();
@@ -21,6 +21,17 @@ renderOfficer();
 
 // ---------- Formulaire ----------
 const text = $("f-text");
+
+// Langue de la demande : par défaut celle du site, la personne peut la changer.
+// (Les noms des langues sont écrits dans chaque langue : « Español », « 한국어 »…)
+const langSel = $("f-lang");
+let langTouched = false;
+function fillLangs() {
+  langSel.replaceChildren(...window.YE.langs().map((c) => h("option", { value: c, lang: c }, window.YE.langName(c))));
+  if (!langTouched) langSel.value = lang();
+}
+langSel.addEventListener("change", () => { langTouched = true; });
+fillLangs();
 text.addEventListener("input", () => { $("charCount").textContent = text.value.length + " / 1500"; });
 $("f-wantContact").addEventListener("change", (e) => { $("contactBox").hidden = !e.target.checked; });
 document.querySelectorAll('input[name="via"]').forEach((r) => r.addEventListener("change", () => {
@@ -65,6 +76,8 @@ function finish(wantsContact, followUrl) {
     $("followOpen").href = followUrl;
   }
   $("prayerForm").reset();
+  langTouched = false;
+  langSel.value = lang();
   $("contactBox").hidden = true;
   $("charCount").textContent = "0 / 1500";
   $("formSection").hidden = true;
@@ -111,7 +124,7 @@ $("prayerForm").addEventListener("submit", async (e) => {
       needs: needs.length ? needs : ["priere"],
       wants_contact: wants,
       age_confirmed: true,
-      lang: lang(),
+      lang: langSel.value || lang(),
       follow_hash: followHash,
     };
     let { error } = await sb.from("prayer_requests").insert(row);
@@ -158,7 +171,7 @@ let testimonies = [];
 function renderTestimonies() {
   const section = $("temoignages");
   section.hidden = testimonies.length === 0;
-  $("tstList").replaceChildren(...testimonies.map((x) => h("figure", { class: "tst", lang: x.lang === "en" ? "en" : "fr" },
+  $("tstList").replaceChildren(...testimonies.map((x) => h("figure", { class: "tst", lang: x.lang || "fr" },
     h("blockquote", {}, x.body),
     h("figcaption", {}, (x.display_name || t("tst.anon")) + " · " + relDate(x.published_at)))));
 }
@@ -174,4 +187,4 @@ async function loadTestimonies() {
 }
 loadTestimonies();
 
-onLangChange(() => { thanksText(); renderOfficer(); renderTestimonies(); });
+onLangChange(() => { thanksText(); renderOfficer(); renderTestimonies(); if (!langTouched) langSel.value = lang(); });

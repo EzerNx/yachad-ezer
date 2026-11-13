@@ -1,8 +1,14 @@
 // =====================================================================
-//  Yachad Ezer — langues (FR / EN) et thème (clair / sombre)
+//  Yachad Ezer — langues et thème (clair / sombre)
 //
 //  Comment ça marche :
-//   * Chaque texte a une « clé » et deux versions : [français, anglais].
+//   * Chaque texte a une « clé ». Ici, deux versions : [français, anglais].
+//     Le site entier existe en français et en anglais.
+//   * Les 8 autres langues (es, pt, sw, ht, de, ru, zh, ko) sont dans
+//     js/lang/<code>.js : seulement les pages publiques. Elles ne sont
+//     téléchargées que si on choisit cette langue (le site reste léger).
+//   * Si un texte manque dans une langue, on prend l'anglais
+//     (le français pour le créole haïtien, plus proche pour ses lecteurs).
 //   * Dans le HTML, un élément avec data-i18n="cle" reçoit le bon texte.
 //     data-i18n-html : le texte contient un peu de HTML (gras, lien).
 //     data-i18n-attr="placeholder:cle" : traduit un attribut.
@@ -69,7 +75,7 @@
     "hero.cta": ["Confier une demande", "Share a prayer request"],
     "trust.1": ["Anonyme si vous le voulez", "Anonymous if you wish"],
     "trust.2": ["Votre nom n’est jamais montré", "Your name is never shown"],
-    "trust.3": ["Conforme à la Loi 25", "Compliant with Quebec’s Law 25"],
+    "trust.3": ["Vie privée : Loi 25 et RGPD", "Privacy: Quebec Law 25 and GDPR"],
     "praise.alt": ["Des personnes lèvent les mains vers la lumière", "People raising their hands toward the light"],
     "steps.eyebrow": ["Comment ça marche", "How it works"],
     "steps.title": ["Trois étapes, en toute confidence", "Three steps, in confidence"],
@@ -106,7 +112,7 @@
     "contact.consent.err": ["Ce consentement est nécessaire pour qu’on puisse vous recontacter.", "We need this consent to be able to contact you."],
     "f.consent": ["J’ai lu « Vos renseignements personnels » plus bas. J’accepte que ma demande, qui peut révéler mes croyances, soit lue par l’équipe et conservée au plus 6 mois.", "I have read “Your personal information” below. I agree that my request, which may reveal my beliefs, may be read by the team and kept for no more than 6 months."],
     "f.consent.err": ["Votre consentement est nécessaire pour envoyer la demande.", "Your consent is needed to send the request."],
-    "f.age": ["J’ai 14 ans ou plus. <span class=\"hint\">Moins de 14 ans : demande à un parent de remplir ce formulaire avec toi.</span>", "I am 14 or older. <span class=\"hint\">Under 14: ask a parent to fill in this form with you.</span>"],
+    "f.age": ["J’ai 14 ans ou plus, ou l’âge minimum de mon pays s’il est plus élevé. <span class=\"hint\">Moins de 14 ans : demande à un parent de remplir ce formulaire avec toi.</span>", "I am 14 or older, or the minimum age in my country if it is higher. <span class=\"hint\">Under 14: ask a parent to fill in this form with you.</span>"],
     "f.age.err": ["Confirmez votre âge, ou demandez l’aide d’un parent.", "Please confirm your age, or ask a parent for help."],
     "f.submit": ["Confier ma demande", "Send my request"],
     "f.send.err": ["L’envoi n’a pas fonctionné. Vérifiez votre connexion puis réessayez.", "Sending didn’t work. Check your connection and try again."],
@@ -115,18 +121,18 @@
     "thanks.contact": ["Des intercesseurs vont prier pour vous. Nous vous recontacterons comme vous l’avez demandé.", "Intercessors will pray for you. We will contact you as you requested."],
     "thanks.nocontact": ["Des intercesseurs vont prier pour vous. Personne ne vous contactera.", "Intercessors will pray for you. No one will contact you."],
     "thanks.again": ["Envoyer une autre demande", "Send another request"],
-    "privacy.eyebrow": ["Loi 25 · Québec", "Law 25 · Quebec"],
+    "privacy.eyebrow": ["Loi 25 (Québec) · RGPD (Europe)", "Law 25 (Quebec) · GDPR (Europe)"],
     "privacy.title": ["Vos renseignements personnels", "Your personal information"],
     "privacy.1.s": ["Ce que nous recueillons", "What we collect"],
-    "privacy.1.b": ["Votre sujet de prière, un prénom si vous le donnez, et un courriel ou un numéro seulement si vous demandez à être recontacté. Rien d’autre.", "Your prayer request, a first name if you give one, and an email or phone number only if you ask to be contacted. Nothing else."],
+    "privacy.1.b": ["Votre sujet de prière et la langue choisie, un prénom si vous le donnez, et un courriel ou un numéro seulement si vous demandez à être recontacté. Votre adresse IP n’est pas conservée : une empreinte brouillée sert 24 heures contre le spam, puis elle est effacée.", "Your prayer request and the language you chose, a first name if you give one, and an email or phone number only if you ask to be contacted. Your IP address is not stored: a scrambled fingerprint is used for 24 hours against spam, then erased."],
     "privacy.2.s": ["Pourquoi", "Why"],
-    "privacy.2.b": ["Pour prier pour vous et, si vous le demandez, vous transmettre une réponse, un suivi ou un conseil. Pas d’infolettre, pas de publicité, aucune vente ni partage.", "To pray for you and, if you ask, to send you a reply, follow-up or advice. No newsletter, no advertising, no selling or sharing."],
+    "privacy.2.b": ["Pour prier pour vous et, si vous le demandez, vous transmettre une réponse, un suivi ou un conseil. Pas d’infolettre, pas de publicité, aucune vente ni partage. Base légale : votre consentement explicite, car une demande de prière peut révéler vos convictions religieuses (RGPD, art. 6.1.a et 9.2.a).", "To pray for you and, if you ask, to send you a reply, follow-up or advice. No newsletter, no advertising, no selling or sharing. Legal basis: your explicit consent, because a prayer request may reveal your religious beliefs (GDPR, Art. 6(1)(a) and 9(2)(a))."],
     "privacy.3.s": ["Qui y a accès", "Who has access"],
-    "privacy.3.b": ["Les intercesseurs voient le texte de la demande avec un code, jamais votre nom ni vos coordonnées. Seul l’administrateur peut voir votre prénom et vos coordonnées. Chaque intercesseur a signé un engagement de confidentialité. Les données sont hébergées par Supabase au Canada, possiblement hors du Québec.", "Intercessors see the text of the request with a code, never your name or contact details. Only the administrator can see your first name and contact details. Every intercessor has signed a confidentiality pledge. Data is hosted by Supabase in Canada, possibly outside Quebec."],
+    "privacy.3.b": ["Les intercesseurs voient le texte de la demande avec un code, jamais votre nom ni vos coordonnées. Ils peuvent vivre dans d’autres pays que le vôtre. Seul l’administrateur peut voir votre prénom et vos coordonnées. Chaque intercesseur a signé un engagement de confidentialité.", "Intercessors see the text of the request with a code, never your name or contact details. They may live in other countries than yours. Only the administrator can see your first name and contact details. Every intercessor has signed a confidentiality pledge."],
     "privacy.4.s": ["Combien de temps", "How long"],
     "privacy.4.b": ["Au plus 6 mois. Ensuite, la demande, vos coordonnées et les notes des intercesseurs sont supprimées automatiquement.", "At most 6 months. After that, the request, your contact details and the intercessors’ notes are deleted automatically."],
     "privacy.5.s": ["Vos droits", "Your rights"],
-    "privacy.5.b": ["<ul><li>Demander à consulter, corriger ou supprimer vos renseignements.</li><li>Retirer votre consentement en tout temps.</li><li>Porter plainte à la Commission d’accès à l’information du Québec.</li></ul>", "<ul><li>Ask to access, correct or delete your information.</li><li>Withdraw your consent at any time.</li><li>File a complaint with the Commission d’accès à l’information du Québec.</li></ul>"],
+    "privacy.5.b": ["<ul><li>Consulter, corriger ou supprimer vos renseignements. Avec votre lien de suivi, vous pouvez vous-même télécharger ou supprimer votre demande.</li><li>Recevoir vos données dans un fichier (portabilité).</li><li>Retirer votre consentement en tout temps.</li><li>Porter plainte : au Québec, à la Commission d’accès à l’information ; dans l’Union européenne, à l’autorité de protection des données de votre pays (en France, la CNIL).</li></ul>", "<ul><li>Access, correct or delete your information. With your follow-up link, you can download or delete your request yourself.</li><li>Receive your data in a file (portability).</li><li>Withdraw your consent at any time.</li><li>Complain: in Quebec, to the Commission d’accès à l’information; in the European Union, to the data protection authority of your country.</li></ul>"],
     "privacy.6.s": ["Responsable de la protection des renseignements personnels", "Person in charge of protecting personal information"],
     "privacy.6.b": ["Écrivez-lui en indiquant la date de votre demande. En cas d’incident de confidentialité présentant un risque de préjudice sérieux, nous avisons les personnes concernées et la Commission d’accès à l’information.", "Write to them and include the date of your request. If a confidentiality incident poses a risk of serious harm, we notify the people concerned and the Commission d’accès à l’information."],
 
@@ -160,7 +166,7 @@
     "join.p3": ["Je ne copie, ne photographie ni ne partage aucune demande.", "I never copy, photograph or share any request."],
     "join.p4": ["Je prie fidèlement pour les demandes qui me sont confiées.", "I pray faithfully for the requests entrusted to me."],
     "join.pledge.ok": ["Je m’engage à respecter ces règles.", "I commit to following these rules."],
-    "join.consent": ["J’accepte que Yachad Ezer conserve mon nom, mon courriel et ma candidature pour gérer l’équipe d’intercession, tant que je suis membre. Je peux demander leur suppression en tout temps.", "I agree that Yachad Ezer may keep my name, email and application to manage the intercession team while I am a member. I can ask for them to be deleted at any time."],
+    "join.consent": ["J’accepte que Yachad Ezer conserve mon nom, mon courriel, mes langues, mon pays, mes disponibilités et ma candidature, hébergés au Canada, pour gérer l’équipe d’intercession tant que je suis membre. Je peux les modifier, les télécharger ou supprimer mon compte en tout temps dans « Mon compte ».", "I agree that Yachad Ezer may keep my name, email, languages, country, availability and application, hosted in Canada, to manage the intercession team while I am a member. I can edit or download them, or delete my account, at any time in “My account”."],
     "join.age": ["J’ai 18 ans ou plus.", "I am 18 or older."],
     "join.submit": ["Envoyer ma candidature", "Send my application"],
     "join.done.h": ["Merci pour votre cœur de servir.", "Thank you for your heart to serve."],
@@ -427,19 +433,147 @@
     "a.sendMail.sending": ["Envoi…", "Sending…"],
     "a.sendMail.done": ["Courriel envoyé et observation marquée comme transmise.", "Email sent and note marked as passed on."],
     "a.sendMail.err": ["Le courriel n’est pas parti : {msg}", "The email was not sent: {msg}"],
+    // ---------- Version 3 : langues, RGPD, crise, export ----------
+    "privacy.7.s": ["Où sont vos données", "Where your data is"],
+    "privacy.7.b": ["Hébergement : Supabase, au Canada (possiblement hors du Québec). Courriels : Brevo (France), seulement si vous demandez une réponse par courriel. Les pages du site sont servies par GitHub Pages, qui ne reçoit pas votre demande. Si vous écrivez depuis l’Union européenne, vos données sont donc transférées au Canada. Ce transfert ne repose pas sur une garantie européenne particulière : vous y consentez en envoyant le formulaire (RGPD, art. 49.1.a). Vous pouvez retirer ce consentement en supprimant votre demande.", "Hosting: Supabase, in Canada. Emails: Brevo (France), only if you ask for a reply by email. The site’s pages are served by GitHub Pages, which does not receive your request. If you write from the European Union, your data is therefore transferred to Canada. This transfer does not rely on a specific European safeguard: you consent to it by sending the form (GDPR, Art. 49(1)(a)). You can withdraw this consent by deleting your request."],
+    "privacy.8.s": ["Âge minimum", "Minimum age"],
+    "privacy.8.b": ["14 ans ou plus. Si la loi de votre pays fixe un âge plus élevé pour consentir seul (par exemple 15 ou 16 ans dans plusieurs pays d’Europe), c’est cet âge qui compte : sinon, demandez à un parent de remplir le formulaire avec vous.", "14 or older. If the law of your country sets a higher age to consent on your own (for example 15 or 16 in several European countries), that age applies: otherwise, ask a parent to fill in the form with you."],
+    "privacy.9.s": ["Langue de référence", "Reference language"],
+    "privacy.9.b": ["Ce texte est traduit pour vous aider à le lire. En cas de différence, la version française fait foi.", "This text is translated to help you read it. If there is any difference, the French version prevails."],
+    "f.lang": ["Langue de votre demande", "Language of your request"],
+    "f.lang.hint": ["Nous la confions en priorité à des intercesseurs qui parlent cette langue.", "We give it first to intercessors who speak this language."],
+    "crisis.t": ["En danger ?", "In danger?"],
+    "crisis.p": ["Si votre vie ou celle de quelqu’un est en danger, appelez tout de suite les urgences de votre pays. Pour parler à quelqu’un maintenant, gratuitement : <a href=\"https://findahelpline.com\" target=\"_blank\" rel=\"noopener\">findahelpline.com</a> (lignes d’écoute dans plus de 100 pays). Au Canada : composez ou textez le 9-8-8.", "If your life or someone else’s is in danger, call your country’s emergency number right away. To talk to someone now, for free: <a href=\"https://findahelpline.com\" target=\"_blank\" rel=\"noopener\">findahelpline.com</a> (helplines in more than 100 countries). In Canada: call or text 9-8-8."],
+    "s.x.h": ["Télécharger mes données", "Download my data"],
+    "s.x.p": ["Un fichier avec tout ce que nous gardons sur cette demande : le texte, la date, votre prénom et vos coordonnées si vous les avez donnés. Les intercesseurs n’y figurent pas.", "A file with everything we keep about this request: the text, the date, your first name and contact details if you gave them. The intercessors are not included."],
+    "s.x.btn": ["Télécharger (fichier JSON)", "Download (JSON file)"],
+    "s.x.warn": ["Ce lien donne accès au texte de votre demande : ne le partagez pas.", "This link gives access to the text of your request: do not share it."],
+    "join.langs": ["Langues dans lesquelles vous pouvez prier", "Languages you can pray in"],
+    "join.langs.hint": ["Cochez-en au moins une (8 au plus). Les demandes écrites dans ces langues vous seront confiées en priorité.", "Tick at least one (8 at most). Requests written in these languages will be given to you first."],
+    "join.country": ["Pays de résidence <span class=\"hint\">· facultatif</span>", "Country of residence <span class=\"hint\">· optional</span>"],
+    "join.e.langs": ["Choisissez entre 1 et 8 langues.", "Choose between 1 and 8 languages."],
+    "dispo.title": ["Quand pouvez-vous prier ?", "When can you pray?"],
+    "dispo.hint": ["Facultatif. Heures de votre fuseau horaire ({tz}). Vous pourrez les changer dans « Mon compte ».", "Optional. Times in your time zone ({tz}). You can change them in “My account”."],
+    "dispo.day": ["Jour", "Day"],
+    "dispo.every": ["Tous les jours", "Every day"],
+    "dispo.from": ["de", "from"],
+    "dispo.to": ["à", "to"],
+    "dispo.add": ["Ajouter un créneau", "Add a time slot"],
+    "dispo.remove": ["Retirer ce créneau", "Remove this time slot"],
+    "dispo.err.order": ["Vérifiez les heures : la fin doit venir après le début.", "Check the times: the end must come after the start."],
+    "dispo.err.max": ["Au plus {n} créneaux par semaine.", "At most {n} time slots per week."],
+    "err.tz": ["Ce fuseau horaire n’est pas reconnu.", "This time zone is not recognised."],
+    "m.acc.profile.h": ["Mon profil", "My profile"],
+    "m.acc.church": ["Église ou communauté (facultatif)", "Church or community (optional)"],
+    "m.acc.country": ["Pays de résidence (facultatif)", "Country of residence (optional)"],
+    "m.acc.tz": ["Fuseau horaire", "Time zone"],
+    "m.acc.tz.hint": ["Vos disponibilités sont lues dans ce fuseau.", "Your availability is read in this time zone."],
+    "m.acc.save": ["Enregistrer", "Save"],
+    "m.acc.saved": ["Enregistré.", "Saved."],
+    "m.acc.dispo.hint": ["Heures dans votre fuseau ({tz}). Les demandes peuvent vous être confiées en priorité les jours où vous êtes disponible.", "Times in your time zone ({tz}). Requests may be given to you first on the days you are available."],
+    "m.acc.login.h": ["Connexion", "Sign-in"],
+    "m.acc.email.hint": ["Pour changer d’adresse, nous envoyons un lien de confirmation. Il peut être demandé depuis l’ancienne et la nouvelle adresse.", "To change your address, we send a confirmation link. It may be requested from both the old and the new address."],
+    "m.acc.email.btn": ["Changer de courriel", "Change email"],
+    "m.acc.email.same": ["C’est déjà votre adresse.", "This is already your address."],
+    "m.acc.email.sent": ["Lien envoyé à {email}. Le changement se fera quand vous l’aurez confirmé.", "Link sent to {email}. The change will happen once you confirm it."],
+    "m.acc.pass.old": ["Mot de passe actuel", "Current password"],
+    "m.acc.pass.new": ["Nouveau mot de passe", "New password"],
+    "m.acc.pass.new2": ["Confirmez le nouveau mot de passe", "Confirm the new password"],
+    "m.acc.pass.btn": ["Changer de mot de passe", "Change password"],
+    "m.acc.pass.needOld": ["Entrez votre mot de passe actuel.", "Enter your current password."],
+    "m.acc.pass.wrongOld": ["Le mot de passe actuel n’est pas le bon.", "The current password is incorrect."],
+    "m.acc.pass.same": ["Le nouveau mot de passe doit être différent de l’ancien.", "The new password must be different from the old one."],
+    "m.acc.pass.weak": ["Évitez de mettre votre courriel dans le mot de passe.", "Avoid putting your email in the password."],
+    "m.acc.pass.done": ["Mot de passe changé. Vos autres appareils ont été déconnectés.", "Password changed. Your other devices have been signed out."],
+    "m.acc.data.h": ["Mes données", "My data"],
+    "m.acc.data.p": ["Téléchargez tout ce que Yachad Ezer garde sur vous : profil, disponibilités, codes des demandes reçues et vos observations.", "Download everything Yachad Ezer keeps about you: profile, availability, codes of the requests you received and your notes."],
+    "m.acc.data.btn": ["Télécharger mes données (JSON)", "Download my data (JSON)"],
+    "m.acc.migration": ["La base n’est pas à jour : l’administrateur doit exécuter la migration 004.", "The database is out of date: the administrator must run migration 004."],
+    "tr.btn": ["Traduire ({from})", "Translate ({from})"],
+    "tr.auto": ["autre langue", "other language"],
+    "tr.working": ["Traduction sur votre appareil…", "Translating on your device…"],
+    "tr.downloading": ["Téléchargement du traducteur : {pct} %", "Downloading the translator: {pct}%"],
+    "tr.label": ["Traduction automatique ({to}), faite sur votre appareil :", "Automatic translation ({to}), done on your device:"],
+    "tr.unsupported": ["Ce navigateur ne sait pas encore traduire sur l’appareil. Ouvrez le portail dans Chrome sur ordinateur. Ne collez pas la demande dans un site de traduction : son texte sortirait de l’équipe.", "This browser can’t translate on the device yet. Open the portal in Chrome on a computer. Don’t paste the request into a translation website: its text would leave the team."],
+    "tr.pair": ["Cette langue n’est pas encore disponible dans le traducteur de votre navigateur.", "This language isn’t available yet in your browser’s translator."],
+    "tr.failed": ["La traduction n’a pas fonctionné. Réessayez.", "The translation didn’t work. Please try again."],
+    "m.reqLang": ["Écrite en {lang}", "Written in {lang}"],
+    "a.m.langs": ["Langues", "Languages"],
+    "a.m.country": ["Pays", "Country"],
+    "a.m.dispo": ["Disponibilités", "Availability"],
+    "a.m.noDispo": ["non indiquées", "not given"],
+    "a.cov.h": ["Couverture de prière", "Prayer coverage"],
+    "a.cov.p": ["Nombre d’intercesseurs actifs disponibles, heure par heure, dans votre fuseau ({tz}). Les cases vides sont des moments sans personne.", "Number of active intercessors available, hour by hour, in your time zone ({tz}). Empty cells are times with no one."],
+    "a.cov.empty": ["Aucune disponibilité indiquée pour l’instant.", "No availability given yet."],
+    "a.cov.cell": ["{day}, {hour} h : {n} intercesseur(s)", "{day}, {hour}:00: {n} intercessor(s)"],
+    "a.cov.lang": ["Langue", "Language"],
+    "a.cov.req": ["Demandes ouvertes", "Open requests"],
+    "a.cov.ppl": ["Intercesseurs qui la parlent", "Intercessors who speak it"],
     "privacy.officer.missing": ["À compléter par l’administrateur", "To be completed by the administrator"]
   };
 
-  // ---------- Langue ----------
+  // ---------- Langues ----------
+  // name : le nom dans la langue elle-même · locale : pour les dates · fb : langue de secours
+  var LANGS = {
+    fr: { name: "Français",        locale: "fr-CA",   html: "fr-CA",   fb: "fr" },
+    en: { name: "English",         locale: "en-CA",   html: "en-CA",   fb: "en" },
+    es: { name: "Español",         locale: "es",      html: "es",      fb: "en" },
+    pt: { name: "Português",       locale: "pt-BR",   html: "pt-BR",   fb: "en" },
+    sw: { name: "Kiswahili",       locale: "sw",      html: "sw",      fb: "en" },
+    ht: { name: "Kreyòl ayisyen",  locale: "fr-HT",   html: "ht",      fb: "fr" },
+    de: { name: "Deutsch",         locale: "de",      html: "de",      fb: "en" },
+    ru: { name: "Русский",         locale: "ru",      html: "ru",      fb: "en" },
+    zh: { name: "中文（简体）",      locale: "zh-CN",   html: "zh-Hans", fb: "en" },
+    ko: { name: "한국어",            locale: "ko",      html: "ko",      fb: "en" }
+  };
+  var CODES = Object.keys(LANGS);
+  var PACKS = window.YE_PACKS = window.YE_PACKS || {};   // remplies par js/lang/<code>.js
+  var VERSION = "8";
+
+  function pick(code) {
+    if (code && LANGS[code]) return code;
+    var wanted = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "fr"]);
+    for (var i = 0; i < wanted.length; i++) {
+      var c = String(wanted[i] || "").toLowerCase().split("-")[0];
+      if (LANGS[c]) return c;
+    }
+    return "en";   // aucune de nos langues : l'anglais est le plus partagé
+  }
+
   var lang = null;
   try { lang = localStorage.getItem("ye-lang"); } catch (e) {}
-  if (lang !== "fr" && lang !== "en") lang = /^en/i.test(navigator.language || "") ? "en" : "fr";
-  document.documentElement.lang = lang === "en" ? "en-CA" : "fr-CA";
+  lang = pick(lang);
+  document.documentElement.lang = LANGS[lang].html;
+
+  // Charge le fichier d'une langue (une seule fois). boot.js l'a souvent déjà lancé.
+  function loadPack(code, done) {
+    if (code === "fr" || code === "en" || PACKS[code]) { done(); return; }
+    var id = "ye-pack-" + code;
+    var s = document.getElementById(id);
+    if (!s) {
+      s = document.createElement("script");
+      s.id = id;
+      s.src = "js/lang/" + code + ".js?v=" + VERSION;
+      document.head.appendChild(s);
+    }
+    s.addEventListener("load", done, { once: true });
+    s.addEventListener("error", done, { once: true });   // hors ligne : on garde la langue de secours
+  }
 
   function t(key, vars, forLang) {
+    var code = LANGS[forLang] ? forLang : lang;
     var entry = D[key];
-    var s = entry ? entry[(forLang || lang) === "en" ? 1 : 0] : key;
-    if (!entry && window.console) console.warn("Traduction manquante :", key);
+    var s;
+    if (code === "fr" || code === "en") {
+      s = entry ? entry[code === "en" ? 1 : 0] : undefined;
+    } else {
+      s = PACKS[code] && PACKS[code][key];
+      if (s == null && entry) s = entry[LANGS[code].fb === "fr" ? 0 : 1];
+    }
+    if (s == null) {
+      if (window.console) console.warn("Traduction manquante :", key);
+      s = key;
+    }
     if (vars) s = s.replace(/\{(\w+)\}/g, function (m, k) { return vars[k] != null ? vars[k] : m; });
     return s;
   }
@@ -456,13 +590,18 @@
     });
   }
 
-  function setLang(next) {
-    lang = next === "en" ? "en" : "fr";
-    try { localStorage.setItem("ye-lang", lang); } catch (e) {}
-    document.documentElement.lang = lang === "en" ? "en-CA" : "fr-CA";
+  function refresh() {
+    document.documentElement.lang = LANGS[lang].html;
     apply();
     renderPrefs();
     window.dispatchEvent(new Event("ye:lang"));   // les pages redessinent leurs textes
+  }
+
+  function setLang(next) {
+    if (!LANGS[next]) return;
+    lang = next;
+    try { localStorage.setItem("ye-lang", lang); } catch (e) {}
+    loadPack(lang, refresh);
   }
 
   // ---------- Thème ----------
@@ -477,8 +616,9 @@
     renderPrefs();
   }
 
-  // ---------- Contrôles : pastille « FR | EN » + interrupteur soleil/lune ----------
+  // ---------- Contrôles : choix de la langue + interrupteur soleil/lune ----------
   var SUN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  var GLOBE = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>';
   var MOON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>';
 
   function renderPrefs() {
@@ -490,21 +630,27 @@
       box.classList.add("prefs");
       box.textContent = "";
 
-      // Langue : deux boutons, celui de la langue actuelle est « appuyé »
-      var group = document.createElement("div");
+      // Langue : une pastille « globe + FR ». Une vraie liste <select> transparente
+      // est posée dessus : le téléphone ouvre son propre sélecteur (accessible, simple).
+      var group = document.createElement("label");
       group.className = "pref-lang";
-      group.setAttribute("role", "group");
-      group.setAttribute("aria-label", t("prefs.langGroup"));
-      ["fr", "en"].forEach(function (code) {
-        var b = document.createElement("button");
-        b.type = "button";
-        b.textContent = code.toUpperCase();
-        b.setAttribute("lang", code);
-        b.setAttribute("aria-pressed", String(lang === code));
-        b.title = code === "fr" ? "Français" : "English";
-        b.addEventListener("click", function () { if (lang !== code) setLang(code); });
-        group.appendChild(b);
+      group.title = t("prefs.langGroup");
+      group.innerHTML = GLOBE;
+      var code = document.createElement("span");
+      code.className = "pref-code";
+      code.textContent = lang.toUpperCase();
+      var sel = document.createElement("select");
+      sel.setAttribute("aria-label", t("prefs.langGroup"));
+      CODES.forEach(function (c) {
+        var o = document.createElement("option");
+        o.value = c;
+        o.lang = LANGS[c].html;
+        o.textContent = LANGS[c].name;
+        if (c === lang) o.selected = true;
+        sel.appendChild(o);
       });
+      sel.addEventListener("change", function () { setLang(sel.value); });
+      group.append(code, sel);
 
       var sep = document.createElement("span");
       sep.className = "pref-sep";
@@ -534,7 +680,9 @@
   window.YE = {
     t: t,
     lang: function () { return lang; },
-    locale: function () { return lang === "en" ? "en-CA" : "fr-CA"; },
+    locale: function () { return LANGS[lang].locale; },
+    langs: function () { return CODES.slice(); },
+    langName: function (c) { return LANGS[c] ? LANGS[c].name : c; },
     setLang: setLang,
     apply: apply,
     keys: function () { return Object.keys(D); }
@@ -542,4 +690,5 @@
 
   apply();
   renderPrefs();
+  if (lang !== "fr" && lang !== "en" && !PACKS[lang]) loadPack(lang, refresh);
 })();

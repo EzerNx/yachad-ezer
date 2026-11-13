@@ -133,6 +133,30 @@ begin
     case when (m ->> 'engagement') = 'true' then now() end,
     v_langs, v_cc, v_tz
   );
+
+  -- Disponibilités données dans le formulaire : [{"d":1,"s":360,"e":420}, …]
+  -- Seules les lignes valides sont gardées (au plus 28), les autres sont ignorées.
+  if jsonb_typeof(m -> 'availability') = 'array' then
+    insert into public.availability (member_id, weekday, start_min, end_min)
+    select new.id, (x ->> 'd')::smallint, (x ->> 's')::smallint, (x ->> 'e')::smallint
+    from (select x from jsonb_array_elements(m -> 'availability') x limit 28) a
+    where jsonb_typeof(x) = 'object'
+      and coalesce(x ->> 'd', '') ~ '^[1-7]$'
+      and coalesce(x ->> 's', '') ~ '^[0-9]{1,4}$'
+      and coalesce(x ->> 'e', '') ~ '^[0-9]{1,4}$'
+      and (x ->> 's')::int between 0 and 1439
+      and (x ->> 'e')::int between 1 and 1440
+      and (x ->> 'e')::int > (x ->> 's')::int
+    on conflict do nothing;
+  end if;
+
+  -- Minimisation : ces informations sont maintenant dans le profil.
+  -- On les retire des métadonnées du compte (sinon elles resteraient en double,
+  -- et voyageraient dans chaque jeton de connexion). On garde seulement le nom.
+  update auth.users
+  set raw_user_meta_data = coalesce(raw_user_meta_data, '{}'::jsonb)
+      - 'church' - 'motivation' - 'languages' - 'country' - 'timezone' - 'availability' - 'engagement'
+  where id = new.id;
   return new;
 end;
 $$;
@@ -191,6 +215,35 @@ drop policy if exists "disponibilité : je supprime les miennes, l'admin aussi" 
 create policy "disponibilité : je supprime les miennes, l'admin aussi" on public.availability
   for delete to authenticated
   using (member_id = (select auth.uid()) or private.is_admin());
+
+-- Remplacer TOUS mes créneaux d'un coup (depuis « Mon compte »).
+-- Une seule opération : si une ligne est invalide, rien n'est changé.
+-- p_slots : [{"weekday":1,"start_min":360,"end_min":420}, …]
+create or replace function private.set_my_availability(p_slots jsonb)
+returns int language plpgsql security definer set search_path = '' as $$
+declare
+  v_uid uuid := (select auth.uid());
+  v_n   int;
+begin
+  if v_uid is null or not exists (select 1 from public.profiles where id = v_uid) then
+    raise exception 'not_signed_in' using errcode = '42501';
+  end if;
+  if jsonb_typeof(p_slots) <> 'array' or jsonb_array_length(p_slots) > 28 then
+    raise exception 'too_many_slots' using errcode = 'P0001';
+  end if;
+  delete from public.availability where member_id = v_uid;
+  insert into public.availability (member_id, weekday, start_min, end_min)
+  select v_uid, (x ->> 'weekday')::smallint, (x ->> 'start_min')::smallint, (x ->> 'end_min')::smallint
+  from jsonb_array_elements(p_slots) x;          -- les contraintes CHECK de la table refusent les valeurs invalides
+  get diagnostics v_n = row_count;
+  return v_n;
+end;
+$$;
+
+create or replace function public.set_my_availability(p_slots jsonb)
+returns int language sql volatile security invoker set search_path = '' as $$
+  select private.set_my_availability(p_slots);
+$$;
 
 -- ---------------------------------------------------------------------
 -- D. L'ALGORITHME DE RÉPARTITION, version 2
@@ -335,16 +388,18 @@ $$;
 -- ---------------------------------------------------------------------
 revoke execute on function private.site_langs(), private.valid_timezone(text),
   private.check_profile_fields(), private.limit_availability(),
-  private.export_my_data(), private.request_export(text),
+  private.export_my_data(), private.request_export(text), private.set_my_availability(jsonb),
   private.assign_request(uuid, int), private.handle_new_user(),
   private.add_testimony(text, text, text, text)
   from public, anon, authenticated;
 grant execute on function private.site_langs()                          to anon, authenticated;
 grant execute on function private.valid_timezone(text)                  to authenticated;
 grant execute on function private.export_my_data()                      to authenticated;
+grant execute on function private.set_my_availability(jsonb)            to authenticated;
 grant execute on function private.request_export(text)                  to anon, authenticated;
 grant execute on function private.add_testimony(text, text, text, text) to anon, authenticated;
 
-revoke execute on function public.export_my_data(), public.request_export(text) from public;
+revoke execute on function public.export_my_data(), public.request_export(text), public.set_my_availability(jsonb) from public;
 grant execute on function public.export_my_data()      to authenticated;
+grant execute on function public.set_my_availability(jsonb) to authenticated;
 grant execute on function public.request_export(text)  to anon, authenticated;

@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://kklvokzhptyogutwakol.supabase.co wss://kklvokzhptyogutwakol.supabase.co; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script src="js/boot.js?v=7"></script>
+<script src="js/boot.js?v=8"></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title data-i18n="idx.title">Yachad Ezer · Requêtes de prière</title>
@@ -25,8 +25,8 @@
 <meta property="og:locale:alternate" content="en_CA">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0D1430">
-<link rel="stylesheet" href="css/fonts.css?v=7">
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/fonts.css?v=8">
+<link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body class="public">
 
@@ -55,7 +55,7 @@
       <ul class="trust">
         <li data-i18n="trust.1">Anonyme si vous le voulez</li>
         <li data-i18n="trust.2">Votre nom n’est jamais montré</li>
-        <li data-i18n="trust.3">Conforme à la Loi 25</li>
+        <li data-i18n="trust.3">Vie privée : Loi 25 et RGPD</li>
       </ul>
     </div>
     <div class="hero-art"><svg class="praise" data-i18n-attr="aria-label:praise.alt" viewBox="0 0 600 360" role="img" aria-label="Des personnes lèvent les mains vers la lumière">
@@ -116,6 +116,10 @@
             <blockquote data-i18n="v.mat">« Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos. »</blockquote>
             <cite data-i18n="v.mat.ref">Matthieu 11.28 · Louis Segond 1910</cite>
           </div>
+          <div class="crisis" role="note">
+            <b data-i18n="crisis.t">En danger ?</b>
+            <p data-i18n-html="crisis.p">Si votre vie ou celle de quelqu’un est en danger, appelez tout de suite les urgences de votre pays.</p>
+          </div>
         </aside>
 
         <div>
@@ -137,6 +141,12 @@
                 <textarea id="f-text" maxlength="1500" required data-i18n-attr="placeholder:f.text.ph" placeholder="Ex. : Priez pour ma mère qui commence un traitement la semaine prochaine, et pour que je garde la paix."></textarea>
                 <span class="chars" id="charCount">0 / 1500</span>
                 <span class="err" id="err-text" hidden data-i18n="f.text.err">Écrivez au moins quelques mots pour que nous sachions comment prier.</span>
+              </div>
+
+              <div class="field">
+                <label for="f-lang" data-i18n="f.lang">Langue de votre demande</label>
+                <span class="hint" data-i18n="f.lang.hint">Nous la confions en priorité à des intercesseurs qui parlent cette langue.</span>
+                <select id="f-lang"></select>
               </div>
 
               <fieldset>
@@ -213,7 +223,7 @@
     </section>
 
     <section class="section" id="confidentialite" aria-labelledby="privacy-title">
-      <div class="section-head"><span class="eyebrow" data-i18n="privacy.eyebrow">Loi 25 · Québec</span><h2 id="privacy-title" data-i18n="privacy.title">Vos renseignements personnels</h2></div>
+      <div class="section-head"><span class="eyebrow" data-i18n="privacy.eyebrow">Loi 25 (Québec) · RGPD (Europe)</span><h2 id="privacy-title" data-i18n="privacy.title">Vos renseignements personnels</h2></div>
       <div class="privacy">
         <details><summary data-i18n="privacy.1.s">Ce que nous recueillons</summary>
           <div class="pbody" data-i18n="privacy.1.b">Votre sujet de prière, un prénom si vous le donnez, et un courriel ou un numéro seulement si vous demandez à être recontacté. Rien d’autre.</div></details>
@@ -225,6 +235,12 @@
           <div class="pbody" data-i18n="privacy.4.b">Au plus 6 mois. Ensuite, la demande, vos coordonnées et les notes des intercesseurs sont supprimées automatiquement.</div></details>
         <details><summary data-i18n="privacy.5.s">Vos droits</summary>
           <div class="pbody" data-i18n-html="privacy.5.b"><ul><li>Demander à consulter, corriger ou supprimer vos renseignements.</li><li>Retirer votre consentement en tout temps.</li><li>Porter plainte à la Commission d’accès à l’information du Québec.</li></ul></div></details>
+        <details><summary data-i18n="privacy.7.s">Où sont vos données</summary>
+          <div class="pbody" data-i18n="privacy.7.b"></div></details>
+        <details><summary data-i18n="privacy.8.s">Âge minimum</summary>
+          <div class="pbody" data-i18n="privacy.8.b"></div></details>
+        <details><summary data-i18n="privacy.9.s">Langue de référence</summary>
+          <div class="pbody" data-i18n="privacy.9.b"></div></details>
         <details><summary data-i18n="privacy.6.s">Responsable de la protection des renseignements personnels</summary>
           <div class="pbody">
             <!-- Le nom et le courriel viennent de js/config.js (PRIVACY_OFFICER) -->
@@ -243,9 +259,9 @@
   </div>
 </footer>
 
-<script src="js/i18n.js?v=7"></script>
+<script src="js/i18n.js?v=8"></script>
 <script src="js/vendor/supabase-2.117.3.js"></script>
-<script type="module" src="js/pages/accueil.js?v=7"></script>
+<script type="module" src="js/pages/accueil.js?v=8"></script>
 
 </body>
 </html>

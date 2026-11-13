@@ -1,5 +1,5 @@
 // Script de la page connexion.html
-import { sb, showConfigWarning, explain, getMyProfile, signOut, t, onLangChange } from "../app.js?v=7";
+import { sb, showConfigWarning, explain, getMyProfile, signOut, t, onLangChange } from "../app.js?v=8";
 const $ = (id) => document.getElementById(id);
 showConfigWarning($("loginForm"));
 

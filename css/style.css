@@ -140,16 +140,21 @@ a { color: var(--gold-deep); }
 .btn[disabled] { opacity: .5; cursor: default; transform: none; }
 
 /* ===================================================================
-   Langue + thème : une pastille « FR | EN » et un interrupteur
+   Langue + thème : une pastille « globe FR » et un interrupteur
    =================================================================== */
 .prefs { display: inline-flex; align-items: center; gap: 4px; padding: 3px; border-radius: 999px;
   border: 1px solid var(--chrome-line); background: var(--chrome); flex: none; }
-.pref-lang { display: inline-flex; gap: 2px; }
-.pref-lang button { all: unset; box-sizing: border-box; cursor: pointer; min-width: 34px; height: 28px; padding: 0 8px; border-radius: 999px;
-  display: inline-grid; place-items: center; font-size: .74rem; font-weight: 700; letter-spacing: .06em; color: var(--chrome-muted);
-  transition: background .15s ease, color .15s ease; }
-.pref-lang button:hover { color: var(--chrome-ink); }
-.pref-lang button[aria-pressed="true"] { background: var(--seg-on-bg); color: var(--seg-on-ink); }
+.pref-lang { position: relative; display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 10px 0 8px;
+  border-radius: 999px; color: var(--chrome-ink); cursor: pointer; transition: background .15s ease; }
+.pref-lang:hover { background: var(--seg-on-bg); color: var(--seg-on-ink); }
+.pref-lang svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; }
+.pref-code { font-size: .74rem; font-weight: 700; letter-spacing: .06em; }
+.pref-code::after { content: ""; display: inline-block; width: 5px; height: 5px; margin: 0 0 2px 6px;
+  border-right: 1.6px solid currentColor; border-bottom: 1.6px solid currentColor; transform: rotate(45deg); opacity: .7; }
+/* La vraie liste est invisible mais couvre toute la pastille : un clic l'ouvre */
+.pref-lang select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;
+  font-size: 16px; /* évite le zoom automatique sur iPhone */ border: 0; }
+.pref-lang:focus-within { outline: 2px solid var(--gold); outline-offset: 2px; }
 .pref-sep { width: 1px; height: 18px; background: var(--chrome-line); margin: 0 2px; }
 .pref-theme { all: unset; cursor: pointer; border-radius: 999px; display: inline-flex; }
 .pref-theme .track { position: relative; width: 54px; height: 28px; border-radius: 999px; background: var(--track);
@@ -159,7 +164,7 @@ a { color: var(--gold-deep); }
   box-shadow: 0 1px 3px rgba(0, 0, 0, .25); display: grid; place-items: center; transition: transform .22s ease; }
 .pref-theme .knob svg { width: 13px; height: 13px; stroke: var(--gold-deep); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .pref-theme[aria-checked="true"] .knob { transform: translateX(26px); }
-.pref-lang button:focus-visible, .pref-theme:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.pref-theme:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
 /* ---------- En-tête public ---------- */
 .site-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--header-bg);
@@ -218,6 +223,12 @@ html:lang(en) .verse-band blockquote::after { content: "”"; margin-left: 0; }
 .verse { display: flex; flex-direction: column; gap: 6px; padding: 18px 20px; border-radius: 16px; background: var(--gold-soft); }
 .verse blockquote { margin: 0; font-family: var(--display); font-size: 1.25rem; line-height: 1.4; }
 .verse cite { font-style: normal; font-size: .85rem; color: var(--muted); }
+/* Encadré « En danger ? » : discret mais toujours visible près du formulaire */
+.crisis { margin-top: 18px; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line); border-left: 4px solid var(--danger, #B3261E);
+  background: var(--surface); font-size: .92rem; }
+.crisis b { display: block; margin-bottom: 4px; }
+.crisis p { margin: 0; color: var(--muted); }
+.crisis a { color: inherit; font-weight: 600; }
 
 /* ---------- Sections publiques ---------- */
 .section { padding-block: 64px; display: flex; flex-direction: column; gap: 28px; }
@@ -251,6 +262,13 @@ fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-direction: colu
 .chip input:checked + span { background: var(--gold-soft); border-color: var(--gold); color: var(--ink); font-weight: 600; }
 .chip input:checked + span::before { content: "✓"; color: var(--gold-deep); font-weight: 700; }
 .chip input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* Créneaux de disponibilité : « jour · de · à · ✕ » sur une ligne, qui se replie sur téléphone */
+.slot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.slot select { width: auto; flex: 1 1 150px; }
+.slot input[type=time] { width: auto; flex: 0 1 120px; }
+input[type=time] { font: inherit; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--field); color: var(--ink); }
+input[type=time]:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 0 4px var(--gold-soft); }
 .check { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; font-weight: 400; font-size: .95rem; cursor: pointer; }
 .check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--gold-deep); }
 .box { display: flex; flex-direction: column; gap: 14px; padding: 18px; border-radius: 16px; background: var(--field); border: 1px solid var(--line); }
@@ -438,3 +456,33 @@ fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-direction: colu
 .danger-zone h2, .danger-zone h3 { color: var(--danger); }
 .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 @media (max-width: 860px) { .nav-item { font-size: .64rem; padding: 7px 2px; min-width: 0; } .nav-item span[data-i18n] { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; } }
+
+/* Messages de confirmation qui restent affichés (Mon compte) */
+.ok-msg { color: var(--ok); font-weight: 600; margin: 0; }
+hr.sep { border: 0; border-top: 1px solid var(--line); margin: 6px 0; width: 100%; }
+
+/* Traduction affichée sous la demande */
+.translation { border-left: 3px solid var(--gold); padding: 8px 12px; background: var(--gold-soft); border-radius: 0 10px 10px 0; }
+.translation p { margin: 4px 0 0; }
+
+/* Admin : informations du profil d'un intercesseur */
+.item.member .facts { flex-basis: 100%; flex-direction: column; }
+.facts { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: .88rem; }
+.facts b { margin-right: 6px; }
+
+/* Admin : grille de couverture 7 × 24 */
+.cov-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.coverage { border-collapse: separate; border-spacing: 2px; font-size: .74rem; min-width: 420px; }
+.coverage th { font-weight: 600; color: var(--muted); padding: 2px 6px; text-align: center; white-space: nowrap; }
+.coverage tbody th { text-align: right; }
+.coverage td { width: 44px; height: 20px; text-align: center; border-radius: 4px; color: var(--ink); font-weight: 600;
+  background: color-mix(in srgb, var(--gold) calc(var(--a, 0) * 100%), transparent); }
+.coverage td.gap { background: var(--line); opacity: .45; }
+.lang-table { border-collapse: collapse; font-size: .9rem; max-width: 520px; }
+.lang-table th, .lang-table td { padding: 6px 12px; border-bottom: 1px solid var(--line); text-align: left; }
+.lang-table td { text-align: right; }
+.lang-table tr.warn th, .lang-table tr.warn td { color: var(--danger); font-weight: 600; }
+
+/* Coréen et chinois : ne pas couper un mot au milieu ; ligne un peu plus aérée */
+:lang(ko) body, :lang(ko) h1, :lang(ko) h2, :lang(ko) p { word-break: keep-all; }
+:lang(zh-Hans) body { line-height: 1.75; }

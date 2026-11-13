@@ -6,14 +6,14 @@
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script src="js/boot.js?v=7"></script>
+<script src="js/boot.js?v=8"></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <title data-i18n="s.title">Suivi de ma demande · Yachad Ezer</title>
 <meta name="theme-color" content="#0D1430">
-<link rel="stylesheet" href="css/fonts.css?v=7">
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/fonts.css?v=8">
+<link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body class="public">
 
@@ -75,6 +75,14 @@
         <p class="pill ok" id="t-done" hidden data-i18n="s.t.sent">Merci !</p>
       </div>
 
+      <div class="form-card stack">
+        <h2 style="font-size:1.4rem" data-i18n="s.x.h">Télécharger mes données</h2>
+        <p class="muted" data-i18n="s.x.p">Un fichier avec tout ce que nous gardons sur cette demande.</p>
+        <p class="hint" data-i18n="s.x.warn">Ce lien donne accès au texte de votre demande : ne le partagez pas.</p>
+        <div class="people"><button class="btn btn-secondary" type="button" id="exportBtn" data-i18n="s.x.btn">Télécharger (fichier JSON)</button></div>
+        <span class="err" id="x-err" hidden></span>
+      </div>
+
       <div class="form-card stack danger-zone">
         <h2 style="font-size:1.4rem" data-i18n="s.del.h">Supprimer ma demande</h2>
         <p class="muted" data-i18n="s.del.p">Votre demande sera effacée définitivement.</p>
@@ -98,8 +106,8 @@
   </div>
 </footer>
 
-<script src="js/i18n.js?v=7"></script>
+<script src="js/i18n.js?v=8"></script>
 <script src="js/vendor/supabase-2.117.3.js"></script>
-<script type="module" src="js/pages/suivi.js?v=7"></script>
+<script type="module" src="js/pages/suivi.js?v=8"></script>
 </body>
 </html>

@@ -335,12 +335,17 @@ select t.as('postgres');
 select t.as('postgres');
 insert into auth.users (id, email, raw_user_meta_data) values
   ('00000000-0000-0000-0000-0000000000d1', 'multi@test',
-   '{"display_name":"Ana","languages":["ES","es","pt","<b>","x1"],"country":"ht","timezone":"Europe/Paris"}'),
+   '{"display_name":"Ana","languages":["ES","es","pt","<b>","x1"],"country":"ht","timezone":"Europe/Paris",
+     "availability":[{"d":1,"s":360,"e":420},{"d":9,"s":0,"e":60},{"d":2,"s":500,"e":400},{"d":"3; drop table x","s":1,"e":2},"x",{"d":7,"s":1200,"e":1440}]}'),
   ('00000000-0000-0000-0000-0000000000d2', 'bad@test',
    '{"display_name":"Bad","languages":"es","country":"Canada","timezone":"Mars/Olympus"}');
 select t.ok((select languages = array['es','pt'] and country = 'HT' and timezone = 'Europe/Paris'
              from public.profiles where id = '00000000-0000-0000-0000-0000000000d1'),
   'Inscription : langues nettoyées (sans doublon ni code invalide), pays et fuseau enregistrés');
+select t.ok((select count(*) from public.availability where member_id = '00000000-0000-0000-0000-0000000000d1') = 2,
+  'Inscription : seules les disponibilités valides sont gardées (2 sur 6)');
+select t.ok((select raw_user_meta_data = '{"display_name":"Ana"}'::jsonb from auth.users where id = '00000000-0000-0000-0000-0000000000d1'),
+  'Inscription : les détails sont retirés des métadonnées du compte (pas de copie en double)');
 select t.ok((select languages = array['fr'] and country = '' and timezone = 'America/Toronto'
              from public.profiles where id = '00000000-0000-0000-0000-0000000000d2'),
   'Inscription : des métadonnées mal formées ne bloquent pas, on prend des valeurs sûres');
@@ -384,12 +389,26 @@ select t.as('authenticated', '00000000-0000-0000-0000-0000000000b1');
 select t.ok(t.fails('insert into public.availability (member_id, weekday, start_min, end_min) values (''00000000-0000-0000-0000-0000000000b1'', 3, 1200, 1230)'),
   'Pas plus de 28 créneaux par personne');
 select t.as('authenticated', '00000000-0000-0000-0000-0000000000d1');
-select t.ok(t.n('select * from public.availability') = 0, 'Un intercesseur ne voit pas les disponibilités des autres');
-select t.ok(t.w('delete from public.availability') <= 0, 'Ni ne les supprime');
+select t.ok(t.n('select * from public.availability where member_id <> ''00000000-0000-0000-0000-0000000000d1''') = 0, 'Un intercesseur ne voit pas les disponibilités des autres');
+select t.ok(t.w('delete from public.availability where member_id = ''00000000-0000-0000-0000-0000000000b1''') <= 0, 'Ni ne les supprime');
 select t.as('anon');
 select t.ok(t.n('select * from public.availability') <= 0, 'Le visiteur ne voit aucune disponibilité');
 select t.as('authenticated', '00000000-0000-0000-0000-0000000000a1');
 select t.ok(t.n('select * from public.availability') >= 28, 'L''admin voit les disponibilités (tableau de couverture)');
+
+select t.as('authenticated', '00000000-0000-0000-0000-0000000000d1');
+select t.ok((select public.set_my_availability('[{"weekday":2,"start_min":300,"end_min":360},{"weekday":4,"start_min":1200,"end_min":1260}]')) = 2
+            and (select count(*) from public.availability where member_id = '00000000-0000-0000-0000-0000000000d1') = 2,
+  'Mon compte : je remplace mes créneaux en une seule opération');
+select t.ok(t.fails('select public.set_my_availability(''[{"weekday":2,"start_min":300,"end_min":200}]'')')
+            and (select count(*) from public.availability where member_id = '00000000-0000-0000-0000-0000000000d1') = 2,
+  'Un créneau invalide annule tout : mes anciens créneaux restent intacts');
+select t.as('postgres');
+select t.ok((select count(*) from public.availability where member_id = '00000000-0000-0000-0000-0000000000b1') >= 28,
+  'Remplacer mes créneaux ne touche pas ceux des autres');
+select t.as('anon');
+select t.ok(t.fails('select public.set_my_availability(''[]'')'), 'Le visiteur ne peut pas écrire de disponibilités');
+select t.as('postgres');
 
 \echo
 \echo '== Répartition selon la langue =='
