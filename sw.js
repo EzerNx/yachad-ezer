@@ -7,14 +7,17 @@
 //   · on ne touche JAMAIS aux appels vers Supabase (les données restent privées)
 //   · les pages sont toujours redemandées au réseau d'abord (version la plus récente)
 // =====================================================================
-const CACHE = "yachad-ezer-v7";
+const CACHE = "yachad-ezer-v8";
 const ASSETS = [
   "./", "index.html", "suivi.html", "connexion.html", "devenir-intercesseur.html", "mot-de-passe.html",
   "membre.html", "admin.html",
-  "css/style.css?v=7", "css/fonts.css?v=7",
-  "js/boot.js?v=7", "js/i18n.js?v=7", "js/app.js?v=7", "js/config.js?v=7", "js/vendor/supabase-2.117.3.js",
-  "js/pages/accueil.js?v=7", "js/pages/suivi.js?v=7", "js/pages/connexion.js?v=7", "js/pages/candidature.js?v=7",
-  "js/pages/mot-de-passe.js?v=7", "js/pages/membre.js?v=7", "js/pages/admin.js?v=7",
+  "css/style.css?v=8", "css/fonts.css?v=8",
+  "js/boot.js?v=8", "js/i18n.js?v=8", "js/app.js?v=8", "js/config.js?v=8", "js/vendor/supabase-2.117.3.js",
+  "js/pages/accueil.js?v=8", "js/pages/suivi.js?v=8", "js/pages/connexion.js?v=8", "js/pages/candidature.js?v=8",
+  "js/pages/mot-de-passe.js?v=8", "js/pages/membre.js?v=8", "js/pages/admin.js?v=8",
+  "js/profil.js?v=8", "js/traduire.js?v=8",
+  // Les 8 langues supplémentaires : petites, gardées pour l'usage hors ligne
+  ...["es", "pt", "sw", "ht", "de", "ru", "zh", "ko"].map((c) => "js/lang/" + c + ".js?v=8"),
   "favicon.svg", "icons/icon-192.png", "icons/icon-512.png",
 ];
 

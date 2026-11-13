@@ -1,7 +1,7 @@
 // Script de la page suivi.html (lien privé de la personne qui a demandé la prière)
 // Le jeton est dans l'adresse après « #t= ». La partie après # n'est jamais
 // envoyée au serveur de GitHub : seul ce script la lit, puis la passe à Supabase.
-import { sb, t, lang, h, relDate, fmtDate, onLangChange, isRateLimited } from "../app.js?v=7";
+import { sb, t, lang, h, relDate, fmtDate, onLangChange, isRateLimited, downloadJson } from "../app.js?v=8";
 
 const $ = (id) => document.getElementById(id);
 const token = new URLSearchParams(location.hash.slice(1)).get("t") || "";
@@ -51,6 +51,18 @@ $("tstForm").addEventListener("submit", async (e) => {
   if (error) { err.textContent = t(isRateLimited(error) ? "err.spam" : "s.err"); err.hidden = false; return; }
   $("tstForm").hidden = true;
   $("t-done").hidden = false;
+});
+
+// ---------- Télécharger mes données (droit d'accès et de portabilité) ----------
+// Le fichier est fabriqué dans le navigateur : rien ne passe par un autre serveur.
+$("exportBtn").addEventListener("click", async () => {
+  const btn = $("exportBtn");
+  $("x-err").hidden = true;
+  btn.disabled = true;
+  const { data, error } = await sb.rpc("request_export", { p_token: token });
+  btn.disabled = false;
+  if (error || !data) { $("x-err").textContent = t("s.err"); $("x-err").hidden = false; return; }
+  downloadJson(data, "yachad-ezer-" + (data.request?.code || "demande") + ".json");
 });
 
 // ---------- Suppression (droit à l'effacement) ----------

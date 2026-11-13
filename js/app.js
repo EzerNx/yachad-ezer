@@ -1,6 +1,6 @@
 // Outils partagés par toutes les pages
-import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js?v=7";
-export { PRIVACY_OFFICER, EMAIL_REPLIES_ENABLED } from "./config.js?v=7";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js?v=8";
+export { PRIVACY_OFFICER, EMAIL_REPLIES_ENABLED } from "./config.js?v=8";
 
 export const configured =
   !SUPABASE_URL.includes("TON-PROJET") && !SUPABASE_PUBLISHABLE_KEY.includes("A_REMPLACER");
@@ -54,7 +54,11 @@ export function explain(error) {
   if (/Invalid login credentials/i.test(m)) return t("err.login");
   if (/Email not confirmed/i.test(m)) return t("err.notconfirmed");
   if (/already registered/i.test(m)) return t("err.registered");
-  if (/Password should be/i.test(m)) return t("err.password");
+  if (/should be different from the old/i.test(m)) return t("m.acc.pass.same");
+  if (/Password should be|weak.?password/i.test(m)) return t("err.password");
+  if (/invalid_timezone/i.test(m)) return t("err.tz");
+  if (/too_many_slots/i.test(m)) return t("dispo.err.max", { n: 28 });
+  if (/profiles_languages_check/i.test(m)) return t("join.e.langs");
   if (/rate limit/i.test(m)) return t("err.rate");
   if (/Failed to fetch|NetworkError/i.test(m)) return t("err.network");
   return t("err.generic");
@@ -122,6 +126,17 @@ export function avatar(id, name, extra = "") {
 }
 
 // Dates relatives : « aujourd'hui », « hier », sinon la date
+// Droit d'accès / portabilité : enregistre un objet comme fichier .json.
+// Le fichier est fabriqué dans le navigateur : rien ne passe par un autre serveur.
+export function downloadJson(obj, name) {
+  const url = URL.createObjectURL(new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" }));
+  const a = h("a", { href: url, download: name });
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 export function relDate(iso) {
   const d = new Date(iso);
   const days = Math.floor((new Date().setHours(0, 0, 0, 0) - new Date(iso).setHours(0, 0, 0, 0)) / 864e5);

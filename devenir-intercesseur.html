@@ -5,14 +5,14 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://kklvokzhptyogutwakol.supabase.co wss://kklvokzhptyogutwakol.supabase.co; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script src="js/boot.js?v=7"></script>
+<script src="js/boot.js?v=8"></script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title data-i18n="join.title">Devenir intercesseur · Yachad Ezer</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0D1430">
-<link rel="stylesheet" href="css/fonts.css?v=7">
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/fonts.css?v=8">
+<link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body>
 <div class="auth">
@@ -55,6 +55,19 @@
           <label for="j-church" data-i18n-html="join.church">Votre église ou communauté <span class="hint">· facultatif</span></label>
           <input type="text" id="j-church" maxlength="120">
         </div>
+        <fieldset>
+          <span class="legend" data-i18n="join.langs">Langues dans lesquelles vous pouvez prier</span>
+          <span class="hint" data-i18n="join.langs.hint">Les demandes écrites dans ces langues vous seront confiées en priorité.</span>
+          <div id="j-langs"></div>
+        </fieldset>
+        <div class="field" id="j-country-field">
+          <label for="j-country" data-i18n-html="join.country">Pays de résidence <span class="hint">· facultatif</span></label>
+        </div>
+        <fieldset>
+          <span class="legend" data-i18n="dispo.title">Quand pouvez-vous prier ?</span>
+          <span class="hint" id="j-tz"></span>
+          <div id="j-dispo"></div>
+        </fieldset>
         <div class="field">
           <label for="j-motivation" data-i18n="join.motivation">Pourquoi souhaitez-vous servir dans la prière ?</label>
           <textarea id="j-motivation" maxlength="1000" required></textarea>
@@ -88,9 +101,9 @@
   </main>
 </div>
 
-<script src="js/i18n.js?v=7"></script>
+<script src="js/i18n.js?v=8"></script>
 <script src="js/vendor/supabase-2.117.3.js"></script>
-<script type="module" src="js/pages/candidature.js?v=7"></script>
+<script type="module" src="js/pages/candidature.js?v=8"></script>
 
 </body>
 </html>
